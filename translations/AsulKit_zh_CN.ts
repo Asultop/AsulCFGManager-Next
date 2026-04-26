@@ -4,44 +4,85 @@
 <context>
     <name>Asul</name>
     <message>
-        <location filename="../Sources/MainEntry/asul.cpp" line="19"/>
+        <location filename="../Sources/MainEntry/asul.cpp" line="20"/>
         <source>关闭</source>
         <translation>关闭</translation>
     </message>
     <message>
-        <location filename="../Sources/MainEntry/asul.cpp" line="19"/>
+        <location filename="../Sources/MainEntry/asul.cpp" line="20"/>
         <source>确定要关闭此程序?</source>
         <translation>确定要关闭此程序?</translation>
     </message>
     <message>
-        <location filename="../Sources/MainEntry/asul.cpp" line="40"/>
+        <location filename="../Sources/MainEntry/asul.cpp" line="41"/>
         <source>主页</source>
         <translation>主页</translation>
     </message>
     <message>
-        <location filename="../Sources/MainEntry/asul.cpp" line="41"/>
-        <source>图标</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../Sources/MainEntry/asul.cpp" line="42"/>
+        <source>图标</source>
+        <translation>图标</translation>
+    </message>
+    <message>
+        <location filename="../Sources/MainEntry/asul.cpp" line="43"/>
+        <source>部署</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>样例组</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">样例组</translation>
     </message>
     <message>
-        <location filename="../Sources/MainEntry/asul.cpp" line="46"/>
         <source>示例</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">示例</translation>
     </message>
     <message>
-        <location filename="../Sources/MainEntry/asul.cpp" line="47"/>
+        <location filename="../Sources/MainEntry/asul.cpp" line="44"/>
         <source>关于</source>
         <translation>关于</translation>
     </message>
     <message>
-        <location filename="../Sources/MainEntry/asul.cpp" line="48"/>
+        <location filename="../Sources/MainEntry/asul.cpp" line="45"/>
         <source>设置</source>
         <translation>设置</translation>
+    </message>
+</context>
+<context>
+    <name>F_SteamUserQuery</name>
+    <message>
+        <location filename="../Sources/ToolKit/ASteamSDK/ASteamUserQuery/F_SteamUserQuery.cpp" line="19"/>
+        <source>用户文件路径为空</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../Sources/ToolKit/ASteamSDK/ASteamUserQuery/F_SteamUserQuery.cpp" line="25"/>
+        <source>无法打开用户文件:</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../Sources/ToolKit/ASteamSDK/ASteamUserQuery/F_SteamUserQuery.cpp" line="45"/>
+        <source>无效 SteamID:</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../Sources/ToolKit/ASteamSDK/ASteamUserQuery/F_SteamUserQuery.cpp" line="60"/>
+        <source>成功解析</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../Sources/ToolKit/ASteamSDK/ASteamUserQuery/F_SteamUserQuery.cpp" line="60"/>
+        <source>个用户</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../Sources/ToolKit/ASteamSDK/ASteamUserQuery/F_SteamUserQuery.cpp" line="63"/>
+        <source>VDF解析错误:</source>
+        <translation>VDF解析错误:</translation>
+    </message>
+    <message>
+        <location filename="../Sources/ToolKit/ASteamSDK/ASteamUserQuery/F_SteamUserQuery.cpp" line="92"/>
+        <source>错误：无效的SteamID64（小于基数）</source>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -55,6 +96,95 @@
         <location filename="../Sources/Global/GlobalFunc.cpp" line="204"/>
         <source>否</source>
         <translation>否</translation>
+    </message>
+</context>
+<context>
+    <name>LoadingProgressDialog</name>
+    <message>
+        <location filename="../Sources/ToolKit/LoadingProgress/LoadingProgressDialog.cpp" line="42"/>
+        <source>Loading...</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>SteamAvatarFetcher</name>
+    <message>
+        <location filename="../Sources/ToolKit/ASteamSDK/ASteamAvatarFetcher/F_SteamAvatarFetcher.cpp" line="12"/>
+        <source>SteamAvatarFetcher initialized</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Sources/ToolKit/ASteamSDK/ASteamAvatarFetcher/F_SteamAvatarFetcher.cpp" line="21"/>
+        <source>Starting avatar fetch for SteamID: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Sources/ToolKit/ASteamSDK/ASteamAvatarFetcher/F_SteamAvatarFetcher.cpp" line="31"/>
+        <source>Retry interval set to: %1 ms</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Sources/ToolKit/ASteamSDK/ASteamAvatarFetcher/F_SteamAvatarFetcher.cpp" line="38"/>
+        <source>Max retries set to: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Sources/ToolKit/ASteamSDK/ASteamAvatarFetcher/F_SteamAvatarFetcher.cpp" line="38"/>
+        <source>unlimited</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Sources/ToolKit/ASteamSDK/ASteamAvatarFetcher/F_SteamAvatarFetcher.cpp" line="56"/>
+        <source>Fetch attempt #%1</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../Sources/ToolKit/ASteamSDK/ASteamAvatarFetcher/F_SteamAvatarFetcher.cpp" line="63"/>
+        <source>Request timed out (10 seconds)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Sources/ToolKit/ASteamSDK/ASteamAvatarFetcher/F_SteamAvatarFetcher.cpp" line="69"/>
+        <location filename="../Sources/ToolKit/ASteamSDK/ASteamAvatarFetcher/F_SteamAvatarFetcher.cpp" line="97"/>
+        <location filename="../Sources/ToolKit/ASteamSDK/ASteamAvatarFetcher/F_SteamAvatarFetcher.cpp" line="117"/>
+        <location filename="../Sources/ToolKit/ASteamSDK/ASteamAvatarFetcher/F_SteamAvatarFetcher.cpp" line="137"/>
+        <location filename="../Sources/ToolKit/ASteamSDK/ASteamAvatarFetcher/F_SteamAvatarFetcher.cpp" line="161"/>
+        <source>Scheduling retry in %1 ms</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Sources/ToolKit/ASteamSDK/ASteamAvatarFetcher/F_SteamAvatarFetcher.cpp" line="71"/>
+        <location filename="../Sources/ToolKit/ASteamSDK/ASteamAvatarFetcher/F_SteamAvatarFetcher.cpp" line="99"/>
+        <location filename="../Sources/ToolKit/ASteamSDK/ASteamAvatarFetcher/F_SteamAvatarFetcher.cpp" line="119"/>
+        <location filename="../Sources/ToolKit/ASteamSDK/ASteamAvatarFetcher/F_SteamAvatarFetcher.cpp" line="139"/>
+        <location filename="../Sources/ToolKit/ASteamSDK/ASteamAvatarFetcher/F_SteamAvatarFetcher.cpp" line="163"/>
+        <source>Max retries reached, giving up</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Sources/ToolKit/ASteamSDK/ASteamAvatarFetcher/F_SteamAvatarFetcher.cpp" line="90"/>
+        <source>Network error: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Sources/ToolKit/ASteamSDK/ASteamAvatarFetcher/F_SteamAvatarFetcher.cpp" line="110"/>
+        <source>Invalid JSON response</source>
+        <translation>不合法的JSON返回</translation>
+    </message>
+    <message>
+        <location filename="../Sources/ToolKit/ASteamSDK/ASteamAvatarFetcher/F_SteamAvatarFetcher.cpp" line="130"/>
+        <source>Player information not found</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Sources/ToolKit/ASteamSDK/ASteamAvatarFetcher/F_SteamAvatarFetcher.cpp" line="154"/>
+        <source>Invalid avatar URL received</source>
+        <translation>收到错误的头像URL</translation>
+    </message>
+    <message>
+        <location filename="../Sources/ToolKit/ASteamSDK/ASteamAvatarFetcher/F_SteamAvatarFetcher.cpp" line="169"/>
+        <source>Avatar URLs successfully retrieved</source>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -95,6 +225,260 @@
     </message>
 </context>
 <context>
+    <name>T_Deploy</name>
+    <message>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="41"/>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="287"/>
+        <source>安装</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>关闭</source>
+        <translation type="obsolete">关闭</translation>
+    </message>
+    <message>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="41"/>
+        <source>@AsulTop</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="41"/>
+        <source>CFG_Panel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="58"/>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="65"/>
+        <source> (最近登录)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="70"/>
+        <source>账号</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="70"/>
+        <source>请先登录账号</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="82"/>
+        <source>在线商店</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="101"/>
+        <source>本地文件</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="104"/>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="114"/>
+        <source>扫描</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="106"/>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="236"/>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="245"/>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="255"/>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="266"/>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="277"/>
+        <source>导入</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="114"/>
+        <source>扫描本地文件</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="180"/>
+        <source>打开文件</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="180"/>
+        <source> Files (*.*)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="209"/>
+        <source>签名</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="209"/>
+        <source>受信任开发者</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="212"/>
+        <source>文件 </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="212"/>
+        <source> 可能存在风险，是否继续？</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="212"/>
+        <source>签名：未受信任开发者签名</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="218"/>
+        <source>解析包</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="236"/>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="358"/>
+        <source>文件不存在</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="245"/>
+        <source>文件打开失败</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="255"/>
+        <source>解析失败</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="266"/>
+        <source>缺少参数</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="277"/>
+        <source>目标路径不在CFG目录下</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="315"/>
+        <source> (受信任)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="358"/>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="365"/>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="372"/>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="391"/>
+        <source>导出</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="365"/>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="391"/>
+        <source>文件打开失败:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="372"/>
+        <source>文件写入失败:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="396"/>
+        <source>// ====== 生成的文件 =======</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="397"/>
+        <source>//=这个 %1 文件由 Asul-CFGManager(AM) 根据配置自动生成 </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="398"/>
+        <source>
+//==这个 配置文件 从哪儿来的?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="399"/>
+        <source>//CFG 制作者: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="400"/>
+        <source>//CFG 名称: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="401"/>
+        <source>//CFG 版本: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="402"/>
+        <source>//==CFG 详细 结束</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="406"/>
+        <source>//==参数结束</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="407"/>
+        <source>//AM 是由 Alivn开发的部署 CS2 CFG 的程序,旨在为CFG制作者提供更方便的分发服务 以及 使用者提供方便的配置服务</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="408"/>
+        <source>//开发者:Github(https://github.com/AsulTop),网站(http://www.asul.top)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="409"/>
+        <source>//配置时间: </source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>T_DeployPanel</name>
+    <message>
+        <location filename="../Sources/COM_DeployPanelWindow/T_DeployPanel.cpp" line="63"/>
+        <source>关闭</source>
+        <translation type="unfinished">关闭</translation>
+    </message>
+    <message>
+        <location filename="../Sources/COM_DeployPanelWindow/T_DeployPanel.cpp" line="63"/>
+        <source>是否退出配置</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Sources/COM_DeployPanelWindow/T_DeployPanel.cpp" line="83"/>
+        <source>部署 CFG</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Sources/COM_DeployPanelWindow/T_DeployPanel.cpp" line="89"/>
+        <source> 项目</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Sources/COM_DeployPanelWindow/T_DeployPanel.cpp" line="91"/>
+        <source> 配置</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Sources/COM_DeployPanelWindow/T_DeployPanel.cpp" line="449"/>
+        <source>安装</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Sources/COM_DeployPanelWindow/T_DeployPanel.cpp" line="449"/>
+        <source>确认保存配置 ?</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>T_Example</name>
     <message>
         <source>设置</source>
@@ -103,11 +487,50 @@
     <message>
         <location filename="../Sources/COM_ExampleWidget.template/T_Example.cpp" line="14"/>
         <source>样例</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../Sources/COM_ExampleWidget.template/T_Example.cpp" line="17"/>
         <source>使用这个模板快速开始界面开发</source>
+        <translation></translation>
+    </message>
+</context>
+<context>
+    <name>T_Home</name>
+    <message>
+        <location filename="../Sources/COM_HomeWidget/T_Home.cpp" line="21"/>
+        <source>主页</source>
+        <translation type="unfinished">主页</translation>
+    </message>
+    <message>
+        <location filename="../Sources/COM_HomeWidget/T_Home.cpp" line="53"/>
+        <source>使用 ASDK 创建项目</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Sources/COM_HomeWidget/T_Home.cpp" line="93"/>
+        <location filename="../Sources/COM_HomeWidget/T_Home.cpp" line="126"/>
+        <source>跳转</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Sources/COM_HomeWidget/T_Home.cpp" line="107"/>
+        <source>转到Github</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Sources/COM_HomeWidget/T_Home.cpp" line="124"/>
+        <source>设置</source>
+        <translation type="unfinished">设置</translation>
+    </message>
+    <message>
+        <location filename="../Sources/COM_HomeWidget/T_Home.cpp" line="127"/>
+        <source>转到设置</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Sources/COM_HomeWidget/T_Home.cpp" line="128"/>
+        <source> 快速设置界面</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -116,7 +539,7 @@
     <message>
         <location filename="../Sources/COM_IconWidget/T_Icon.cpp" line="25"/>
         <source>图标</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">图标</translation>
     </message>
 </context>
 <context>

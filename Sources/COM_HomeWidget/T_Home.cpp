@@ -17,40 +17,8 @@
 T_Home::T_Home(QWidget *parent)
     : BaseScrollPage{parent}
 {
-    // this->initWidget(tr("项目演示"), tr("1.0.0"), tr(""));
-
-    // QVBoxLayout *mainLayout = new QVBoxLayout(centralWidget);
-    // mainLayout->setAlignment(Qt::AlignCenter);
-
-    // // 演示面板
-
-    // QFrame *demoPanel = new QFrame(this);
-    // demoPanel->setFixedSize(600, 400);
-    // demoPanel->setStyleSheet("background: rgba(255,255,255,0.9); border-radius: 15px;");
-
-    // QVBoxLayout *panelLayout = new QVBoxLayout(demoPanel);
-    // QLabel *infoLabel = new QLabel(tr(" 这是一个快速开始项目 \n\n AsulKit 开发框架 \n\n 你可以从本项目基础上快速二开"), demoPanel);
-    // infoLabel->setAlignment(Qt::AlignCenter);
-    // infoLabel->setStyleSheet("font-size: 24px; color: #333;");
-
-    // ElaPushButton *startBtn = new ElaPushButton(tr("转到设置"), demoPanel);
-    // startBtn->setFixedSize(200, 50);
-    // // startBtn->setStyleClass("defaultButton");
-
-    // panelLayout->addWidget(infoLabel);
-    // panelLayout->addWidget(startBtn, 0, Qt::AlignHCenter);
-    // GlobalFunc::addThemeSyncList(startBtn);
-    // mainLayout->addWidget(demoPanel);
-
-    // connect(startBtn, &ElaPushButton::clicked, [=] {
-    //     emit showSettingPage();
-    //     GlobalFunc::showInfo("提示", "欢迎使用示例项目 (设置中)");
-    // });
-
-
-    // 预览窗口标题
-    // this->initWidget(tr("主页"),tr("Home")," ");
-        setWindowTitle("Home");
+    
+    setWindowTitle(tr("主页"));
 
     setTitleVisible(false);
     setContentsMargins(2, 2, 0, 0);
@@ -81,8 +49,8 @@ T_Home::T_Home(QWidget *parent)
     urlCard1->setUrl(gSets->getProgramRepository());
 
     urlCard1->setCardPixmap(QPixmap(":/Sources/icon/github.png"));
-    urlCard1->setTitle("ASDK Github");
-    urlCard1->setSubTitle("Use AsulSwiftDevelopKit To Create A Cool Project");
+    urlCard1->setTitle("Github");
+    urlCard1->setSubTitle(tr("使用 ASDK 创建项目"));
     ElaToolTip* urlCard1ToolTip = new ElaToolTip(urlCard1);
     urlCard1ToolTip->setToolTip(gSets->getProgramRepository());
     ElaAcrylicUrlCard* urlCard2 = new ElaAcrylicUrlCard(this);
@@ -122,7 +90,7 @@ T_Home::T_Home(QWidget *parent)
     backgroundLayout->addWidget(cardScrollArea);
 
     // 推荐卡片
-    ElaText* flowText = new ElaText("跳转", this);
+    ElaText* flowText = new ElaText(tr("跳转"), this);
     flowText->setTextPixelSize(20);
     QHBoxLayout* flowTextLayout = new QHBoxLayout();
     flowTextLayout->setContentsMargins(33, 0, 0, 0);
@@ -134,9 +102,9 @@ T_Home::T_Home(QWidget *parent)
         QDesktopServices::openUrl(QUrl(gSets->getProgramRepository()));
     });
     homeCard->setCardPixmap(QPixmap(":/Sources/icon/github.png"));
-    homeCard->setTitle("ASDK Github");
+    homeCard->setTitle("Github");
     homeCard->setSubTitle(gSets->getProgramName());
-    homeCard->setInteractiveTips("转到Github");
+    homeCard->setInteractiveTips(tr("转到Github"));
     homeCard->setDetailedText(gSets->getProgramDescription());
 
     ElaPopularCard* homeCard1 = new ElaPopularCard(this);
@@ -153,11 +121,11 @@ T_Home::T_Home(QWidget *parent)
         homeCard1->setCardPixmap(QPixmap(":/Sources/icon/splash_light.png"));
     else
         homeCard1->setCardPixmap(QPixmap(":/Sources/icon/splash_dark.png"));
-    homeCard1->setTitle("ASDK Settings");
+    homeCard1->setTitle(tr("设置"));
     homeCard1->setSubTitle(gSets->getProgramName());
-    homeCard1->setCardButtontext("跳转");
-    homeCard1->setInteractiveTips("转到设置");
-    homeCard1->setDetailedText(gSets->getProgramName()+" 快速设置界面");
+    homeCard1->setCardButtontext(tr("跳转"));
+    homeCard1->setInteractiveTips(tr("转到设置"));
+    homeCard1->setDetailedText(gSets->getProgramName()+" "+tr(" 快速设置界面"));
 
 
     ElaFlowLayout* flowLayout = new ElaFlowLayout(0, 5, 5);

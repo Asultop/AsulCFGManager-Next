@@ -11,13 +11,23 @@
 #include <QJsonParseError>
 #include <QJsonDocument>
 #include <QJsonObject>
+#include <qobject.h>
 
 #define gSets GlobalSettings::getInstance()
 class GlobalSettings : public QObject
 {
     Q_OBJECT
     Q_SINGLETON_CREATE_H(GlobalSettings);
-    Q_PROPERTY_CREATE(qint64,QINT64_Example);
+    
+
+    Q_PROPERTY_CREATE(QString, CFGPath);
+    Q_PROPERTY_CREATE(QString, SteamUserPath);
+    Q_PROPERTY_CREATE(QString, SteamConfPath);
+    Q_PROPERTY_CREATE(QString, SteamPath);
+    Q_PROPERTY_CREATE(QString, WMPVPPath);
+    Q_PROPERTY_CREATE(QString, EEEEEPath);
+    Q_PROPERTY_CREATE(QString, EEEEELaunchOptionFilePath);
+    Q_PROPERTY_CREATE(QString, WmPvpLaunchOptionFilePath);
     Q_PROPERTY_CREATE(int,CharactersPerMinute);
     Q_PROPERTY_CREATE(QTemporaryDir*,GLoc);
 
@@ -40,8 +50,12 @@ public:
     QString getProgramLicense();
     QString getProgramRepository();
     QString getProgramOrganization();
+    
+    
 private:
     QJsonObject jsonObj;
+    QString getPath(QString vdfFile);
+    QString getAllPath();
 signals:
 };
 

@@ -6,7 +6,10 @@
 #include <ElaPushButton.h>
 #include <ElaLineEdit.h>
 #include <ElaText.h>
-
+#include <qdebug.h>
+#include <qdir.h>
+#include <qfiledevice.h>
+#include <qstandardpaths.h>
 
 
 Q_SINGLETON_CREATE_CPP(GlobalSettings);
@@ -59,7 +62,16 @@ void GlobalSettings::init()
         GlobalFunc::updateThemeUI();
     });
 
-}
+    this->getAllPath();
+
+    // qDebug() << this->getSteamPath();
+    // qDebug() << this->getSteamUserPath();
+    // qDebug() << this->getSteamConfPath();
+    // qDebug() << this->getCFGPath();
+    // qDebug() << this->getWMPVPPath();
+    // qDebug() << this->getEEEEEPath();
+
+   }
 void GlobalSettings::destroy(){
 
     delete this->getGLoc();
@@ -98,4 +110,113 @@ QString GlobalSettings::getProgramRepository()
 QString GlobalSettings::getProgramOrganization()
 {
     return jsonObj["programOrganization"].toString();
+}
+
+QString GlobalSettings::getAllPath()
+{
+
+    QCoreApplication::processEvents(QEventLoop::AllEvents,5);
+    QString regPath = "HKEY_LOCAL_MACHINE\\SOFTWARE\\Classes\\steam\\Shell\\Open\\Command";
+    QSettings *reg=new QSettings (regPath,QSettings::NativeFormat);
+    QString steamPath = reg->value(".").toString();
+    steamPath =QString(steamPath.split("\"")[1])+QString("\\..\\");
+    //获取到cfg目录
+
+    QString libraryFoldersFile = steamPath + "/steamapps/libraryfolders.vdf";
+    if(steamPath.isEmpty()){
+        qDebug() << "Steam Path is empty";
+        return "";
+    }
+    QString CFGPath = getPath(libraryFoldersFile);
+    this->setCFGPath(CFGPath);
+    this->setSteamPath(QString(steamPath).replace("\\","/").replace("steam.exe/..","").replace("//","/"));
+    this->setSteamUserPath(QString(steamPath).replace("\\","/").replace("steam.exe/..","userdata"));
+    this->setSteamConfPath(QString(steamPath).replace("\\","/").replace("steam.exe/..","config"));
+
+    qDebug() << "CFGPath:" << CFGPath;
+    qDebug() << "SteamUserPath:" << this->getSteamUserPath();
+    qDebug() << "SteamConfPath:" << this->getSteamConfPath();
+    qDebug() << "SteamPath:" << this->getSteamPath();
+    
+    //完美平台使用 计算机\HKEY_CLASSES_ROOT\wmpvp\shell\open\command 获取到wmpvp的路径
+    // "C:\Program Files (x86)\perfectworldarena\完美世界竞技平台.exe" "%1"
+    QString wmpvpPath = "HKEY_CLASSES_ROOT\\wmpvp\\shell\\open\\command";
+    QSettings *wmpvpReg=new QSettings (wmpvpPath,QSettings::NativeFormat);
+    QString wmpvpPath_ = wmpvpReg->value(".").toString();
+    wmpvpPath_ = QString(wmpvpPath_.split("\"")[1]).replace("%1",steamPath);
+    this->setWMPVPPath(wmpvpPath_.replace("\\","/"));
+    qDebug() << "WMPVPPath:" << wmpvpPath_.replace("\\","/").replace("完美世界竞技平台.exe","");
+
+    //5E平台路径 计算机\HKEY_CLASSES_ROOT\fe-play\shell\open\command 获取到5E平台的路径
+    // "C:\Program Files (x86)\Counter-Strike Global Offensive\csgo.exe" "%1"
+    QString eeeeePath = "HKEY_CLASSES_ROOT\\fe-play\\shell\\open\\command";
+    QSettings *eeeeeReg=new QSettings (eeeeePath,QSettings::NativeFormat);
+    QString eeeeePath_ = eeeeeReg->value(".").toString();
+    eeeeePath_ = QString(eeeeePath_.split("\"")[1]).replace("%1",steamPath);
+    this->setEEEEEPath(eeeeePath_.replace("\\","/"));
+    qDebug() << "EEEEEPath:" << eeeeePath_.replace("\\","/").replace("5EClient.exe","");
+
+    QString eeeeeLOP=QFileInfo(QStandardPaths::standardLocations(QStandardPaths::AppDataLocation).first()).absolutePath()+"/5E对战平台/setting.json";
+    /*
+        {
+	"csgo": {
+		"path": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Counter-Strike Global Offensive\\game\\bin\\win64",
+		"args": "-customLaunchOptionForSearch"
+	}
+}
+    */
+    this->setEEEEELaunchOptionFilePath(eeeeeLOP);
+    qDebug() << "EEEEEELaunchOptionFilePath:" << this->getEEEEELaunchOptionFilePath();
+
+    QString wmpvpLOP=QFileInfo(QStandardPaths::standardLocations(QStandardPaths::AppDataLocation).first()).absolutePath()+"/Wmpvp/setting/game.json";
+    /*
+    {
+        "csgocommand": "-commandU",
+        "version": 3,
+        "cs_check_result": {
+            "steamlogined": true,
+            "steammatch": true,
+            "needcheck": false,
+            "checkingprogress": "end",
+            "anticheat": {
+                "result": "success",
+                "error": ""
+            },
+            "game": {
+                "result": "success",
+                "error": ""
+            },
+            "connect": {
+                "result": "success",
+                "error": ""
+            },
+            "checkpassed": true,
+            "checkresult": "RESULT_SUCCESS"
+        }
+    }
+    */
+    this->setWmPvpLaunchOptionFilePath(wmpvpLOP);
+    qDebug() << "WmPvpLaunchOptionFilePath:" << this->getWmPvpLaunchOptionFilePath();
+    
+    
+}
+QString GlobalSettings::getPath(QString vdfFile)
+{
+    QFile file(vdfFile);
+    file.open(QIODevice::ReadOnly | QIODevice::Text);
+    QString buffer(file.readAll());
+    QString path;
+    QStringList reader = buffer.split("\n");
+    foreach(QString var,reader){
+        if(var.contains("path")){
+            path=var.split("\"")[3];
+        }
+        if(var.contains("730")) break;
+    }
+
+    //path -> steamapps -> common -> Counter-Strike Global Offensive ->game ->csgo -> cfg
+    path=path.replace("\\\\","\\");
+    path = path+"\\steamapps\\common\\Counter-Strike Global Offensive\\game\\csgo\\cfg";
+    path.replace("\\","/");
+    return path;
 }

@@ -47,7 +47,19 @@ set(SOURCES
     Sources/COM_IconWidget/T_IconDelegate.cpp
     Sources/COM_IconWidget/T_IconModel.cpp
     Sources/COM_ExampleWidget.template/T_Example.cpp
+    Sources/COM_DeployWidget/T_Deploy.cpp
+    Sources/COM_DeployPanelWindow/T_DeployPanel.cpp
 
+    Sources/ToolKit/ASteamSDK/ASteamUserQuery/F_SteamUserQuery.cpp
+    Sources/ToolKit/LoadingProgress/LoadingProgressDialog.cpp
+
+    3rd/QsLog/QsLog.cpp
+    3rd/QsLog/QsLogDest.cpp
+    3rd/QsLog/QsLogDestConsole.cpp
+    3rd/QsLog/QsLogDestFile.cpp
+    3rd/QsLog/QsLogDestFunctor.cpp
+
+    
     Sources/CTL_AsulComboBox/AsulComboBox.cpp
 
     Sources/MainEntry/main.cpp
@@ -68,8 +80,12 @@ set(HEADERS
     Sources/COM_IconWidget/T_IconDelegate.h
     Sources/COM_IconWidget/T_IconModel.h
     Sources/COM_ExampleWidget.template/T_Example.h
+    Sources/COM_DeployWidget/T_Deploy.h
+    Sources/COM_DeployPanelWindow/T_DeployPanel.h
+
 
     Sources/CTL_AsulComboBox/AsulComboBox.h
+    Sources/ToolKit/LoadingProgress/LoadingProgressDialog.h
     
     Sources/MainEntry/Def.h
     Sources/MainEntry/asul.h
@@ -92,7 +108,7 @@ qt6_create_translation(QM_FILES ${CMAKE_SOURCE_DIR} ${TS_FILES})
 
 # qt6_add_translations(${PROJECT_NAME} ${TS_FILES})
 # 可执行文件
-add_executable(${PROJECT_NAME} WIN32
+add_executable(${PROJECT_NAME} #WIN32
     ${SOURCES}
     ${HEADERS}
     ${RESOURCE_FILES}
@@ -112,23 +128,30 @@ endif()
 # 包含目录
 target_include_directories(${PROJECT_NAME} PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/ElaWidgetTools/install/include
+    ${CMAKE_CURRENT_SOURCE_DIR}/AVF-SDK/install/include
+    ${CMAKE_CURRENT_SOURCE_DIR}/3rd/ValveFileVDF-1.1.1/include
+    ${CMAKE_CURRENT_SOURCE_DIR}/3rd/QsLog
+    ${CMAKE_CURRENT_SOURCE_DIR}/3rd/AFormSDK/include
 )
 
 # 链接库
 target_link_libraries(${PROJECT_NAME} PRIVATE
     ${QT_LIBRARIES}
+    aformparser
 )
-
+add_subdirectory(3rd/AFormSDK)
 # Windows特定设置
 if(WIN32)
     # 链接ElaWidgetTools库
     if(MINGW)
         target_link_libraries(${PROJECT_NAME} PRIVATE
             ${CMAKE_CURRENT_SOURCE_DIR}/ElaWidgetTools/install/lib/libElaWidgetTools.a
+            ${CMAKE_CURRENT_SOURCE_DIR}/AVF-SDK/install/lib/libverifyfile.dll.a
         )
     else()
         target_link_libraries(${PROJECT_NAME} PRIVATE
             ${CMAKE_CURRENT_SOURCE_DIR}/ElaWidgetTools/install/lib/ElaWidgetTools.lib
+            ${CMAKE_CURRENT_SOURCE_DIR}/AVF-SDK/install/lib/libverifyfile.dll.a
         )
     endif()
 
@@ -138,6 +161,14 @@ if(WIN32)
         "${CMAKE_CURRENT_SOURCE_DIR}/ElaWidgetTools/install/bin/ElaWidgetTools.dll"
         $<TARGET_FILE_DIR:${PROJECT_NAME}>
         COMMENT "Copying ElaWidgetTools.dll to binary directory"
+    )
+
+    # 部署AVF-SDK DLL
+    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        "${CMAKE_CURRENT_SOURCE_DIR}/AVF-SDK/install/bin/libverifyfile.dll"
+        $<TARGET_FILE_DIR:${PROJECT_NAME}>
+        COMMENT "Copying libverifyfile.dll to binary directory"
     )
 endif()
 
@@ -162,4 +193,10 @@ add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
     "${CMAKE_CURRENT_SOURCE_DIR}/3rd"
     "$<TARGET_FILE_DIR:${PROJECT_NAME}>/3rd"
     COMMENT "Copying 3rd directory to binary directory"
+)
+
+# 复制AVF-SDK DLL到安装目录
+install(FILES "${CMAKE_CURRENT_SOURCE_DIR}/AVF-SDK/install/bin/libverifyfile.dll"
+    DESTINATION bin
+    PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE
 )

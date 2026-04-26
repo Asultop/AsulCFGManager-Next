@@ -1,10 +1,10 @@
 {
-    "programName": "AsulSwiftDevelopKit",
-    "targetName": "AsulSwiftDevelopKit",
+    "programName": "ACM-Next",
+    "targetName": "AsulCFGManager-Next",
     "programOrganization": "Asul",
     "programVersion": "1.0.0",
-    "programDescription": "A development kit for Swift programming language",
+    "programDescription": "CS2 CFG 管理",
     "programAuthor": "Asul",
     "programLicense": "MIT",
-    "programRepository": "https://github.com/AsulTop/AsulSwiftDevelopKit"
+    "programRepository": "https://github.com/AsulTop/AsulCFGManager-Next"
 }

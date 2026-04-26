@@ -15,5 +15,18 @@
         <file>translations/AsulKit_zh_CN.qm</file>
         <file>translations/AsulKit_zh_CN.ts</file>
         <file>PropertySetting/Program_Property.json</file>
+        <file>Tools/7z.dll</file>
+        <file>Tools/7z.exe</file>
+    </qresource>
+    <qresource prefix="/certs">
+        <file>RootCA-Cert/root-ca.crt.pem</file>
+    </qresource>
+    <qresource prefix="/Tools">
+        <file>Tools/7z.exe</file>
+        <file>Tools/7z.dll</file>
+    </qresource>
+    <qresource prefix="/Pictures">
+        <file>Pictures/CS2.png</file>
+        <file>Pictures/verified.png</file>
     </qresource>
 </RCC>

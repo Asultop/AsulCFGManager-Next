@@ -46,7 +46,7 @@ void GlobalFunc::updateThemeUI(){
 bool GlobalFunc::UnzipFile(const QString &archivePath, const QString &extractDir){
     QString program;
 #ifdef Q_OS_WIN
-    program = QCoreApplication::applicationDirPath()+"/3rd/7z.exe"; // 默认安装路径
+    program = GlobalSettings::getInstance()->getGLoc()->path()+"/7z.exe"; // 默认安装路径
     if (!QFile::exists(program)) {
         program = QStandardPaths::findExecutable("7z.exe");
 
@@ -221,7 +221,78 @@ bool GlobalFunc::askDialog(QString title,QString content){
     return askDialog(nullptr,title,content);
 }
 
+ElaScrollPageArea * GenerateArea(QWidget *parent, ElaText *title, QWidget *subtitle, QWidget *widget, bool convert){
+    ElaScrollPageArea *configArea=new ElaScrollPageArea(parent);
+    QHBoxLayout * configHLayout=new QHBoxLayout(configArea);
+    QVBoxLayout* configVLayout=new QVBoxLayout();
 
+    configHLayout->setContentsMargins(10,20,20,20);
+
+
+    QFont font=title->font();
+    font.setBold(true);
+    title->setFont(font);
+    title->setTextPixelSize(15);
+
+    configVLayout->addWidget(title,7);
+    configVLayout->addWidget(subtitle,4);
+
+    configHLayout->addLayout(configVLayout);
+    configHLayout->addStretch();
+    configHLayout->addWidget(widget);
+    if(!convert && qobject_cast<ElaComboBox*> (widget)){
+        widget->setFixedWidth(300);
+    }
+    return configArea;
+}
+ElaScrollPageArea * GenerateArea(QWidget *parent, QString iconPath, ElaText *title, QWidget *subtitle, QWidget *widget, bool convert){
+    ElaScrollPageArea *configArea=new ElaScrollPageArea(parent);
+    QHBoxLayout * configHLayout=new QHBoxLayout();
+    QVBoxLayout* configVLayout=new QVBoxLayout();
+    QHBoxLayout * HLayout=new QHBoxLayout(configArea);
+    HLayout->setContentsMargins(10,0,0,0);
+
+    configHLayout->setContentsMargins(10,20,20,20);
+
+
+    QFont font=title->font();
+    font.setBold(true);
+    title->setFont(font);
+    title->setTextPixelSize(15);
+
+    configVLayout->addWidget(title,7);
+    configVLayout->addWidget(subtitle,4);
+
+    ElaText *iconWidget = new ElaText(parent);
+    iconWidget->setFixedSize(QSize(50,50));
+    
+    if(iconPath.contains("${THEME}")){
+        QPixmap icon(QString(iconPath).replace("${THEME}",eTheme->getThemeMode()==ElaThemeType::Dark?"dark":"light"));
+        QPixmap simg = icon.scaled(iconWidget->size(),Qt::IgnoreAspectRatio,Qt::SmoothTransformation);
+        iconWidget->setPixmap(simg);
+    }else{
+        QPixmap icon(iconPath);
+        QPixmap simg = icon.scaled(iconWidget->size(),Qt::IgnoreAspectRatio,Qt::SmoothTransformation);
+        iconWidget->setPixmap(simg);
+    }
+    HLayout->addWidget(iconWidget);
+    configHLayout->addLayout(configVLayout);
+
+    if (widget != nullptr) {
+        configHLayout->addWidget(widget);
+    } else {
+        configVLayout->addStretch();
+    }
+    HLayout->addLayout(configHLayout);
+    if(!convert ){
+        if(qobject_cast<ElaComboBox*> (widget))
+            widget->setFixedWidth(300);
+        if(qobject_cast<ElaPushButton*> (widget))
+            widget->setFixedWidth(300);
+    }
+    return configArea;
+
+}
 ElaScrollPageArea * GlobalFunc::GenerateArea(QWidget *parent,ElaText * title, ElaText * subtitle, QWidget * widget, bool convert){
     ElaScrollPageArea *configArea=new ElaScrollPageArea(parent);
     QHBoxLayout * configHLayout=new QHBoxLayout(configArea);
@@ -240,6 +311,7 @@ ElaScrollPageArea * GlobalFunc::GenerateArea(QWidget *parent,ElaText * title, El
     configVLayout->addWidget(subtitle,4);
 
     configHLayout->addLayout(configVLayout);
+    configHLayout->addStretch();
     configHLayout->addWidget(widget);
     if(!convert && qobject_cast<ElaComboBox*> (widget)){
         widget->setFixedWidth(300);
@@ -252,8 +324,6 @@ ElaScrollPageArea * GlobalFunc::GenerateArea(QWidget *parent,ElaIconType::IconNa
     QHBoxLayout * configHLayout=new QHBoxLayout();
     QVBoxLayout* configVLayout=new QVBoxLayout();
     QHBoxLayout * HLayout=new QHBoxLayout(configArea);
-    // ElaText *titleText=new ElaText(title);
-    // ElaText *detailText=new ElaText(subtitle);
     HLayout->setContentsMargins(10,0,0,0);
 
     configHLayout->setContentsMargins(10,20,20,20);
@@ -276,11 +346,13 @@ ElaScrollPageArea * GlobalFunc::GenerateArea(QWidget *parent,ElaIconType::IconNa
     HLayout->addWidget(iconWidget);
     configHLayout->addLayout(configVLayout);
 
-    configHLayout->addStretch();
-    if (nullptr != widget) {
+    if (widget != nullptr) {
+        configHLayout->addStretch();
         configHLayout->addWidget(widget);
+    } else {
+        configVLayout->addStretch();
     }
-    
+
     HLayout->addLayout(configHLayout);
     if(!convert ){
         if(qobject_cast<ElaComboBox*> (widget))
@@ -296,8 +368,6 @@ ElaScrollPageArea * GlobalFunc::GenerateArea(QWidget *parent,QString iconPath,El
     QHBoxLayout * configHLayout=new QHBoxLayout();
     QVBoxLayout* configVLayout=new QVBoxLayout();
     QHBoxLayout * HLayout=new QHBoxLayout(configArea);
-    // ElaText *titleText=new ElaText(title);
-    // ElaText *detailText=new ElaText(subtitle);
     HLayout->setContentsMargins(10,0,0,0);
 
     configHLayout->setContentsMargins(10,20,20,20);
@@ -331,7 +401,12 @@ ElaScrollPageArea * GlobalFunc::GenerateArea(QWidget *parent,QString iconPath,El
     }
     HLayout->addWidget(iconWidget);
     configHLayout->addLayout(configVLayout);
-    configHLayout->addWidget(widget);
+
+    if (widget != nullptr) {
+        configHLayout->addWidget(widget);
+    } else {
+        configVLayout->addStretch();
+    }
     HLayout->addLayout(configHLayout);
     if(!convert ){
         if(qobject_cast<ElaComboBox*> (widget))
@@ -347,8 +422,6 @@ ElaScrollPageArea * GlobalFunc::GenerateArea(QWidget *parent,ElaIconType::IconNa
     QHBoxLayout * configHLayout=new QHBoxLayout();
     QVBoxLayout* configVLayout=new QVBoxLayout();
     QHBoxLayout * HLayout=new QHBoxLayout(configArea);
-    // ElaText *titleText=new ElaText(title);
-    // ElaText *detailText=new ElaText(subtitle);
     HLayout->setContentsMargins(10,0,0,0);
 
     configHLayout->setContentsMargins(10,20,20,20);
@@ -382,7 +455,7 @@ ElaScrollPageArea * GlobalFunc::GenerateArea(QWidget *parent,ElaIconType::IconNa
                     wget->setFixedWidth(300);
                 if(qobject_cast<ElaPushButton*> (wget))
                     wget->setFixedWidth(300);
-                if(qobject_cast<ElaLineEdit*> (widget))
+                if(qobject_cast<ElaLineEdit*> (wget))
                     wget->setFixedHeight(30);
             }
         }
@@ -395,8 +468,6 @@ ElaScrollPageArea * GlobalFunc::GenerateArea(QWidget *parent,QString iconPath,El
     QHBoxLayout * configHLayout=new QHBoxLayout();
     QVBoxLayout* configVLayout=new QVBoxLayout();
     QHBoxLayout * HLayout=new QHBoxLayout(configArea);
-    // ElaText *titleText=new ElaText(title);
-    // ElaText *detailText=new ElaText(subtitle);
     HLayout->setContentsMargins(10,0,0,0);
 
     configHLayout->setContentsMargins(10,20,20,20);

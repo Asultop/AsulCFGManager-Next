@@ -39,6 +39,9 @@ public:
     static ElaScrollPageArea * GenerateArea(QWidget *parent,QWidget * title, QHBoxLayout * widget,bool convert=true);
     static ElaScrollPageArea * GenerateArea(QWidget *parent,QHBoxLayout * title, QHBoxLayout * widget,bool convert=true);
     static ElaScrollPageArea * GenerateArea(QWidget *parent, ElaText *title, ElaText *subtitle, QWidget *widget, bool convert=true);
+    static ElaScrollPageArea * GenerateArea(QWidget *parent, ElaText *title, QWidget *subtitle, QWidget *widget, bool convert=true);
+    static ElaScrollPageArea * GenerateArea(QWidget *parent, QString iconPath, ElaText *title, QWidget *subtitle, QWidget *widget, bool convert=true);
+    
     static ElaScrollPageArea * GenerateArea(QWidget *parent, QString iconPath, ElaText *title, ElaText *subtitle, QWidget *widget, bool convert=true);
     static ElaScrollPageArea * GenerateArea(QWidget *parent, ElaIconType::IconName iconType, ElaText *title, ElaText *subtitle, QWidget *widget, bool convert=true);
     static ElaScrollPageArea * GenerateArea(QWidget *parent, QString iconPath, ElaText *title, ElaText *subtitle, QHBoxLayout *widget, bool convert=true);
