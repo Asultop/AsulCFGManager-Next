@@ -52,7 +52,7 @@ jobs:
     - name: Create binary package
       shell: cmd
       run: |
-        set "PRODUCT_NAME=AsulSwiftDevelopKit"
+        set "PRODUCT_NAME=AsulCFGManager-Next"
         mkdir dist
         copy build\%PRODUCT_NAME%.exe dist\
         copy build\ElaWidgetTools.dll dist\
