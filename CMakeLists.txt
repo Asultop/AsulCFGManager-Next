@@ -147,6 +147,8 @@ if(WIN32)
         target_link_libraries(${PROJECT_NAME} PRIVATE
             ${CMAKE_CURRENT_SOURCE_DIR}/ElaWidgetTools/install/lib/libElaWidgetTools.a
             ${CMAKE_CURRENT_SOURCE_DIR}/AVF-SDK/install/lib/libverifyfile.dll.a
+            ${CMAKE_CURRENT_SOURCE_DIR}/AVF-SDK/install/lib/libcrypto.dll.a
+            ${CMAKE_CURRENT_SOURCE_DIR}/AVF-SDK/install/lib/libssl.dll.a
         )
     else()
         target_link_libraries(${PROJECT_NAME} PRIVATE
@@ -177,12 +179,6 @@ if(WIN32)
         "${CMAKE_CURRENT_SOURCE_DIR}/AVF-SDK/install/bin/libcrypto-4-x64.dll"
         $<TARGET_FILE_DIR:${PROJECT_NAME}>
         COMMENT "Copying libcrypto-4-x64.dll to binary directory"
-    )
-    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy_if_different
-        "${CMAKE_CURRENT_SOURCE_DIR}/AVF-SDK/install/bin/libssl-4-x64.dll"
-        $<TARGET_FILE_DIR:${PROJECT_NAME}>
-        COMMENT "Copying libssl-4-x64.dll to binary directory"
     )
 endif()
 

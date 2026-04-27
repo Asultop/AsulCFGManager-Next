@@ -18,6 +18,9 @@ jobs:
         submodules: recursive
         fetch-depth: 0
 
+    - name: Install OpenSSL
+      run: choco install openssl -y  
+
     - name: Install Qt
       uses: jurplel/install-qt-action@v4.3.0
       with:
