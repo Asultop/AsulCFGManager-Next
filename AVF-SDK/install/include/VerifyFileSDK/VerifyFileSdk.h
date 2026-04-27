@@ -114,6 +114,16 @@ public:
         QString *errorMessage = nullptr
     );
 
+    static VerifyStatus verifyDetachedSignatureAsymmetric(
+        const QByteArray &payload,
+        const QByteArray &signatureBlob,
+        const VerificationOptions &options,
+        bool enforceFileBinding = false,
+        SignatureInfo *outInfo = nullptr,
+        QByteArray *outSignatureValue = nullptr,
+        QString *errorMessage = nullptr
+    );
+
     // Minimal API for single-root-CA trust model.
     static bool signFileSimple(
         const QString &filePath,
@@ -132,6 +142,28 @@ public:
         bool enableOcspCheck = false,
         const QString &ocspResponseDerPath = QString(),
         bool enableFileBindingCheck = false
+    );
+
+    // Detached signature APIs: signature stored in a separate file,
+    // original file content remains untouched.
+    static bool signFileDetachedSimple(
+        const QString &filePath,
+        const QString &outputSigPath,
+        const QString &leafPrivateKeyPemPath,
+        const QString &leafCertificatePemPath,
+        const QString &keyId = QString(),
+        const QString &algorithm = QStringLiteral("RSA-SHA256"),
+        QString *errorMessage = nullptr
+    );
+
+    static SimpleVerifyResult verifyFileDetachedSimple(
+        const QString &filePath,
+        const QString &detachedSigPath,
+        const QString &rootCaPemPath,
+        bool enableCrlCheck = false,
+        const QStringList &crlPemPaths = {},
+        bool enableOcspCheck = false,
+        const QString &ocspResponseDerPath = QString()
     );
 
 private:

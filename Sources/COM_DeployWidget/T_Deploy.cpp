@@ -20,6 +20,7 @@
 #include <qdebug.h>
 #include <qwidget.h>
 #include <QFile>
+#include <QProcess>
 #include "VerifyFileSdk/VerifyFileSdk.h"
 #include "../../3rd/AFormSDK/include/AFormParser/AFormParser.hpp"
 #include "../ToolKit/ASteamSDK/ASteamUserQuery/F_SteamUserQuery.h"
@@ -126,22 +127,33 @@ T_Deploy::T_Deploy(QWidget *parent)
             if(!subConfig.open(QIODevice::ReadOnly)){
                 continue;
             }
-            QString rootCaPath(":/certs/RootCA-Cert/root-ca.crt.pem");
             QString docFileContent=subConfig.readAll();
+            subConfig.close();
+
+            QString rootCaPath(":/certs/RootCA-Cert/root-ca.crt.pem");
             bool enableCrlCheck=false;
             QStringList crlPemPaths;
             bool enableOcspCheck=false;
             QString ocspResponseDerPath;
-            bool enableFileBingdingCheck=false;
-            auto result = VerifyFile::VerifyFileSdk::verifyFileSimple(
-                subConfig.fileName(),
-                rootCaPath,
-                enableCrlCheck,
-                crlPemPaths,
-                enableOcspCheck,
-                ocspResponseDerPath,
-                enableFileBingdingCheck
-            );
+
+            QFile signatureFile(QDir(subDirPath).filePath("config.sig"));
+            VerifyFile::SimpleVerifyResult result;
+            if(signatureFile.exists()){
+                result = VerifyFile::VerifyFileSdk::verifyFileDetachedSimple(
+                    subConfig.fileName(),
+                    signatureFile.fileName(),
+                    rootCaPath,
+                    enableCrlCheck,
+                    crlPemPaths,
+                    enableOcspCheck,
+                    ocspResponseDerPath
+                );
+            }else{
+                result.hasSignature = false;
+                result.signatureValid = false;
+                result.trusted = false;
+                qDebug() << "[T_Deploy] No detached signature file found in:" << subDirPath;
+            }
             qDebug() << "Has Signature:" << result.hasSignature;
             qDebug() << "Signature valid:" << result.signatureValid;
             qDebug() << "Trusted:" << result.trusted;
@@ -150,10 +162,173 @@ T_Deploy::T_Deploy(QWidget *parent)
             if (!result.errorMessage.isEmpty()) {
                 qDebug() << "Error:" << result.errorMessage;
             }
-            
+            if(result.trusted){
+                GlobalFunc::showSuccess(tr("签名"),tr("受信任开发者")+" "+result.info.signer);
+            }
+            // else{
+            //     bool askRec=GlobalFunc::askDialog(this,tr("签名：未受信任开发者签名"),tr("目录 ")+subDir+tr(" 中的 config 签名未受信任，可能存在风险，是否继续？"));
+            //     if(!askRec){
+            //         continue;
+            //     }
+            // }
 
+            AFormParser::ParseError err;
+            auto doc = AFormParser::Document::from(docFileContent,&err);
+            if(!doc){
+                GlobalFunc::showErr(tr("扫描"),tr("解析失败")+err.message);
+                qWarning()<<"解析失败："<<err.line<<"<"<<err.column<<">: "<<err.message;
+                continue;
+            }
+            qDebug() << "[T_Deploy] check arguments ";
+            QStringList argList={"Version","Name","Target","Author","Description"};
+            for(auto arg:argList){
+                if(doc->metaValue(arg).isEmpty()){
+                    GlobalFunc::showErr(tr("扫描"),tr("缺少参数")+" "+arg);
+                    qCritical()<< "[T_Deploy] Missing argument: "<<arg;
+                    continue;
+                }
+            }
+            qDebug() << "[T_Deploy] doc parsed successfully, forms count:" << doc->forms.size();
+
+            if(m_scannedAreaMap.contains(subDirPath)){
+                qDebug() << "[T_Deploy] Config already in drawer, replacing:" << subDirPath;
+                ElaScrollPageArea *oldArea = m_scannedAreaMap[subDirPath];
+                localFileDrawerArea->removeDrawer(oldArea);
+                delete oldArea;
+            }
+
+            ElaPushButton *editButton = new ElaPushButton(tr("编辑"), this);
+            editButton->setFixedWidth(50);
+            ElaScrollPageArea *gArea;
+            QString displayName = doc->metaValue("Name") + " (" + doc->metaValue("Target") + ")";
+            if(!doc->metaValue("Picture").isEmpty() && QFile(subDirPath+"/"+doc->metaValue("Picture")).exists()){
+                gArea = gFunc->GenerateArea(
+                    this,
+                    QString(subDirPath+"/"+doc->metaValue("Picture")),
+                    new ElaText(displayName,this),
+                    new ElaText(doc->metaValue("Author"),this),
+                    editButton,false
+                );
+            }else{
+                gArea = gFunc->GenerateArea(
+                    this,
+                    QString(":/Pictures/Pictures/CS2.png"),
+                    new ElaText(displayName,this),
+                    new ElaText(doc->metaValue("Author"),this),
+                    editButton,false
+                );
+            }
+            if(result.trusted){
+                editButton->setText(editButton->text()+" "+tr(" (受信任)"));
+                editButton->setLightDefaultColor(QColor(143, 204, 167));
+                editButton->setDarkDefaultColor(QColor(39, 135, 95));
+            }
+
+            localFileDrawerArea->addDrawer(gArea);
+            m_scannedAreaMap[subDirPath] = gArea;
+            qDebug() << "[T_Deploy] About to connect editButton clicked";
+            connect(editButton,&ElaPushButton::clicked,this,[this,gArea,result,localFileDrawerArea,subDirPath,doc,userInfoMap,selectAccountComboBox]() -> void{
+                SteamUserInfo currentUserInfo=userInfoMap[selectAccountComboBox->currentText()];
+                qDebug()<< "[T_Deploy] About to set global variables";
+                qDebug()<< "[T_Deploy] __UserId: "<<currentUserInfo.userId;
+                qDebug()<< "[T_Deploy] __UserShortId: "<<currentUserInfo.userShortId;
+                qDebug()<< "[T_Deploy] __AccountName: "<<currentUserInfo.accountName;
+                qDebug()<< "[T_Deploy] __PersonaName: "<<currentUserInfo.personaName;
+                QDir CFGDir(QDir::cleanPath(gSettings->getCFGPath()+"/"+doc->metaValue("Target")));
+
+                QMap<QString,QString> registerMap={
+                    {"__UserId",currentUserInfo.userId},
+                    {"__UserShortId",currentUserInfo.userShortId},
+                    {"__AccountName",currentUserInfo.accountName},
+                    {"__PersonaName",currentUserInfo.personaName},
+                    {"__WhereAmI", CFGDir.absolutePath()}
+                };
+                doc->setGlobalVariables(registerMap);
+
+                qDebug() << "[T_Deploy] About to create T_DeployPanel with doc";
+                T_DeployPanel * deployPanel = new T_DeployPanel(nullptr,doc,subDirPath);
+                qDebug() << "[T_Deploy] T_DeployPanel created";
+                connect(deployPanel,&T_DeployPanel::deployFinished,this,[this,gArea,doc,subDirPath,deployPanel,localFileDrawerArea,result](){
+                    QDir sourceDir(subDirPath);
+                    QFile AsulConfig(sourceDir.filePath("config.asul"));
+                    if(!AsulConfig.open(QIODevice::ReadWrite | QIODevice::Truncate)){
+                        gFunc->showErr(tr("保存"),tr("文件打开失败:")+" "+AsulConfig.fileName());
+                        qDebug() << "[T_Deploy] Failed to open config.asul : "<<AsulConfig.fileName();
+                        return;
+                    }
+                    if(!AsulConfig.write(doc->dump().toUtf8())){
+                        gFunc->showErr(tr("保存"),tr("文件写入失败:")+" "+AsulConfig.fileName());
+                        qDebug() << "[T_Deploy] Failed to write config.asul : "<<AsulConfig.fileName();
+                        return;
+                    }
+                    AsulConfig.close();
+
+                    QDir CFGDir(QDir::cleanPath(gSettings->getCFGPath()+"/"+doc->metaValue("Target")));
+                    for(auto &CFGExport: doc->toCFGs()){
+                        DBG(" ============ deployProfile ============ ");
+                        DBG(" - deployProfile:" << CFGExport.output);
+                        DBG(" - deployProfile:" << CFGExport.content);
+                        DBG(" - deployProfile:" << CFGExport.relativePath);
+                        DBG(" - deployProfile:" << CFGExport.absolutePath);
+                        DBG(" - deployProfile:" << CFGExport.fileName);
+                        DBG(" - deployProfile:" << CFGExport.sourceFormId);
+                        DBG(" - deployProfile:" << CFGExport.description);
+                        DBG(" - deployProfile done ===============");
+                        QFile cfgFile(CFGDir.filePath(CFGExport.fileName));
+                        if(!cfgFile.open(QIODevice::ReadWrite | QIODevice::Truncate)){
+                            gFunc->showErr(tr("保存"),tr("文件打开失败:")+" "+cfgFile.fileName());
+                            qDebug() << "[T_Deploy] Failed to open config file : "<<cfgFile.fileName();
+                            return;
+                        }
+                        QTextStream out(&cfgFile);
+                        out << tr("// ====== 生成的文件 =======")+"\n";
+                        out << tr("//=这个 %1 文件由 Asul-CFGManager(AM) 根据配置自动生成 ").arg(CFGExport.fileName)+"\n";
+                        out << tr("\n//==这个 配置文件 从哪儿来的?")+"\n";
+                        out << tr("//CFG 制作者: ")<<CFGExport.sourceFormId<<"\n";
+                        out << tr("//CFG 名称: ")<<CFGExport.description<<"\n";
+                        out << tr("//CFG 版本: ")<<doc->metaValue("Version")<<"\n";
+                        out << tr("//==CFG 详细 结束")+"\n\n";
+
+                        out << CFGExport.content << "\r\n";
+
+                        out << "\r\n"+tr("//==参数结束")+"\n";
+                        out << tr("//AM 是由 Alivn开发的部署 CS2 CFG 的程序,旨在为CFG制作者提供更方便的分发服务 以及 使用者提供方便的配置服务")+"\n";
+                        out << tr("//开发者:Github(https://github.com/AsulTop),网站(http://www.asul.top)")+"\n";
+                        out << tr("//配置时间: ")<<QDateTime::currentDateTime().toString("yyyy-MM-dd HH:mm:ss")+"\n\n";
+                    }
+
+                    QDesktopServices::openUrl(QUrl("file:///" + CFGDir.absolutePath()));
+                    if(!doc->metaValue("Exec").isEmpty()){
+                        QString execRelativePath = doc->metaValue("Exec");
+                        QString cleanExecPath = QDir::cleanPath(CFGDir.absoluteFilePath(execRelativePath));
+                        if(!cleanExecPath.contains(gSettings->getCFGPath())){
+                            gFunc->showErr(tr("运行"),tr("可执行文件路径不在允许的目录下"));
+                            qCritical()<< "[T_Deploy] Exec path not in CFG path: "<<cleanExecPath;
+                        }else if(!QFile::exists(cleanExecPath)){
+                            gFunc->showErr(tr("运行"),tr("可执行文件不存在")+" "+cleanExecPath);
+                            qDebug() << "[T_Deploy] Exec file not found: "<<cleanExecPath;
+                        }else{
+                            if(result.trusted){
+                                QProcess::startDetached("cmd", QStringList() << "/c" << "start" << "" << cleanExecPath, CFGDir.absolutePath());
+                            }else{
+                                bool askRec = GlobalFunc::askDialog(this,tr("运行"),tr("此配置未受信任，是否要运行其可执行文件？\n\n")+cleanExecPath+tr("\n\n警告：运行未受信任的程序可能存在安全风险"));
+                                if(askRec){
+                                    QProcess::startDetached("cmd", QStringList() << "/c" << "start" << "" << cleanExecPath, CFGDir.absolutePath());
+                                }
+                            }
+                        }
+                    }
+
+                    deployPanel->deleteLater();
+
+                });
+                qDebug() << "[T_Deploy] editButton clicked, about to show deployPanel";
+                deployPanel->show();
+                qDebug() << "[T_Deploy] deployPanel->show() called";
+            });
+            localFileDrawerArea->expand();
         }
-        
+
     });
 
     localFileDrawerHeaderLayout->addWidget(localFileDrawerText);
@@ -312,14 +487,14 @@ T_Deploy::T_Deploy(QWidget *parent)
             //         padding-left: 10px;  
             //     }
             // )");
-            installButton->setText(installButton->text()+" "+tr(" (受信任)"));
+            installButton->setText(installButton->text()+" "+tr(" (本地受信任)"));
             installButton->setLightDefaultColor(QColor(143, 204, 167));
             installButton->setDarkDefaultColor(QColor(39, 135, 95));
-        }
+        }else installButton->setText(installButton->text() + " "+tr(" (本地)"));
         
         localFileDrawerArea->addDrawer(gArea);
         qDebug() << "[T_Deploy] About to connect installButton clicked";
-        connect(installButton,&ElaPushButton::clicked,this,[this,gArea,localFileDrawerArea,extracDir,doc,userInfoMap,selectAccountComboBox]() -> void{
+        connect(installButton,&ElaPushButton::clicked,this,[this,result,gArea,localFileDrawerArea,extracDir,doc,userInfoMap,selectAccountComboBox]() -> void{
             SteamUserInfo currentUserInfo=userInfoMap[selectAccountComboBox->currentText()];
             qDebug()<< "[T_Deploy] About to set global variables";
             qDebug()<< "[T_Deploy] __UserId: "<<currentUserInfo.userId;
@@ -342,7 +517,7 @@ T_Deploy::T_Deploy(QWidget *parent)
             qDebug() << "[T_Deploy] About to create T_DeployPanel with doc";
             T_DeployPanel * deployPanel = new T_DeployPanel(nullptr,doc,extracDir);
             qDebug() << "[T_Deploy] T_DeployPanel created";
-            connect(deployPanel,&T_DeployPanel::deployFinished,this,[gArea,doc,extracDir,deployPanel,localFileDrawerArea](){
+            connect(deployPanel,&T_DeployPanel::deployFinished,this,[this,gArea,doc,extracDir,deployPanel,localFileDrawerArea,result](){
                 // 准备实现toCFGs保存后复制配置到CFG文件目录
                 QDir CFGDir(QDir::cleanPath(gSettings->getCFGPath()+"/"+doc->metaValue("Target")));
                 if(CFGDir.exists()){
@@ -412,7 +587,28 @@ T_Deploy::T_Deploy(QWidget *parent)
                 // Debug-Use
 
                 QDesktopServices::openUrl(QUrl("file:///" + CFGDir.absolutePath()));
-                // Debug-Use
+
+                if(!doc->metaValue("Exec").isEmpty()){
+                    QString execRelativePath = doc->metaValue("Exec");
+                    QString cleanExecPath = QDir::cleanPath(CFGDir.absoluteFilePath(execRelativePath));
+                    if(!cleanExecPath.contains(gSettings->getCFGPath())){
+                        gFunc->showErr(tr("运行"),tr("可执行文件路径不在允许的目录下"));
+                        qCritical()<< "[T_Deploy] Exec path not in CFG path: "<<cleanExecPath;
+                    }else if(!QFile::exists(cleanExecPath)){
+                        gFunc->showErr(tr("运行"),tr("可执行文件不存在")+" "+cleanExecPath);
+                        qDebug() << "[T_Deploy] Exec file not found: "<<cleanExecPath;
+                    }else{
+                        if(result.trusted){
+                            QProcess::startDetached("cmd", QStringList() << "/c" << "start" << "" << cleanExecPath, CFGDir.absolutePath());
+                        }else{
+                            bool askRec = GlobalFunc::askDialog(this,tr("运行"),tr("此配置未受信任，是否要运行其可执行文件？\n\n")+cleanExecPath+tr("\n\n警告：运行未受信任的程序可能存在安全风险"));
+                            if(askRec){
+                                QProcess::startDetached("cmd", QStringList() << "/c" << "start" << "" << cleanExecPath, CFGDir.absolutePath());
+                            }
+                        }
+                    }
+                }
+
                 localFileDrawerArea->removeDrawer(gArea);
                 deployPanel->deleteLater();
                 delete gArea;
