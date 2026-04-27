@@ -170,6 +170,14 @@ if(WIN32)
         $<TARGET_FILE_DIR:${PROJECT_NAME}>
         COMMENT "Copying libverifyfile.dll to binary directory"
     )
+
+    # 部署OpenSSL DLL (AVF-SDK 依赖)
+    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        "${CMAKE_CURRENT_SOURCE_DIR}/AVF-SDK/install/bin/libcrypto-4-x64.dll"
+        $<TARGET_FILE_DIR:${PROJECT_NAME}>
+        COMMENT "Copying libcrypto-4-x64.dll to binary directory"
+    )
 endif()
 
 # 安装设置
@@ -197,6 +205,10 @@ add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
 
 # 复制AVF-SDK DLL到安装目录
 install(FILES "${CMAKE_CURRENT_SOURCE_DIR}/AVF-SDK/install/bin/libverifyfile.dll"
+    DESTINATION bin
+    PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE
+)
+install(FILES "${CMAKE_CURRENT_SOURCE_DIR}/AVF-SDK/install/bin/libcrypto-4-x64.dll"
     DESTINATION bin
     PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE
 )
