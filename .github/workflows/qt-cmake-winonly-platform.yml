@@ -56,6 +56,7 @@ jobs:
         mkdir dist
         copy build\%PRODUCT_NAME%.exe dist\
         copy build\ElaWidgetTools.dll dist\
+        copy build\libverifyfile.dll dist\
         windeployqt dist\%PRODUCT_NAME%.exe
 
     - name: Upload artifacts
