@@ -178,6 +178,12 @@ if(WIN32)
         $<TARGET_FILE_DIR:${PROJECT_NAME}>
         COMMENT "Copying libcrypto-4-x64.dll to binary directory"
     )
+    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        "${CMAKE_CURRENT_SOURCE_DIR}/AVF-SDK/install/bin/libssl-4-x64.dll"
+        $<TARGET_FILE_DIR:${PROJECT_NAME}>
+        COMMENT "Copying libssl-4-x64.dll to binary directory"
+    )
 endif()
 
 # 安装设置

@@ -58,6 +58,7 @@ jobs:
         copy build\ElaWidgetTools.dll dist\
         copy build\libverifyfile.dll dist\
         copy build\libcrypto-4-x64.dll dist\
+        copy build\libssl-4-x64.dll dist\
         windeployqt dist\%PRODUCT_NAME%.exe
 
     - name: Upload artifacts
