@@ -70,8 +70,6 @@ CMakeLists.txt.user*
 # Binaries
 # --------
 
-*.exe
-
 # Directories with generated files
 .moc/
 .obj/
@@ -80,3 +78,6 @@ CMakeLists.txt.user*
 .uic/
 /build*/
 /.cache/
+./.vscode/
+./.cache/
+./.trae/
