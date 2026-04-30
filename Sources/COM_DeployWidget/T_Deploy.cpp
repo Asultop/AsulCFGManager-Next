@@ -289,8 +289,10 @@ T_Deploy::T_Deploy(QWidget *parent)
                         out << tr("//配置时间: ")<<QDateTime::currentDateTime().toString("yyyy-MM-dd HH:mm:ss")+"\n\n";
                     }
 
-                    QDesktopServices::openUrl(QUrl("file:///" + CFGDir.absolutePath()));
-                    if(!doc->metaValue("Exec").isEmpty()){
+                    if(gSets->getOpenFolderAfterDeploy()){
+                        QDesktopServices::openUrl(QUrl("file:///" + CFGDir.absolutePath()));
+                    }
+                    if(gSets->getExecuteProgramAfterDeploy() && !doc->metaValue("Exec").isEmpty()){
                         QString execRelativePath = doc->metaValue("Exec");
                         QString cleanExecPath = QDir::cleanPath(CFGDir.absoluteFilePath(execRelativePath));
                         if(!cleanExecPath.contains(gSettings->getCFGPath())){
@@ -576,11 +578,11 @@ T_Deploy::T_Deploy(QWidget *parent)
                     out << tr("//配置时间: ")<<QDateTime::currentDateTime().toString("yyyy-MM-dd HH:mm:ss")+"\n\n";
                 }
 
-                // Debug-Use
+                if(gSets->getOpenFolderAfterDeploy()){
+                    QDesktopServices::openUrl(QUrl("file:///" + CFGDir.absolutePath()));
+                }
 
-                QDesktopServices::openUrl(QUrl("file:///" + CFGDir.absolutePath()));
-
-                if(!doc->metaValue("Exec").isEmpty()){
+                if(gSets->getExecuteProgramAfterDeploy() && !doc->metaValue("Exec").isEmpty()){
                     QString execRelativePath = doc->metaValue("Exec");
                     QString cleanExecPath = QDir::cleanPath(CFGDir.absoluteFilePath(execRelativePath));
                     if(!cleanExecPath.contains(gSettings->getCFGPath())){

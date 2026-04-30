@@ -39,7 +39,7 @@ Asul::Asul(QWidget *parent) : ElaWindow(parent) {
                      ));
   this->setNavigationBarDisplayMode(ElaNavigationType::Auto); //SetNavigationBarDisplayMode
   InstallPage(tr("主页"), T_Home, ElaIconType::House);
-  InstallPage(tr("图标"),T_Icon,ElaIconType::TicketsSimple);
+  // InstallPage(tr("图标"),T_Icon,ElaIconType::TicketsSimple);
   InstallPage(tr("部署"),T_Deploy,ElaIconType::Download);
   InstallAboutFooter(tr("关于"), T_About, _about);
   InstallFooter(tr("设置"), T_SettingScreen, _setting, ElaIconType::Gear);

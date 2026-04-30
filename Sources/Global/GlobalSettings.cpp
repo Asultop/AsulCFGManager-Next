@@ -32,6 +32,8 @@ void GlobalSettings::init()
     this->setGLoc(new QTemporaryDir());
     this->setEnableThemeColorSyncWithSystem(false);
     this->setEnableThemeModeSyncWithSystem(false);
+    this->setOpenFolderAfterDeploy(true);
+    this->setExecuteProgramAfterDeploy(true);
     this->setSupportedLang(QStringList{"zh_CN","en_US"});
 
 

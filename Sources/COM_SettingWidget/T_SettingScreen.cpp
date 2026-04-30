@@ -10,9 +10,8 @@
 #include "ElaApplication.h"
 
 #include "ElaColorDialog.h"
-#include "ElaPlainTextEdit.h"
 #include "ElaPushButton.h"
-
+#include "ElaDrawerArea.h"
 #include "ElaScrollPageArea.h"
 
 T_SettingScreen::T_SettingScreen(QWidget *parent)
@@ -20,15 +19,31 @@ T_SettingScreen::T_SettingScreen(QWidget *parent)
 {
     this->initWidget(tr("设置"),tr("设置"),tr(""));
 
-
     QVBoxLayout *centerVLayout=new QVBoxLayout(centralWidget);
+
+    // --- 外观 DrawerArea ---
+    ElaDrawerArea *appearanceDrawer = new ElaDrawerArea(this);
+    QWidget *appearanceHeader = new QWidget(this);
+    QHBoxLayout *appearanceHeaderLayout = new QHBoxLayout(appearanceHeader);
+    appearanceHeaderLayout->setContentsMargins(0,0,0,0);
+    ElaText *appearanceIcon = new ElaText(this);
+    appearanceIcon->setTextPixelSize(15);
+    appearanceIcon->setElaIcon(ElaIconType::Paintbrush);
+    appearanceIcon->setFixedSize(25,25);
+    ElaText *appearanceText = new ElaText(tr("外观"),this);
+    appearanceText->setTextPixelSize(15);
+    appearanceHeaderLayout->addWidget(appearanceIcon);
+    appearanceHeaderLayout->addWidget(appearanceText);
+    appearanceHeaderLayout->addStretch();
+    appearanceDrawer->setDrawerHeader(appearanceHeader);
 
     ElaToggleSwitch *closeThemeColorSync=new ElaToggleSwitch(this);
     closeThemeColorSync->setIsToggled(gSets->getEnableThemeColorSyncWithSystem());
-        connect(closeThemeColorSync,&ElaToggleSwitch::toggled,[=](bool checked){
+    connect(closeThemeColorSync,&ElaToggleSwitch::toggled,[=](bool checked){
         gSets->setEnableThemeColorSyncWithSystem(checked);
         if(checked) GlobalFunc::updateThemeUI();
     });
+    appearanceDrawer->addDrawer(GlobalFunc::GenerateArea(this,new ElaText(tr("开启颜色同步"),this),new ElaText(tr("同步 Windows 的主题色"),this),closeThemeColorSync,false));
 
     ElaToggleSwitch *closeThemeModeSync=new ElaToggleSwitch(this);
     closeThemeModeSync->setIsToggled(gSets->getEnableThemeModeSyncWithSystem());
@@ -41,74 +56,54 @@ T_SettingScreen::T_SettingScreen(QWidget *parent)
             }else eTheme->setThemeMode(ElaThemeType::Light);
         }
     });
+    appearanceDrawer->addDrawer(GlobalFunc::GenerateArea(this,new ElaText(tr("开启明暗同步"),this),new ElaText(tr("同步 Windows 的明暗模式"),this),closeThemeModeSync,false));
 
     AsulComboBox *SwitchDisplayMode=new AsulComboBox(this);
     SwitchDisplayMode->addItems(QString{"Normal ElaMica Mica MicaAlt Acrylic DWMBlur"}.split(" "));
     SwitchDisplayMode->setCurrentText("Acrylic");
     eApp->setWindowDisplayMode(ElaApplicationType::Acrylic);
-    
     connect(SwitchDisplayMode,&AsulComboBox::currentIndexChanged,[=](int index){
-        QString filePath = gSets->getGLoc()->path()+"/mica.png";
         switch (index){
-            case 0:
-                // eApp->setElaMicaImagePath(filePath);
-                eApp->setWindowDisplayMode(ElaApplicationType::Normal);
-                break;
-            case 1:
-                // eApp->setElaMicaImagePath(filePath);
-                eApp->setWindowDisplayMode(ElaApplicationType::ElaMica);
-                break;
-            case 2:
-                // eApp->setElaMicaImagePath(filePath);
-                eApp->setWindowDisplayMode(ElaApplicationType::Mica);
-                break;
-            case 3:
-                // eApp->setElaMicaImagePath(filePath);
-                eApp->setWindowDisplayMode(ElaApplicationType::MicaAlt);
-                break;
-            case 4:
-                // eApp->setElaMicaImagePath(filePath);
-                eApp->setWindowDisplayMode(ElaApplicationType::Acrylic);
-                break;
-            case 5:
-                // eApp->setElaMicaImagePath(filePath);
-                eApp->setWindowDisplayMode(ElaApplicationType::DWMBlur);
-                break;
+            case 0: eApp->setWindowDisplayMode(ElaApplicationType::Normal); break;
+            case 1: eApp->setWindowDisplayMode(ElaApplicationType::ElaMica); break;
+            case 2: eApp->setWindowDisplayMode(ElaApplicationType::Mica); break;
+            case 3: eApp->setWindowDisplayMode(ElaApplicationType::MicaAlt); break;
+            case 4: eApp->setWindowDisplayMode(ElaApplicationType::Acrylic); break;
+            case 5: eApp->setWindowDisplayMode(ElaApplicationType::DWMBlur); break;
         }
     });
+    appearanceDrawer->addDrawer(GlobalFunc::GenerateArea(this,new ElaText(tr("显示模式"),this),new ElaText(tr("切换窗口显示模式"),this),SwitchDisplayMode,false));
 
-    
-
-    //切换主题
     AsulComboBox * changeThemeMode = new AsulComboBox(this);
     changeThemeMode->addItems(QString{"Light Dark"}.split(" "));
     changeThemeMode->setCurrentText(eTheme->getThemeMode()==ElaThemeType::Dark?"Dark":"Light");
-        connect(changeThemeMode,&AsulComboBox::currentIndexChanged,[=](int index){
+    connect(changeThemeMode,&AsulComboBox::currentIndexChanged,[=](int index){
         if(index==0){
             eTheme->setThemeMode(ElaThemeType::Light);
         }else eTheme->setThemeMode(ElaThemeType::Dark);
     });
+    appearanceDrawer->addDrawer(GlobalFunc::GenerateArea(this,new ElaText(tr("切换主题"),this),new ElaText(tr("切换 Dark/Light"),this),changeThemeMode,false));
 
     ElaPushButton * ColorPickBtn=new ElaPushButton(this);
-
     ElaColorDialog * colorDialog=new ElaColorDialog(this);
-
     GlobalFunc::addThemeSyncList(ColorPickBtn);
     ColorPickBtn->setText(tr("选择颜色"));
-
     colorDialog->setWindowTitle(" ");
     connect(ColorPickBtn,&ElaPushButton::clicked,[=](){
-        // qDebug()<<"ColorPick Clicked"<<Qt::endl;
         colorDialog->exec();
     });
     connect(colorDialog, &ElaColorDialog::colorSelected, this, [=](const QColor& color) {
         GlobalFunc::updateThemeUI(color);
     });
+    appearanceDrawer->addDrawer(GlobalFunc::GenerateArea(this,ElaIconType::Display,new ElaText(tr("选择颜色"),this),new ElaText(tr("选择自定义颜色"),this),ColorPickBtn,false));
 
+    appearanceDrawer->expand();
+    centerVLayout->addWidget(appearanceDrawer);
+
+    // --- 语言 (独立) ---
     AsulComboBox * switchLanguage = new AsulComboBox(this);
     switchLanguage->addItems(gSets->getSupportedLang());
     switchLanguage->setCurrentText(gSets->getRegisterSettings()->value("lang").toString());
-
     connect(switchLanguage,&AsulComboBox::currentTextChanged,[=](QString val){
         gSets->getRegisterSettings()->setValue("lang",val);
         qApp->installTranslator(gSets->translators[val]);
@@ -117,34 +112,40 @@ T_SettingScreen::T_SettingScreen(QWidget *parent)
             QProcess::startDetached(qApp->applicationFilePath(), QStringList());
         }else{GlobalFunc::showInfo(tr("语言"),tr("重启以更换语言"),0x3f3f3f3f);}
     });
-    
-
-    AsulComboBox *test1ComboBox=new AsulComboBox(this);
-    test1ComboBox->addItems(QString{"Test1 Test2 Test3 Test4 Test5"}.split(" "));
-
-    AsulComboBox *test2ComboBox=new AsulComboBox(this);
-    test2ComboBox->addItems(QString{"Test1 Test2 Test3 Test4 Test5"}.split(" "));
-
-    
-    ElaScrollPageArea * TestingArea=new ElaScrollPageArea(this);
-    TestingArea->setMinimumWidth(600);
-    ElaPlainTextEdit *TestingAreaTextEdit=new ElaPlainTextEdit(this);
-    TestingAreaTextEdit->setPlainText("TestingAreaTextEdit");
-    QHBoxLayout *testingAreaLayout=new QHBoxLayout(TestingArea);
-    testingAreaLayout->addWidget(TestingAreaTextEdit);
-
-
-
-
-    centerVLayout->addWidget(GlobalFunc::GenerateArea(this,new ElaText(tr("开启颜色同步"),this),new ElaText(tr("同步 Windows 的主题色"),this),closeThemeColorSync,false));
-    centerVLayout->addWidget(GlobalFunc::GenerateArea(this,new ElaText(tr("开启明暗同步"),this),new ElaText(tr("同步 Windows 的明暗模式"),this),closeThemeModeSync,false));
-    centerVLayout->addWidget(GlobalFunc::GenerateArea(this,new ElaText(tr("显示模式"),this),new ElaText(tr("切换窗口显示模式"),this),SwitchDisplayMode,false));
-    centerVLayout->addWidget(GlobalFunc::GenerateArea(this,new ElaText(tr("切换主题"),this),new ElaText(tr("切换 Dark/Light"),this),changeThemeMode,false));
-    centerVLayout->addWidget(GlobalFunc::GenerateArea(this,ElaIconType::Display,new ElaText(tr("选择颜色"),this),new ElaText(tr("选择自定义颜色"),this),ColorPickBtn,false));
     centerVLayout->addWidget(GlobalFunc::GenerateArea(this,ElaIconType::Globe,new ElaText(tr("切换语言"),this),new ElaText(tr("切换语言"),this),switchLanguage,false));
-    centerVLayout->addWidget(GlobalFunc::GenerateArea(this,ElaIconType::DiceD6,new ElaText(tr("测试图标"),this),new ElaText(tr("测试图标"),this),test1ComboBox,false));
-    centerVLayout->addWidget(GlobalFunc::GenerateArea(this,QString(":/Sources/icon/splash_${THEME}.png"),new ElaText(tr("测试图标"),this),new ElaText(tr("测试图标"),this),test2ComboBox,false));
-    centerVLayout->addWidget(TestingArea);
+
+    // --- 部署 DrawerArea ---
+    ElaDrawerArea *deployDrawer = new ElaDrawerArea(this);
+    QWidget *deployHeader = new QWidget(this);
+    QHBoxLayout *deployHeaderLayout = new QHBoxLayout(deployHeader);
+    deployHeaderLayout->setContentsMargins(0,0,0,0);
+    ElaText *deployIcon = new ElaText(this);
+    deployIcon->setTextPixelSize(15);
+    deployIcon->setElaIcon(ElaIconType::Download);
+    deployIcon->setFixedSize(25,25);
+    ElaText *deployText = new ElaText(tr("部署"),this);
+    deployText->setTextPixelSize(15);
+    deployHeaderLayout->addWidget(deployIcon);
+    deployHeaderLayout->addWidget(deployText);
+    deployHeaderLayout->addStretch();
+    deployDrawer->setDrawerHeader(deployHeader);
+
+    ElaToggleSwitch *openFolderAfterDeploy=new ElaToggleSwitch(this);
+    openFolderAfterDeploy->setIsToggled(gSets->getOpenFolderAfterDeploy());
+    connect(openFolderAfterDeploy,&ElaToggleSwitch::toggled,[=](bool checked){
+        gSets->setOpenFolderAfterDeploy(checked);
+    });
+    deployDrawer->addDrawer(GlobalFunc::GenerateArea(this,new ElaText(tr("部署后打开文件夹"),this),new ElaText(tr("部署完成后打开 CFG 目录"),this),openFolderAfterDeploy,false));
+
+    ElaToggleSwitch *executeProgramAfterDeploy=new ElaToggleSwitch(this);
+    executeProgramAfterDeploy->setIsToggled(gSets->getExecuteProgramAfterDeploy());
+    connect(executeProgramAfterDeploy,&ElaToggleSwitch::toggled,[=](bool checked){
+        gSets->setExecuteProgramAfterDeploy(checked);
+    });
+    deployDrawer->addDrawer(GlobalFunc::GenerateArea(this,new ElaText(tr("部署后执行程序"),this),new ElaText(tr("部署完成后运行配置中的可执行文件"),this),executeProgramAfterDeploy,false));
+
+    deployDrawer->expand();
+    centerVLayout->addWidget(deployDrawer);
 
     centerVLayout->addStretch();
 }
