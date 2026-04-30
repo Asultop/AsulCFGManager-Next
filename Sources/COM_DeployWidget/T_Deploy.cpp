@@ -130,39 +130,6 @@ T_Deploy::T_Deploy(QWidget *parent)
             QString docFileContent=subConfig.readAll();
             subConfig.close();
 
-            QString rootCaPath(":/certs/RootCA-Cert/root-ca.crt.pem");
-            bool enableCrlCheck=false;
-            QStringList crlPemPaths;
-            bool enableOcspCheck=false;
-            QString ocspResponseDerPath;
-
-            QFile signatureFile(QDir(subDirPath).filePath("config.sig"));
-            VerifyFile::SimpleVerifyResult result;
-            result = VerifyFile::VerifyFileSdk::verifyFileSimple(
-                subConfig.fileName(),
-                rootCaPath,
-                enableCrlCheck,
-                crlPemPaths,
-                enableOcspCheck,
-                ocspResponseDerPath
-            );
-            qDebug() << "Has Signature:" << result.hasSignature;
-            qDebug() << "Signature valid:" << result.signatureValid;
-            qDebug() << "Trusted:" << result.trusted;
-            qDebug() << "Signer:" << result.info.signer;
-            qDebug() << "Status:" << static_cast<int>(result.status);
-            if (!result.errorMessage.isEmpty()) {
-                qDebug() << "Error:" << result.errorMessage;
-            }
-            if(result.trusted){
-                GlobalFunc::showSuccess(tr("签名"),tr("受信任开发者")+" "+result.info.signer);
-            }
-            // else{
-            //     bool askRec=GlobalFunc::askDialog(this,tr("签名：未受信任开发者签名"),tr("目录 ")+subDir+tr(" 中的 config 签名未受信任，可能存在风险，是否继续？"));
-            //     if(!askRec){
-            //         continue;
-            //     }
-            // }
 
             AFormParser::ParseError err;
             auto doc = AFormParser::Document::from(docFileContent,&err);
@@ -210,16 +177,10 @@ T_Deploy::T_Deploy(QWidget *parent)
                     editButton,false
                 );
             }
-            if(result.trusted){
-                editButton->setText(editButton->text()+" "+tr(" (受信任)"));
-                editButton->setLightDefaultColor(QColor(143, 204, 167));
-                editButton->setDarkDefaultColor(QColor(39, 135, 95));
-            }
-
             localFileDrawerArea->addDrawer(gArea);
             m_scannedAreaMap[subDirPath] = gArea;
             qDebug() << "[T_Deploy] About to connect editButton clicked";
-            connect(editButton,&ElaPushButton::clicked,this,[this,gArea,result,localFileDrawerArea,subDirPath,doc,userInfoMap,selectAccountComboBox]() -> void{
+            connect(editButton,&ElaPushButton::clicked,this,[this,gArea,localFileDrawerArea,subDirPath,doc,userInfoMap,selectAccountComboBox]() -> void{
                 SteamUserInfo currentUserInfo=userInfoMap[selectAccountComboBox->currentText()];
                 qDebug()<< "[T_Deploy] About to set global variables";
                 qDebug()<< "[T_Deploy] __UserId: "<<currentUserInfo.userId;
@@ -240,7 +201,7 @@ T_Deploy::T_Deploy(QWidget *parent)
                 qDebug() << "[T_Deploy] About to create T_DeployPanel with doc";
                 T_DeployPanel * deployPanel = new T_DeployPanel(nullptr,doc,subDirPath);
                 qDebug() << "[T_Deploy] T_DeployPanel created";
-                connect(deployPanel,&T_DeployPanel::deployFinished,this,[this,gArea,doc,subDirPath,deployPanel,localFileDrawerArea,result](){
+                connect(deployPanel,&T_DeployPanel::deployFinished,this,[this,gArea,doc,subDirPath,deployPanel,localFileDrawerArea](){
                     QDir sourceDir(subDirPath);
                     QFile AsulConfig(sourceDir.filePath("config.asul"));
                     if(!AsulConfig.open(QIODevice::ReadWrite | QIODevice::Truncate)){
@@ -302,14 +263,7 @@ T_Deploy::T_Deploy(QWidget *parent)
                             gFunc->showErr(tr("运行"),tr("可执行文件不存在")+" "+cleanExecPath);
                             qDebug() << "[T_Deploy] Exec file not found: "<<cleanExecPath;
                         }else{
-                            if(result.trusted){
-                                QProcess::startDetached("cmd", QStringList() << "/c" << "start" << "" << cleanExecPath, CFGDir.absolutePath());
-                            }else{
-                                bool askRec = GlobalFunc::askDialog(this,tr("运行"),tr("此配置未受信任，是否要运行其可执行文件？\n\n")+cleanExecPath+tr("\n\n警告：运行未受信任的程序可能存在安全风险"));
-                                if(askRec){
-                                    QProcess::startDetached("cmd", QStringList() << "/c" << "start" << "" << cleanExecPath, CFGDir.absolutePath());
-                                }
-                            }
+                            QProcess::startDetached("cmd", QStringList() << "/c" << "start" << "" << cleanExecPath, CFGDir.absolutePath());
                         }
                     }
 
@@ -350,39 +304,7 @@ T_Deploy::T_Deploy(QWidget *parent)
         if(filePath.isEmpty()){
             return;
         }
-        // GlobalFunc::showSuccess(tr("导入"),tr("文件:") + filePath);
-    
-        bool enableCrlCheck=false;
-        QStringList crlPemPaths;
-        bool enableOcspCheck=false;
-        QString ocspResponseDerPath;
-        bool enableFileBingdingCheck=false;
-        auto result = VerifyFile::VerifyFileSdk::verifyFileSimple(
-            filePath,
-            rootCaPath,
-            enableCrlCheck,
-            crlPemPaths,
-            enableOcspCheck,
-            ocspResponseDerPath,
-            enableFileBingdingCheck
-        );
-        qDebug() << "Has Signature:" << result.hasSignature;
-        qDebug() << "Signature valid:" << result.signatureValid;
-        qDebug() << "Trusted:" << result.trusted;
-        qDebug() << "Signer:" << result.info.signer;
-        qDebug() << "Status:" << static_cast<int>(result.status);
-        if (!result.errorMessage.isEmpty()) {
-            qDebug() << "Error:" << result.errorMessage;
-        }
-        if(result.trusted){
-            GlobalFunc::showSuccess(tr("签名"),tr("受信任开发者")+" "+result.info.signer);
-        }
-        else{
-            bool askRec=GlobalFunc::askDialog(this,tr("签名：未受信任开发者签名"),tr("文件 ")+QFileInfo(filePath).fileName()+tr(" 可能存在风险，是否继续？"));
-            if(!askRec){
-                return;
-            }
-        }
+
         LoadingProgressDialog *loadingProgressDialog = new LoadingProgressDialog(this);
         loadingProgressDialog->setTitle(tr("解析包"));
         loadingProgressDialog->setProgressMode(LoadingProgressDialog::ProgressMode::Step);
@@ -418,6 +340,54 @@ T_Deploy::T_Deploy(QWidget *parent)
             return;
         }
         configFormFileContent=AsulFormFile.readAll();
+
+        // Verify using .sig if available
+        bool enableCrlCheck=false;
+        QStringList crlPemPaths;
+        bool enableOcspCheck=false;
+        QString ocspResponseDerPath;
+        QFile sigFile(extracDir + "/config.sig");
+        VerifyFile::SimpleVerifyResult result;
+        if(sigFile.exists()){
+            result = VerifyFile::VerifyFileSdk::verifyFileDetachedSimple(
+                AsulFormFilePath,
+                sigFile.fileName(),
+                rootCaPath,
+                enableCrlCheck,
+                crlPemPaths,
+                enableOcspCheck,
+                ocspResponseDerPath
+            );
+        }else{
+            result = VerifyFile::VerifyFileSdk::verifyFileSimple(
+                filePath,
+                rootCaPath,
+                enableCrlCheck,
+                crlPemPaths,
+                enableOcspCheck,
+                ocspResponseDerPath
+            );
+        }
+        qDebug() << "Has Signature:" << result.hasSignature;
+        qDebug() << "Signature valid:" << result.signatureValid;
+        qDebug() << "Trusted:" << result.trusted;
+        qDebug() << "Signer:" << result.info.signer;
+        qDebug() << "Status:" << static_cast<int>(result.status);
+        if (!result.errorMessage.isEmpty()) {
+            qDebug() << "Error:" << result.errorMessage;
+        }
+        if(result.trusted){
+            GlobalFunc::showSuccess(tr("签名"),tr("受信任开发者")+" "+result.info.signer);
+        }
+        else{
+            bool askRec=GlobalFunc::askDialog(this,tr("签名：未受信任开发者签名"),tr("文件 ")+QFileInfo(filePath).fileName()+tr(" 可能存在风险，是否继续？"));
+            if(!askRec){
+                loadingProgressDialog->close();
+                delete loadingProgressDialog;
+                return;
+            }
+        }
+
         AFormParser::ParseError err;
         auto doc = AFormParser::Document::from(configFormFileContent,&err);
         if(!doc){

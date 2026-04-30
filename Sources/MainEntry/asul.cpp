@@ -38,6 +38,7 @@ Asul::Asul(QWidget *parent) : ElaWindow(parent) {
                          ElaAppBarType::MinimizeButtonHint // ButtonFlag
                      ));
   this->setNavigationBarDisplayMode(ElaNavigationType::Auto); //SetNavigationBarDisplayMode
+  this->setNavigationBarDisplayMode(ElaNavigationType::Compact); //SetNavigationBarDisplayMode
   InstallPage(tr("主页"), T_Home, ElaIconType::House);
   // InstallPage(tr("图标"),T_Icon,ElaIconType::TicketsSimple);
   InstallPage(tr("部署"),T_Deploy,ElaIconType::Download);

@@ -143,6 +143,25 @@ public:
         bool enableFileBindingCheck = false
     );
 
+    static bool signFileDetachedSimple(
+        const QString &filePath,
+        const QString &leafPrivateKeyPemPath,
+        const QString &leafCertificatePemPath,
+        const QString &keyId = QString(),
+        const QString &algorithm = QStringLiteral("RSA-SHA256"),
+        QString *errorMessage = nullptr
+    );
+
+    static SimpleVerifyResult verifyFileDetachedSimple(
+        const QString &filePath,
+        const QString &sigFilePath,
+        const QString &rootCaPemPath,
+        bool enableCrlCheck = false,
+        const QStringList &crlPemPaths = {},
+        bool enableOcspCheck = false,
+        const QString &ocspResponseDerPath = QString()
+    );
+
 private:
     VerifyFileSdk() = delete;
 };
