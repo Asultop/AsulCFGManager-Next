@@ -1,7 +1,7 @@
 #ifndef ELAFRAMEWORK_ELAWIDGETTOOLS_INCLUDE_ELADRAWERAREA_H_
 #define ELAFRAMEWORK_ELAWIDGETTOOLS_INCLUDE_ELADRAWERAREA_H_
 
-#include "stdafx.h"
+#include "ElaProperty.h"
 #include <QWidget>
 
 class ElaDrawerAreaPrivate;
@@ -21,7 +21,7 @@ public:
     void removeDrawer(QWidget* widget);
 
     void expand();
-    void collpase();
+    void collapse();
 
     bool getIsExpand() const;
 Q_SIGNALS:

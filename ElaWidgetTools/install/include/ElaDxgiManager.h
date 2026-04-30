@@ -3,8 +3,8 @@
 
 #include <QWidget>
 #ifdef Q_OS_WIN
-#include "singleton.h"
-#include "stdafx.h"
+#include "ElaProperty.h"
+#include "ElaSingleton.h"
 
 class ElaDxgiManagerPrivate;
 class ELA_EXPORT ElaDxgiManager : public QObject
@@ -15,7 +15,7 @@ class ELA_EXPORT ElaDxgiManager : public QObject
 
 private:
     explicit ElaDxgiManager(QObject* parent = nullptr);
-    ~ElaDxgiManager();
+    ~ElaDxgiManager() override;
 
 public:
     QStringList getDxDeviceList() const;

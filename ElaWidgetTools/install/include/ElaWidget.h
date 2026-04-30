@@ -3,8 +3,8 @@
 
 #include <QWidget>
 
-#include "Def.h"
 #include "ElaAppBar.h"
+#include "ElaDef.h"
 class ElaWidgetPrivate;
 class ELA_EXPORT ElaWidget : public QWidget
 {
@@ -17,7 +17,7 @@ class ELA_EXPORT ElaWidget : public QWidget
     Q_TAKEOVER_NATIVEEVENT_H
 public:
     explicit ElaWidget(QWidget* parent = nullptr);
-    ~ElaWidget();
+    ~ElaWidget() override;
     void moveToCenter();
 
     void setWindowButtonFlag(ElaAppBarType::ButtonType buttonFlag, bool isEnable = true);

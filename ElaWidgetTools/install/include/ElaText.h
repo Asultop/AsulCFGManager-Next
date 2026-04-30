@@ -3,8 +3,8 @@
 
 #include <QLabel>
 
-#include "Def.h"
-#include "stdafx.h"
+#include "ElaDef.h"
+#include "ElaProperty.h"
 class ElaTextPrivate;
 class ELA_EXPORT ElaText : public QLabel
 {

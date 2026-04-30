@@ -2,7 +2,7 @@
 #include "../Global/GlobalFunc.h"
 #include "../Global/GlobalSettings.h"
 #include "../SystemKit/AsulApplication.h"
-#include "Def.h"
+#include "ElaDef.h"
 
 
 #include "ElaPushButton.h"

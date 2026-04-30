@@ -4,8 +4,8 @@
 #include <QIcon>
 #include <QObject>
 
-#include "Def.h"
-#include "singleton.h"
+#include "ElaDef.h"
+#include "ElaSingleton.h"
 #define eApp ElaApplication::getInstance()
 class ElaApplicationPrivate;
 class ELA_EXPORT ElaApplication : public QObject

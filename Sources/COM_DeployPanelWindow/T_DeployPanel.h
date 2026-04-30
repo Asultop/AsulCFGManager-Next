@@ -7,8 +7,8 @@
 #include <QMap>
 #include "../SystemKit/BaseInclude.h"
 #include "../SystemKit/BaseScrollpage.h"
-#include "../AFormSDK/include/AFormParser/AFormParser.hpp"
-#include "../AFormSDK/include/AFormParser/LuaRuntime.hpp"
+#include "AFormParser/AFormParser.hpp"
+#include "AFormParser/LuaRuntime.hpp"
 #include <QTextBrowser>
 #include <ElaWindow.h>
 

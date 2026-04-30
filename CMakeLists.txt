@@ -83,14 +83,10 @@ set(HEADERS
     Sources/COM_DeployWidget/T_Deploy.h
     Sources/COM_DeployPanelWindow/T_DeployPanel.h
 
-
     Sources/CTL_AsulComboBox/AsulComboBox.h
     Sources/ToolKit/LoadingProgress/LoadingProgressDialog.h
-    
-    Sources/MainEntry/Def.h
+
     Sources/MainEntry/asul.h
-    Sources/MainEntry/singleton.h
-    Sources/MainEntry/stdafx.h
 )
 
 # 资源文件
@@ -140,6 +136,7 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
     aformparser
 )
 add_subdirectory(3rd/AFormSDK)
+
 # Windows特定设置
 if(WIN32)
     # 链接ElaWidgetTools库
@@ -153,7 +150,7 @@ if(WIN32)
     else()
         target_link_libraries(${PROJECT_NAME} PRIVATE
             ${CMAKE_CURRENT_SOURCE_DIR}/ElaWidgetTools/install/lib/ElaWidgetTools.lib
-            ${CMAKE_CURRENT_SOURCE_DIR}/AVF-SDK/install/lib/libverifyfile.dll.a
+            ${CMAKE_CURRENT_SOURCE_DIR}/AVF-SDK/install/lib/verifyfile.lib
         )
     endif()
 
@@ -168,9 +165,9 @@ if(WIN32)
     # 部署AVF-SDK DLL
     add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_if_different
-        "${CMAKE_CURRENT_SOURCE_DIR}/AVF-SDK/install/bin/libverifyfile.dll"
+        "${CMAKE_CURRENT_SOURCE_DIR}/AVF-SDK/install/bin/verifyfile.dll"
         $<TARGET_FILE_DIR:${PROJECT_NAME}>
-        COMMENT "Copying libverifyfile.dll to binary directory"
+        COMMENT "Copying verifyfile.dll to binary directory"
     )
 
     # 部署OpenSSL DLL (AVF-SDK 依赖)
@@ -179,6 +176,12 @@ if(WIN32)
         "${CMAKE_CURRENT_SOURCE_DIR}/AVF-SDK/install/bin/libcrypto-4-x64.dll"
         $<TARGET_FILE_DIR:${PROJECT_NAME}>
         COMMENT "Copying libcrypto-4-x64.dll to binary directory"
+    )
+    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        "${CMAKE_CURRENT_SOURCE_DIR}/AVF-SDK/install/bin/libssl-4-x64.dll"
+        $<TARGET_FILE_DIR:${PROJECT_NAME}>
+        COMMENT "Copying libssl-4-x64.dll to binary directory"
     )
 endif()
 
@@ -206,11 +209,15 @@ add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
 )
 
 # 复制AVF-SDK DLL到安装目录
-install(FILES "${CMAKE_CURRENT_SOURCE_DIR}/AVF-SDK/install/bin/libverifyfile.dll"
+install(FILES "${CMAKE_CURRENT_SOURCE_DIR}/AVF-SDK/install/bin/verifyfile.dll"
     DESTINATION bin
     PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE
 )
 install(FILES "${CMAKE_CURRENT_SOURCE_DIR}/AVF-SDK/install/bin/libcrypto-4-x64.dll"
+    DESTINATION bin
+    PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE
+)
+install(FILES "${CMAKE_CURRENT_SOURCE_DIR}/AVF-SDK/install/bin/libssl-4-x64.dll"
     DESTINATION bin
     PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE
 )

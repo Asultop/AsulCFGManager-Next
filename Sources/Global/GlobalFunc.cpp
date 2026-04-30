@@ -1,5 +1,5 @@
 #include "GlobalFunc.h"
-#include "Def.h"
+#include "ElaDef.h"
 #include "ElaComboBox.h"
 #include "ElaContentDialog.h"
 #include "ElaPlainTextEdit.h"

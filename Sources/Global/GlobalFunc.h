@@ -7,8 +7,8 @@
 #include <ElaScrollPageArea.h>
 #include <ElaText.h>
 #include <QHBoxLayout>
-#include "singleton.h"
-#include "stdafx.h"
+#include "ElaSingleton.h"
+#include "ElaProperty.h"
 
 #define gFunc GlobalFunc::getInstance()
 

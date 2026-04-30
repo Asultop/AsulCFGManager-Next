@@ -3,17 +3,16 @@
 #include <QAbstractNativeEventFilter>
 #include <QDialog>
 
-#include "stdafx.h"
-
+#include "ElaAppBar.h"
+#include "ElaProperty.h"
 class ElaContentDialogPrivate;
 class ELA_EXPORT ElaContentDialog : public QDialog
 {
     Q_OBJECT
     Q_Q_CREATE(ElaContentDialog)
-
+    Q_TAKEOVER_NATIVEEVENT_H
 public:
-
-    explicit ElaContentDialog(QWidget* parent,bool middleButtonEnable=true);
+    explicit ElaContentDialog(QWidget* parent,bool showMiddle=true);
     ~ElaContentDialog() override;
     Q_SLOT virtual void onLeftButtonClicked();
     Q_SLOT virtual void onMiddleButtonClicked();
@@ -34,13 +33,6 @@ protected:
     virtual void showEvent(QShowEvent* event) override;
     virtual void paintEvent(QPaintEvent* event) override;
     virtual void keyPressEvent(QKeyEvent* event) override;
-#ifdef Q_OS_WIN
-#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
-    virtual bool nativeEvent(const QByteArray& eventType, void* message, qintptr* result) override;
-#else
-    virtual bool nativeEvent(const QByteArray& eventType, void* message, long* result) override;
-#endif
-#endif
 };
 
 #endif // ELACONTENTDIALOG_H

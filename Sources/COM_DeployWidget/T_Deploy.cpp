@@ -2,7 +2,7 @@
 #include "../Global/GlobalFunc.h"
 #include "../Global/GlobalSettings.h"
 #include "../SystemKit/AsulApplication.h"
-#include "Def.h"
+#include "ElaDef.h"
 #include "../../3rd/QsLog/QsLog.h"
 
 #include "ElaComboBox.h"
@@ -22,7 +22,7 @@
 #include <QFile>
 #include <QProcess>
 #include "VerifyFileSdk/VerifyFileSdk.h"
-#include "../../3rd/AFormSDK/include/AFormParser/AFormParser.hpp"
+#include "AFormParser/AFormParser.hpp"
 #include "../ToolKit/ASteamSDK/ASteamUserQuery/F_SteamUserQuery.h"
 #include "../ToolKit/LoadingProgress/LoadingProgressDialog.h"
 #include <QThread>
@@ -138,22 +138,14 @@ T_Deploy::T_Deploy(QWidget *parent)
 
             QFile signatureFile(QDir(subDirPath).filePath("config.sig"));
             VerifyFile::SimpleVerifyResult result;
-            if(signatureFile.exists()){
-                result = VerifyFile::VerifyFileSdk::verifyFileDetachedSimple(
-                    subConfig.fileName(),
-                    signatureFile.fileName(),
-                    rootCaPath,
-                    enableCrlCheck,
-                    crlPemPaths,
-                    enableOcspCheck,
-                    ocspResponseDerPath
-                );
-            }else{
-                result.hasSignature = false;
-                result.signatureValid = false;
-                result.trusted = false;
-                qDebug() << "[T_Deploy] No detached signature file found in:" << subDirPath;
-            }
+            result = VerifyFile::VerifyFileSdk::verifyFileSimple(
+                subConfig.fileName(),
+                rootCaPath,
+                enableCrlCheck,
+                crlPemPaths,
+                enableOcspCheck,
+                ocspResponseDerPath
+            );
             qDebug() << "Has Signature:" << result.hasSignature;
             qDebug() << "Signature valid:" << result.signatureValid;
             qDebug() << "Trusted:" << result.trusted;
@@ -620,7 +612,7 @@ T_Deploy::T_Deploy(QWidget *parent)
         });
         qDebug() << "[T_Deploy] connect done, about to close loadingProgressDialog";
         
-        cleanAll:{
+        {
             loadingProgressDialog->close();
             localFileDrawerArea->expand();
             delete loadingProgressDialog;

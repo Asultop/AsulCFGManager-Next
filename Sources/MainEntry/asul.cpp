@@ -1,5 +1,5 @@
 #include "asul.h"
-#include "Def.h"
+#include "ElaDef.h"
 #include "../SystemKit/BaseScrollPage.h"
 #include "../COM_HomeWidget/T_Home.h"
 #include "../COM_SettingWidget/T_SettingScreen.h"
@@ -37,7 +37,7 @@ Asul::Asul(QWidget *parent) : ElaWindow(parent) {
                          ElaAppBarType::MaximizeButtonHint |
                          ElaAppBarType::MinimizeButtonHint // ButtonFlag
                      ));
-  this->setNavigationBarDisplayMode(ElaNavigationType::Compact); //SetNavigationBarDisplayMode
+  this->setNavigationBarDisplayMode(ElaNavigationType::Auto); //SetNavigationBarDisplayMode
   InstallPage(tr("主页"), T_Home, ElaIconType::House);
   InstallPage(tr("图标"),T_Icon,ElaIconType::TicketsSimple);
   InstallPage(tr("部署"),T_Deploy,ElaIconType::Download);

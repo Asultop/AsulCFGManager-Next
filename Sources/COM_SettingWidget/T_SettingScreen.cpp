@@ -6,7 +6,7 @@
 #include <qpixmap.h>
 #include <qstylehints.h>
 #include "../SystemKit/AsulApplication.h"
-#include "Def.h"
+#include "ElaDef.h"
 #include "ElaApplication.h"
 
 #include "ElaColorDialog.h"

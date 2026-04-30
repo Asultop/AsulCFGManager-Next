@@ -1,5 +1,5 @@
 #include "T_Home.h"
-#include "Def.h"
+#include "ElaDef.h"
 #include "ElaImageCard.h"
 #include "ElaAcrylicUrlCard.h"
 #include "ElaTheme.h"
@@ -37,7 +37,6 @@ T_Home::T_Home(QWidget *parent)
     ElaImageCard* backgroundCard = new ElaImageCard(this);
     backgroundCard->setBorderRadius(10);
     backgroundCard->setFixedHeight(400);
-    backgroundCard->setMaximumAspectRatio(1.7);
     backgroundCard->setCardImage(QImage(":/Sources/icon/Home_Background.png"));
 
     ElaAcrylicUrlCard* urlCard1 = new ElaAcrylicUrlCard(this);
@@ -123,7 +122,7 @@ T_Home::T_Home(QWidget *parent)
         homeCard1->setCardPixmap(QPixmap(":/Sources/icon/splash_dark.png"));
     homeCard1->setTitle(tr("设置"));
     homeCard1->setSubTitle(gSets->getProgramName());
-    homeCard1->setCardButtontext(tr("跳转"));
+    homeCard1->setCardButtonText(tr("跳转"));
     homeCard1->setInteractiveTips(tr("转到设置"));
     homeCard1->setDetailedText(gSets->getProgramName()+" "+tr(" 快速设置界面"));
 

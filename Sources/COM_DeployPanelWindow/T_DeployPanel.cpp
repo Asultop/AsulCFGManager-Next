@@ -5,7 +5,7 @@
 #include <QThreadPool>
 #include <QTimer>
 #include <QDebug>
-#include "Def.h"
+#include "ElaDef.h"
 #include "ElaComboBox.h"
 #include "../Global/GlobalSettings.h"
 #include "../Global/GlobalFunc.h"

@@ -7,7 +7,7 @@
 #include "../Global/GlobalFunc.h"
 #include "../Global/GlobalSettings.h"
 #include "../SystemKit/AsulApplication.h"
-#include "Def.h"
+#include "ElaDef.h"
 
 
 #define QLOG_DEBUG qDebug

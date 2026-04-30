@@ -3,7 +3,7 @@
 
 #include <QComboBox>
 
-#include "stdafx.h"
+#include "ElaProperty.h"
 
 class ElaComboBoxPrivate;
 class ELA_EXPORT ElaComboBox : public QComboBox
@@ -20,6 +20,7 @@ public:
 protected:
     virtual void showPopup() override;
     virtual void hidePopup() override;
+    virtual void paintEvent(QPaintEvent* event) override;
 };
 
 #endif // ELACOMBOBOX_H

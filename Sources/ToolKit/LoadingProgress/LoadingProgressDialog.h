@@ -4,7 +4,7 @@
 #include <QWidget>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
-#include "stdafx.h"
+#include "ElaProperty.h"
 #include "ElaProgressBar.h"
 #include "ElaText.h"
 

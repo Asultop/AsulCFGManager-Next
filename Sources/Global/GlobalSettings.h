@@ -2,8 +2,8 @@
 #define GLOBALSETTINGS_H
 
 #include <QObject>
-#include "stdafx.h"
-#include "singleton.h"
+#include "ElaProperty.h"
+#include "ElaSingleton.h"
 #include <QTemporaryDir>
 #include <QTranslator>
 #include <QSettings>

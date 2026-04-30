@@ -3,7 +3,7 @@
 
 #include <QLCDNumber>
 
-#include "stdafx.h"
+#include "ElaProperty.h"
 
 class ElaLCDNumberPrivate;
 class ELA_EXPORT ElaLCDNumber : public QLCDNumber
@@ -18,6 +18,9 @@ public:
     explicit ElaLCDNumber(QWidget* parent = nullptr);
     explicit ElaLCDNumber(uint numDigits, QWidget* parent = nullptr);
     ~ElaLCDNumber() override;
+
+protected:
+    virtual void paintEvent(QPaintEvent* event) override;
 };
 
 #endif //ELAWIDGETTOOLS_ELALCDNUMBER_H

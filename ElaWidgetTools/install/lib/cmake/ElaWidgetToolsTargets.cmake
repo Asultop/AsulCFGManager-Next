@@ -7,7 +7,7 @@ if(CMAKE_VERSION VERSION_LESS "2.8.12")
    message(FATAL_ERROR "CMake >= 2.8.12 required")
 endif()
 cmake_policy(PUSH)
-cmake_policy(VERSION 2.8.12...3.27)
+cmake_policy(VERSION 2.8.12...3.28)
 #----------------------------------------------------------------
 # Generated CMake target import file.
 #----------------------------------------------------------------
@@ -60,7 +60,7 @@ add_library(ElaWidgetTools SHARED IMPORTED)
 
 set_target_properties(ElaWidgetTools PROPERTIES
   INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/ElaWidgetTools/include"
-  INTERFACE_LINK_LIBRARIES "Qt6::Widgets;D3D11;DXGI"
+  INTERFACE_LINK_LIBRARIES "Qt6::Widgets;Qt6::WidgetsPrivate;D3D11;DXGI"
 )
 
 # Load information for each installed configuration.
