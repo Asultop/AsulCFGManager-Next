@@ -2,7 +2,7 @@
 #include "ElaDef.h"
 #include "ElaComboBox.h"
 #include "ElaContentDialog.h"
-#include "ElaPlainTextEdit.h"
+#include <QScrollArea>
 #include "ElaLineEdit.h"
 #include "ElaText.h"
 #include "GlobalSettings.h"
@@ -184,26 +184,35 @@ bool GlobalFunc::askDialog(QWidget *parent,QString title,QString content){
     ElaContentDialog *askWatch=new ElaContentDialog(parent,false);
     QWidget * askWatchWidget=new QWidget(parent);
     ElaText *askText=new ElaText(title,parent);
-    ElaPlainTextEdit *askLine =new ElaPlainTextEdit(parent);
+    askText->setTextPixelSize(20);
+    ElaText *askContent=new ElaText(content,parent);
+    askContent->setTextPixelSize(15);
+    askContent->setWordWrap(true);
+
     QVBoxLayout *askLayout=new QVBoxLayout();
     askLayout->addSpacing(5);
-    askLayout->addWidget(askText,40);
+    askLayout->addWidget(askText);
     askLayout->addSpacing(10);
-    askLayout->addWidget(askLine,60);
+
+    bool isLong = content.length() > 80;
+    if(isLong){
+        QScrollArea *scrollArea = new QScrollArea(parent);
+        scrollArea->setWidgetResizable(true);
+        scrollArea->setFrameShape(QFrame::NoFrame);
+        scrollArea->setMinimumHeight(120);
+        scrollArea->setMaximumHeight(300);
+        scrollArea->setWidget(askContent);
+        askLayout->addWidget(scrollArea);
+    }else{
+        askLayout->addWidget(askContent);
+    }
+
     askWatchWidget->setLayout(askLayout);
-    askLine->setMinimumHeight(45);
-    QFont tmFnt(askLine->font());
-    tmFnt.setPixelSize(15);
-    askLine->setFont(tmFnt);
-    askLine->setReadOnly(true);
-    askLine->appendPlainText(content);
-    askText->setTextPointSize(20);
-    askText->setTextPixelSize(20);
     askWatch->setRightButtonText(tr("是"));
     askWatch->setMiddleButtonText("");
     askWatch->setLeftButtonText(tr("否"));
 
-    bool RET;
+    bool RET = false;
     connect(askWatch,&ElaContentDialog::rightButtonClicked,[&]{
         askWatch->close();
         RET=true;
@@ -221,7 +230,7 @@ bool GlobalFunc::askDialog(QString title,QString content){
     return askDialog(nullptr,title,content);
 }
 
-ElaScrollPageArea * GenerateArea(QWidget *parent, ElaText *title, QWidget *subtitle, QWidget *widget, bool convert){
+ElaScrollPageArea * GlobalFunc::GenerateArea(QWidget *parent, ElaText *title, QWidget *subtitle, QWidget *widget, bool convert){
     ElaScrollPageArea *configArea=new ElaScrollPageArea(parent);
     QHBoxLayout * configHLayout=new QHBoxLayout(configArea);
     QVBoxLayout* configVLayout=new QVBoxLayout();
@@ -245,7 +254,7 @@ ElaScrollPageArea * GenerateArea(QWidget *parent, ElaText *title, QWidget *subti
     }
     return configArea;
 }
-ElaScrollPageArea * GenerateArea(QWidget *parent, QString iconPath, ElaText *title, QWidget *subtitle, QWidget *widget, bool convert){
+ElaScrollPageArea * GlobalFunc::GenerateArea(QWidget *parent, QString iconPath, ElaText *title, QWidget *subtitle, QWidget *widget, bool convert){
     ElaScrollPageArea *configArea=new ElaScrollPageArea(parent);
     QHBoxLayout * configHLayout=new QHBoxLayout();
     QVBoxLayout* configVLayout=new QVBoxLayout();
