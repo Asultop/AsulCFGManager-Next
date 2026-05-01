@@ -46,6 +46,10 @@ void GlobalSettings::init()
 
     this->setRegisterSettings(new QSettings(getProgramOrganization(),getProgramName(),this));
 
+    // 读取上次选择的平台
+    QString lastPlatform = this->getRegisterSettings()->value("LastSelectedPlatform", "Steam").toString();
+    this->setLastSelectedPlatform(lastPlatform);
+
     Qt::ColorScheme scheme = qApp->styleHints()->colorScheme();
     if(scheme == Qt::ColorScheme::Dark){
         eTheme->setThemeMode(ElaThemeType::Dark);
@@ -114,7 +118,7 @@ QString GlobalSettings::getProgramOrganization()
     return jsonObj["programOrganization"].toString();
 }
 
-QString GlobalSettings::getAllPath()
+void GlobalSettings::getAllPath()
 {
 
     QCoreApplication::processEvents(QEventLoop::AllEvents,5);
@@ -127,7 +131,7 @@ QString GlobalSettings::getAllPath()
     QString libraryFoldersFile = steamPath + "/steamapps/libraryfolders.vdf";
     if(steamPath.isEmpty()){
         qDebug() << "Steam Path is empty";
-        return "";
+        return;
     }
     QString CFGPath = getPath(libraryFoldersFile);
     this->setCFGPath(CFGPath);

@@ -4,26 +4,31 @@
 <context>
     <name>Asul</name>
     <message>
-        <location filename="../Sources/MainEntry/asul.cpp" line="20"/>
+        <location filename="../Sources/MainEntry/asul.cpp" line="21"/>
         <source>关闭</source>
         <translation>Close</translation>
     </message>
     <message>
-        <location filename="../Sources/MainEntry/asul.cpp" line="20"/>
+        <location filename="../Sources/MainEntry/asul.cpp" line="21"/>
         <source>确定要关闭此程序?</source>
         <translation>Are you sure to exit?</translation>
     </message>
     <message>
-        <location filename="../Sources/MainEntry/asul.cpp" line="42"/>
+        <location filename="../Sources/MainEntry/asul.cpp" line="43"/>
         <source>主页</source>
         <translation>Home</translation>
+    </message>
+    <message>
+        <location filename="../Sources/MainEntry/asul.cpp" line="46"/>
+        <source>启动项</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>图标</source>
         <translation type="vanished">Icon</translation>
     </message>
     <message>
-        <location filename="../Sources/MainEntry/asul.cpp" line="44"/>
+        <location filename="../Sources/MainEntry/asul.cpp" line="45"/>
         <source>部署</source>
         <translation type="unfinished"></translation>
     </message>
@@ -36,12 +41,12 @@
         <translation type="vanished">Example</translation>
     </message>
     <message>
-        <location filename="../Sources/MainEntry/asul.cpp" line="45"/>
+        <location filename="../Sources/MainEntry/asul.cpp" line="47"/>
         <source>关于</source>
         <translation>About</translation>
     </message>
     <message>
-        <location filename="../Sources/MainEntry/asul.cpp" line="46"/>
+        <location filename="../Sources/MainEntry/asul.cpp" line="48"/>
         <source>设置</source>
         <translation>Settings</translation>
     </message>
@@ -49,37 +54,37 @@
 <context>
     <name>F_SteamUserQuery</name>
     <message>
-        <location filename="../Sources/ToolKit/ASteamSDK/ASteamUserQuery/F_SteamUserQuery.cpp" line="19"/>
+        <location filename="../Sources/ToolKit/ASteamSDK/ASteamUserQuery/F_SteamUserQuery.cpp" line="20"/>
         <source>用户文件路径为空</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../Sources/ToolKit/ASteamSDK/ASteamUserQuery/F_SteamUserQuery.cpp" line="25"/>
+        <location filename="../Sources/ToolKit/ASteamSDK/ASteamUserQuery/F_SteamUserQuery.cpp" line="26"/>
         <source>无法打开用户文件:</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../Sources/ToolKit/ASteamSDK/ASteamUserQuery/F_SteamUserQuery.cpp" line="45"/>
+        <location filename="../Sources/ToolKit/ASteamSDK/ASteamUserQuery/F_SteamUserQuery.cpp" line="46"/>
         <source>无效 SteamID:</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../Sources/ToolKit/ASteamSDK/ASteamUserQuery/F_SteamUserQuery.cpp" line="60"/>
+        <location filename="../Sources/ToolKit/ASteamSDK/ASteamUserQuery/F_SteamUserQuery.cpp" line="61"/>
         <source>成功解析</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../Sources/ToolKit/ASteamSDK/ASteamUserQuery/F_SteamUserQuery.cpp" line="60"/>
+        <location filename="../Sources/ToolKit/ASteamSDK/ASteamUserQuery/F_SteamUserQuery.cpp" line="61"/>
         <source>个用户</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../Sources/ToolKit/ASteamSDK/ASteamUserQuery/F_SteamUserQuery.cpp" line="63"/>
+        <location filename="../Sources/ToolKit/ASteamSDK/ASteamUserQuery/F_SteamUserQuery.cpp" line="64"/>
         <source>VDF解析错误:</source>
         <translation>VDF Parsing Error:</translation>
     </message>
     <message>
-        <location filename="../Sources/ToolKit/ASteamSDK/ASteamUserQuery/F_SteamUserQuery.cpp" line="92"/>
+        <location filename="../Sources/ToolKit/ASteamSDK/ASteamUserQuery/F_SteamUserQuery.cpp" line="93"/>
         <source>错误：无效的SteamID64（小于基数）</source>
         <translation></translation>
     </message>
@@ -805,6 +810,201 @@
         <location filename="../Sources/COM_IconWidget/T_Icon.cpp" line="25"/>
         <source>图标</source>
         <translation type="unfinished">Icon</translation>
+    </message>
+</context>
+<context>
+    <name>T_Manager</name>
+    <message>
+        <location filename="../Sources/COM_ManagerWidget/T_Manager.cpp" line="34"/>
+        <source>启动项</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Sources/COM_ManagerWidget/T_Manager.cpp" line="34"/>
+        <source>管理</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Sources/COM_ManagerWidget/T_Manager.cpp" line="34"/>
+        <source>@AsulTop</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Sources/COM_ManagerWidget/T_Manager.cpp" line="75"/>
+        <source>平台</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Sources/COM_ManagerWidget/T_Manager.cpp" line="91"/>
+        <location filename="../Sources/COM_ManagerWidget/T_Manager.cpp" line="103"/>
+        <location filename="../Sources/COM_ManagerWidget/T_Manager.cpp" line="130"/>
+        <location filename="../Sources/COM_ManagerWidget/T_Manager.cpp" line="697"/>
+        <source>完美对战平台</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Sources/COM_ManagerWidget/T_Manager.cpp" line="121"/>
+        <source>切换平台</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Sources/COM_ManagerWidget/T_Manager.cpp" line="122"/>
+        <source>更改平台将重启对应平台并调整设置，是否继续？</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Sources/COM_ManagerWidget/T_Manager.cpp" line="177"/>
+        <location filename="../Sources/COM_ManagerWidget/T_Manager.cpp" line="185"/>
+        <source> (最近登录)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Sources/COM_ManagerWidget/T_Manager.cpp" line="191"/>
+        <source>账号</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Sources/COM_ManagerWidget/T_Manager.cpp" line="191"/>
+        <source>请先登录账号</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Sources/COM_ManagerWidget/T_Manager.cpp" line="196"/>
+        <source>用户</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Sources/COM_ManagerWidget/T_Manager.cpp" line="197"/>
+        <source>选择用户</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Sources/COM_ManagerWidget/T_Manager.cpp" line="205"/>
+        <location filename="../Sources/COM_ManagerWidget/T_Manager.cpp" line="255"/>
+        <location filename="../Sources/COM_ManagerWidget/T_Manager.cpp" line="308"/>
+        <source>应用</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Sources/COM_ManagerWidget/T_Manager.cpp" line="208"/>
+        <location filename="../Sources/COM_ManagerWidget/T_Manager.cpp" line="258"/>
+        <location filename="../Sources/COM_ManagerWidget/T_Manager.cpp" line="311"/>
+        <source>重启</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Sources/COM_ManagerWidget/T_Manager.cpp" line="209"/>
+        <source>这将重启 Steam 要继续吗</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Sources/COM_ManagerWidget/T_Manager.cpp" line="217"/>
+        <location filename="../Sources/COM_ManagerWidget/T_Manager.cpp" line="267"/>
+        <location filename="../Sources/COM_ManagerWidget/T_Manager.cpp" line="320"/>
+        <source>应用更改</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Sources/COM_ManagerWidget/T_Manager.cpp" line="218"/>
+        <source>点击应用后重启 Steam</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Sources/COM_ManagerWidget/T_Manager.cpp" line="231"/>
+        <location filename="../Sources/COM_ManagerWidget/T_Manager.cpp" line="239"/>
+        <location filename="../Sources/COM_ManagerWidget/T_Manager.cpp" line="555"/>
+        <location filename="../Sources/COM_ManagerWidget/T_Manager.cpp" line="563"/>
+        <location filename="../Sources/COM_ManagerWidget/T_Manager.cpp" line="586"/>
+        <location filename="../Sources/COM_ManagerWidget/T_Manager.cpp" line="592"/>
+        <source>完美平台</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Sources/COM_ManagerWidget/T_Manager.cpp" line="231"/>
+        <location filename="../Sources/COM_ManagerWidget/T_Manager.cpp" line="281"/>
+        <location filename="../Sources/COM_ManagerWidget/T_Manager.cpp" line="555"/>
+        <location filename="../Sources/COM_ManagerWidget/T_Manager.cpp" line="600"/>
+        <source>无法读取启动配置文件</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Sources/COM_ManagerWidget/T_Manager.cpp" line="239"/>
+        <location filename="../Sources/COM_ManagerWidget/T_Manager.cpp" line="289"/>
+        <location filename="../Sources/COM_ManagerWidget/T_Manager.cpp" line="563"/>
+        <location filename="../Sources/COM_ManagerWidget/T_Manager.cpp" line="608"/>
+        <source>配置文件格式错误</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Sources/COM_ManagerWidget/T_Manager.cpp" line="259"/>
+        <source>这将重启完美世界竞技平台 要继续吗</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Sources/COM_ManagerWidget/T_Manager.cpp" line="268"/>
+        <source>点击应用后重启完美世界竞技平台</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Sources/COM_ManagerWidget/T_Manager.cpp" line="281"/>
+        <location filename="../Sources/COM_ManagerWidget/T_Manager.cpp" line="289"/>
+        <location filename="../Sources/COM_ManagerWidget/T_Manager.cpp" line="600"/>
+        <location filename="../Sources/COM_ManagerWidget/T_Manager.cpp" line="608"/>
+        <location filename="../Sources/COM_ManagerWidget/T_Manager.cpp" line="639"/>
+        <location filename="../Sources/COM_ManagerWidget/T_Manager.cpp" line="645"/>
+        <source>5EPlay</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Sources/COM_ManagerWidget/T_Manager.cpp" line="312"/>
+        <source>这将重启 5EPlay 要继续吗</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Sources/COM_ManagerWidget/T_Manager.cpp" line="321"/>
+        <source>点击应用后重启 5EPlay</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Sources/COM_ManagerWidget/T_Manager.cpp" line="490"/>
+        <location filename="../Sources/COM_ManagerWidget/T_Manager.cpp" line="502"/>
+        <location filename="../Sources/COM_ManagerWidget/T_Manager.cpp" line="544"/>
+        <location filename="../Sources/COM_ManagerWidget/T_Manager.cpp" line="546"/>
+        <source>Steam</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Sources/COM_ManagerWidget/T_Manager.cpp" line="490"/>
+        <source>localconfig.vdf 文件不存在</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Sources/COM_ManagerWidget/T_Manager.cpp" line="502"/>
+        <source>localconfig.vdf 解析失败</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Sources/COM_ManagerWidget/T_Manager.cpp" line="544"/>
+        <location filename="../Sources/COM_ManagerWidget/T_Manager.cpp" line="592"/>
+        <location filename="../Sources/COM_ManagerWidget/T_Manager.cpp" line="645"/>
+        <source>启动参数已保存</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Sources/COM_ManagerWidget/T_Manager.cpp" line="546"/>
+        <source>保存失败: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Sources/COM_ManagerWidget/T_Manager.cpp" line="586"/>
+        <location filename="../Sources/COM_ManagerWidget/T_Manager.cpp" line="639"/>
+        <source>无法写入配置文件</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Sources/COM_ManagerWidget/T_Manager.cpp" line="711"/>
+        <source>完美世界竞技平台</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

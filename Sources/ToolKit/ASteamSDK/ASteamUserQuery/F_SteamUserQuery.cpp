@@ -4,6 +4,7 @@
 #include <QTextStream>
 #include <QRegularExpression>
 #include <QDebug>
+#include <fstream>
 
 #include "../../../3rd/ValveFileVDF-1.1.1/include/vdf_parser.hpp"
 

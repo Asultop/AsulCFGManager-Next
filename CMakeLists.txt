@@ -49,6 +49,7 @@ set(SOURCES
     Sources/COM_ExampleWidget.template/T_Example.cpp
     Sources/COM_DeployWidget/T_Deploy.cpp
     Sources/COM_DeployPanelWindow/T_DeployPanel.cpp
+    Sources/COM_ManagerWidget/T_Manager.cpp
 
     Sources/ToolKit/ASteamSDK/ASteamUserQuery/F_SteamUserQuery.cpp
     Sources/ToolKit/LoadingProgress/LoadingProgressDialog.cpp
@@ -82,7 +83,9 @@ set(HEADERS
     Sources/COM_ExampleWidget.template/T_Example.h
     Sources/COM_DeployWidget/T_Deploy.h
     Sources/COM_DeployPanelWindow/T_DeployPanel.h
+    Sources/COM_ManagerWidget/T_Manager.h
 
+    Sources/ToolKit/ASteamSDK/ASteamUserQuery/F_SteamUserQuery.h
     Sources/CTL_AsulComboBox/AsulComboBox.h
     Sources/ToolKit/LoadingProgress/LoadingProgressDialog.h
 

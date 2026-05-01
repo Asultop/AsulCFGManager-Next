@@ -6,6 +6,7 @@
 #include "../COM_AboutWidget/T_About.h"
 #include "../COM_IconWidget/T_Icon.h"
 #include "../COM_DeployWidget/T_Deploy.h"
+#include "../COM_ManagerWidget/T_Manager.h"
 #include "../COM_ExampleWidget.template/T_Example.h"
 
 #include "../Global/GlobalSettings.h"
@@ -42,6 +43,7 @@ Asul::Asul(QWidget *parent) : ElaWindow(parent) {
   InstallPage(tr("主页"), T_Home, ElaIconType::House);
   // InstallPage(tr("图标"),T_Icon,ElaIconType::TicketsSimple);
   InstallPage(tr("部署"),T_Deploy,ElaIconType::Download);
+  InstallPage(tr("启动项"),T_Manager,ElaIconType::Play);
   InstallAboutFooter(tr("关于"), T_About, _about);
   InstallFooter(tr("设置"), T_SettingScreen, _setting, ElaIconType::Gear);
   

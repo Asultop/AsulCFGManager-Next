@@ -28,6 +28,7 @@ class GlobalSettings : public QObject
     Q_PROPERTY_CREATE(QString, EEEEEPath);
     Q_PROPERTY_CREATE(QString, EEEEELaunchOptionFilePath);
     Q_PROPERTY_CREATE(QString, WmPvpLaunchOptionFilePath);
+    Q_PROPERTY_CREATE(QString, LastSelectedPlatform);
     Q_PROPERTY_CREATE(int,CharactersPerMinute);
     Q_PROPERTY_CREATE(QTemporaryDir*,GLoc);
 
@@ -58,7 +59,7 @@ public:
 private:
     QJsonObject jsonObj;
     QString getPath(QString vdfFile);
-    QString getAllPath();
+    void getAllPath();
 signals:
 };
 
