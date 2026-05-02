@@ -24,9 +24,9 @@
 #include "AFormParser/AFormParser.hpp"
 
 #define gSettings GlobalSettings::getInstance()
-#define QLOG_DEBUG qDebug
-#define QLOG_WARN qWarning
-#define QLOG_ERROR qCritical
+// #define QLOG_DEBUG qDebug
+// #define QLOG_WARN qWarning
+// #define QLOG_ERROR qCritical
 
 T_Manager::T_Manager(QWidget *parent)
     : BaseScrollPage{parent}
@@ -400,7 +400,7 @@ QString T_Manager::extractLaunchArgs(const QString& configAsulPath)
     if(!doc) {
         return "";
     }
-    return doc->metaValue("@LaunchArgs");
+    return doc->metaValue("LaunchArgs");
 }
 
 QString T_Manager::getLocalConfigVDFPath()
