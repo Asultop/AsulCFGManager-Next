@@ -35,17 +35,31 @@ private:
     void applyWMPVPChanges();
     void applyEEEEEChanges();
     void restartPlatform();
+    void killPlatformWithElevation(const QString& processName);
     Platform getPlatformFromString(const QString& platformStr);
     QString getPlatformName(Platform platform);
+    void saveCurrentPlatformArgs();
+    void restorePreviousPlatformArgs(Platform fromPlatform, Platform toPlatform);
+    void loadSavedLaunchOptions();
+    void clearWMPVPArgs();
+    void clearEEEEEArgs();
+    void restoreWMPVPArgs(const QString& args);
+    void restoreEEEEEArgs(const QString& args);
+    void restoreSteamArgs(const QString& args);
+    void updateApplyAreaVisibility();
 
 private:
     Platform m_currentPlatform;
+    Platform m_previousPlatform;
     ElaComboBox* m_platformComboBox;
     ElaComboBox* m_userComboBox;
     QMap<QString, SteamUserInfo> m_userInfoMap;
     QMap<QString, QPair<QString, ElaToggleSwitch*>> m_cfgSwitchMap;
     QVBoxLayout* m_contentLayout;
     QString m_originalLaunchOptions;
+    QMap<Platform, QString> m_savedLaunchOptionsMap;
+    bool m_hasUnsavedChanges;
+    ElaScrollPageArea* m_applyArea;
 
 signals:
 
