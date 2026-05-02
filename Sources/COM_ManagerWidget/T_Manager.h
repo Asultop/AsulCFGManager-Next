@@ -47,6 +47,8 @@ private:
     void restoreEEEEEArgs(const QString& args);
     void restoreSteamArgs(const QString& args);
     void updateApplyAreaVisibility();
+    QString readWMPVPLaunchOptions();
+    QString readEEEEELaunchOptions();
 
 private:
     Platform m_currentPlatform;

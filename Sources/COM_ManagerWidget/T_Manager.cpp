@@ -191,6 +191,21 @@ void T_Manager::setupSteamUI()
         m_userComboBox, false);
     m_contentLayout->addWidget(userArea);
 
+    // 连接用户切换信号，重新读取配置并扫描 CFGs
+    connect(m_userComboBox, &QComboBox::currentTextChanged, this, [this](const QString&){
+        // 清除配置区域（保留用户区域）
+        QLayoutItem* child;
+        while((child = m_contentLayout->takeAt(1)) != nullptr) {  // 跳过索引0的用户区域
+            if(child->widget()) {
+                delete child->widget();
+            }
+            delete child;
+        }
+        m_cfgSwitchMap.clear();
+        // 重新扫描本地 CFGs（会读取最新文件内容）
+        scanLocalCFGs();
+    });
+
     // 扫描本地 CFGs
     scanLocalCFGs();
 
@@ -336,14 +351,14 @@ void T_Manager::scanLocalCFGs()
         return;
     }
 
-    // 获取当前平台的启动参数列表
+    // 获取当前平台的启动参数列表（每次都从文件读取最新内容）
     QStringList currentArgsList;
     if(m_currentPlatform == Platform::Steam) {
         currentArgsList = getCurrentLaunchOptions();
     } else if(m_currentPlatform == Platform::WMPVP) {
-        currentArgsList = m_originalLaunchOptions.split(" ", Qt::SkipEmptyParts);
+        currentArgsList = readWMPVPLaunchOptions().split(" ", Qt::SkipEmptyParts);
     } else if(m_currentPlatform == Platform::EEEEE) {
-        currentArgsList = m_originalLaunchOptions.split(" ", Qt::SkipEmptyParts);
+        currentArgsList = readEEEEELaunchOptions().split(" ", Qt::SkipEmptyParts);
     }
 
     m_hasUnsavedChanges = false;
@@ -1069,4 +1084,51 @@ void T_Manager::updateApplyAreaVisibility()
     if(m_applyArea) {
         m_applyArea->setVisible(m_hasUnsavedChanges);
     }
+}
+
+QString T_Manager::readWMPVPLaunchOptions()
+{
+    QString settingPath = gSettings->getWmPvpLaunchOptionFilePath();
+    QFile file(settingPath);
+    if(!file.open(QIODevice::ReadOnly)) {
+        return "";
+    }
+    QByteArray jsonData = file.readAll();
+    file.close();
+
+    QJsonDocument doc = QJsonDocument::fromJson(jsonData);
+    if(!doc.isObject()) {
+        return "";
+    }
+
+    QJsonObject rootObj = doc.object();
+    if(rootObj.contains("csgocommand")) {
+        return rootObj["csgocommand"].toString();
+    }
+    return "";
+}
+
+QString T_Manager::readEEEEELaunchOptions()
+{
+    QString settingPath = gSettings->getEEEEELaunchOptionFilePath();
+    QFile file(settingPath);
+    if(!file.open(QIODevice::ReadOnly)) {
+        return "";
+    }
+    QByteArray jsonData = file.readAll();
+    file.close();
+
+    QJsonDocument doc = QJsonDocument::fromJson(jsonData);
+    if(!doc.isObject()) {
+        return "";
+    }
+
+    QJsonObject rootObj = doc.object();
+    if(rootObj.contains("csgo")) {
+        QJsonObject csgoObj = rootObj["csgo"].toObject();
+        if(csgoObj.contains("args")) {
+            return csgoObj["args"].toString();
+        }
+    }
+    return "";
 }
