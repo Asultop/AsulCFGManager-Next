@@ -21,6 +21,7 @@ public:
 
 private:
     void refreshAllFieldVisibility();
+    void scheduleVisibilityUpdate();
 
 protected:
     void showEvent(QShowEvent *event) override;
@@ -29,6 +30,8 @@ private:
     AFormParser::Document::Ptr m_doc;
     QMap<QString, QWidget*> m_fieldWidgetMap;
     QMap<QString, ElaScrollPageArea*> m_fieldAreaMap;
+    QMap<QString, bool> m_fieldVisibilityCache;
+    bool m_visibilityUpdatePending;
 signals:
     void deployFinished();
 };

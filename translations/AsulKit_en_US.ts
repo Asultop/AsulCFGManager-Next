@@ -713,37 +713,37 @@
 <context>
     <name>T_DeployPanel</name>
     <message>
-        <location filename="../Sources/COM_DeployPanelWindow/T_DeployPanel.cpp" line="63"/>
+        <location filename="../Sources/COM_DeployPanelWindow/T_DeployPanel.cpp" line="64"/>
         <source>关闭</source>
         <translation type="unfinished">Close</translation>
     </message>
     <message>
-        <location filename="../Sources/COM_DeployPanelWindow/T_DeployPanel.cpp" line="63"/>
+        <location filename="../Sources/COM_DeployPanelWindow/T_DeployPanel.cpp" line="64"/>
         <source>是否退出配置</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Sources/COM_DeployPanelWindow/T_DeployPanel.cpp" line="83"/>
+        <location filename="../Sources/COM_DeployPanelWindow/T_DeployPanel.cpp" line="84"/>
         <source>部署 CFG</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Sources/COM_DeployPanelWindow/T_DeployPanel.cpp" line="89"/>
+        <location filename="../Sources/COM_DeployPanelWindow/T_DeployPanel.cpp" line="90"/>
         <source> 项目</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Sources/COM_DeployPanelWindow/T_DeployPanel.cpp" line="91"/>
+        <location filename="../Sources/COM_DeployPanelWindow/T_DeployPanel.cpp" line="92"/>
         <source> 配置</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Sources/COM_DeployPanelWindow/T_DeployPanel.cpp" line="449"/>
+        <location filename="../Sources/COM_DeployPanelWindow/T_DeployPanel.cpp" line="450"/>
         <source>安装</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Sources/COM_DeployPanelWindow/T_DeployPanel.cpp" line="449"/>
+        <location filename="../Sources/COM_DeployPanelWindow/T_DeployPanel.cpp" line="450"/>
         <source>确认保存配置 ?</source>
         <translation type="unfinished"></translation>
     </message>
@@ -837,7 +837,7 @@
     <message>
         <location filename="../Sources/COM_ManagerWidget/T_Manager.cpp" line="99"/>
         <location filename="../Sources/COM_ManagerWidget/T_Manager.cpp" line="111"/>
-        <location filename="../Sources/COM_ManagerWidget/T_Manager.cpp" line="975"/>
+        <location filename="../Sources/COM_ManagerWidget/T_Manager.cpp" line="990"/>
         <source>完美对战平台</source>
         <translation type="unfinished"></translation>
     </message>
@@ -868,119 +868,119 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Sources/COM_ManagerWidget/T_Manager.cpp" line="198"/>
-        <location filename="../Sources/COM_ManagerWidget/T_Manager.cpp" line="252"/>
-        <location filename="../Sources/COM_ManagerWidget/T_Manager.cpp" line="304"/>
+        <location filename="../Sources/COM_ManagerWidget/T_Manager.cpp" line="213"/>
+        <location filename="../Sources/COM_ManagerWidget/T_Manager.cpp" line="267"/>
+        <location filename="../Sources/COM_ManagerWidget/T_Manager.cpp" line="319"/>
         <source>应用</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Sources/COM_ManagerWidget/T_Manager.cpp" line="201"/>
+        <location filename="../Sources/COM_ManagerWidget/T_Manager.cpp" line="216"/>
         <source>重启</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Sources/COM_ManagerWidget/T_Manager.cpp" line="202"/>
+        <location filename="../Sources/COM_ManagerWidget/T_Manager.cpp" line="217"/>
         <source>这将重启 Steam 要继续吗</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Sources/COM_ManagerWidget/T_Manager.cpp" line="212"/>
-        <location filename="../Sources/COM_ManagerWidget/T_Manager.cpp" line="261"/>
-        <location filename="../Sources/COM_ManagerWidget/T_Manager.cpp" line="313"/>
+        <location filename="../Sources/COM_ManagerWidget/T_Manager.cpp" line="227"/>
+        <location filename="../Sources/COM_ManagerWidget/T_Manager.cpp" line="276"/>
+        <location filename="../Sources/COM_ManagerWidget/T_Manager.cpp" line="328"/>
         <source>应用更改</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Sources/COM_ManagerWidget/T_Manager.cpp" line="213"/>
+        <location filename="../Sources/COM_ManagerWidget/T_Manager.cpp" line="228"/>
         <source>点击应用后重启 Steam</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Sources/COM_ManagerWidget/T_Manager.cpp" line="228"/>
-        <location filename="../Sources/COM_ManagerWidget/T_Manager.cpp" line="236"/>
-        <location filename="../Sources/COM_ManagerWidget/T_Manager.cpp" line="613"/>
-        <location filename="../Sources/COM_ManagerWidget/T_Manager.cpp" line="621"/>
-        <location filename="../Sources/COM_ManagerWidget/T_Manager.cpp" line="664"/>
-        <location filename="../Sources/COM_ManagerWidget/T_Manager.cpp" line="672"/>
+        <location filename="../Sources/COM_ManagerWidget/T_Manager.cpp" line="243"/>
+        <location filename="../Sources/COM_ManagerWidget/T_Manager.cpp" line="251"/>
+        <location filename="../Sources/COM_ManagerWidget/T_Manager.cpp" line="628"/>
+        <location filename="../Sources/COM_ManagerWidget/T_Manager.cpp" line="636"/>
+        <location filename="../Sources/COM_ManagerWidget/T_Manager.cpp" line="679"/>
+        <location filename="../Sources/COM_ManagerWidget/T_Manager.cpp" line="687"/>
         <source>完美平台</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Sources/COM_ManagerWidget/T_Manager.cpp" line="228"/>
-        <location filename="../Sources/COM_ManagerWidget/T_Manager.cpp" line="277"/>
-        <location filename="../Sources/COM_ManagerWidget/T_Manager.cpp" line="613"/>
-        <location filename="../Sources/COM_ManagerWidget/T_Manager.cpp" line="680"/>
+        <location filename="../Sources/COM_ManagerWidget/T_Manager.cpp" line="243"/>
+        <location filename="../Sources/COM_ManagerWidget/T_Manager.cpp" line="292"/>
+        <location filename="../Sources/COM_ManagerWidget/T_Manager.cpp" line="628"/>
+        <location filename="../Sources/COM_ManagerWidget/T_Manager.cpp" line="695"/>
         <source>无法读取启动配置文件</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Sources/COM_ManagerWidget/T_Manager.cpp" line="236"/>
-        <location filename="../Sources/COM_ManagerWidget/T_Manager.cpp" line="285"/>
-        <location filename="../Sources/COM_ManagerWidget/T_Manager.cpp" line="621"/>
-        <location filename="../Sources/COM_ManagerWidget/T_Manager.cpp" line="688"/>
+        <location filename="../Sources/COM_ManagerWidget/T_Manager.cpp" line="251"/>
+        <location filename="../Sources/COM_ManagerWidget/T_Manager.cpp" line="300"/>
+        <location filename="../Sources/COM_ManagerWidget/T_Manager.cpp" line="636"/>
+        <location filename="../Sources/COM_ManagerWidget/T_Manager.cpp" line="703"/>
         <source>配置文件格式错误</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Sources/COM_ManagerWidget/T_Manager.cpp" line="262"/>
-        <location filename="../Sources/COM_ManagerWidget/T_Manager.cpp" line="314"/>
+        <location filename="../Sources/COM_ManagerWidget/T_Manager.cpp" line="277"/>
+        <location filename="../Sources/COM_ManagerWidget/T_Manager.cpp" line="329"/>
         <source>点击应用保存配置</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Sources/COM_ManagerWidget/T_Manager.cpp" line="277"/>
-        <location filename="../Sources/COM_ManagerWidget/T_Manager.cpp" line="285"/>
-        <location filename="../Sources/COM_ManagerWidget/T_Manager.cpp" line="680"/>
-        <location filename="../Sources/COM_ManagerWidget/T_Manager.cpp" line="688"/>
-        <location filename="../Sources/COM_ManagerWidget/T_Manager.cpp" line="745"/>
-        <location filename="../Sources/COM_ManagerWidget/T_Manager.cpp" line="753"/>
+        <location filename="../Sources/COM_ManagerWidget/T_Manager.cpp" line="292"/>
+        <location filename="../Sources/COM_ManagerWidget/T_Manager.cpp" line="300"/>
+        <location filename="../Sources/COM_ManagerWidget/T_Manager.cpp" line="695"/>
+        <location filename="../Sources/COM_ManagerWidget/T_Manager.cpp" line="703"/>
+        <location filename="../Sources/COM_ManagerWidget/T_Manager.cpp" line="760"/>
+        <location filename="../Sources/COM_ManagerWidget/T_Manager.cpp" line="768"/>
         <source>5EPlay</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Sources/COM_ManagerWidget/T_Manager.cpp" line="390"/>
+        <location filename="../Sources/COM_ManagerWidget/T_Manager.cpp" line="405"/>
         <source>(无启动参数)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Sources/COM_ManagerWidget/T_Manager.cpp" line="515"/>
-        <location filename="../Sources/COM_ManagerWidget/T_Manager.cpp" line="527"/>
-        <location filename="../Sources/COM_ManagerWidget/T_Manager.cpp" line="602"/>
-        <location filename="../Sources/COM_ManagerWidget/T_Manager.cpp" line="604"/>
+        <location filename="../Sources/COM_ManagerWidget/T_Manager.cpp" line="530"/>
+        <location filename="../Sources/COM_ManagerWidget/T_Manager.cpp" line="542"/>
+        <location filename="../Sources/COM_ManagerWidget/T_Manager.cpp" line="617"/>
+        <location filename="../Sources/COM_ManagerWidget/T_Manager.cpp" line="619"/>
         <source>Steam</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Sources/COM_ManagerWidget/T_Manager.cpp" line="515"/>
+        <location filename="../Sources/COM_ManagerWidget/T_Manager.cpp" line="530"/>
         <source>localconfig.vdf 文件不存在</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Sources/COM_ManagerWidget/T_Manager.cpp" line="527"/>
+        <location filename="../Sources/COM_ManagerWidget/T_Manager.cpp" line="542"/>
         <source>localconfig.vdf 解析失败</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Sources/COM_ManagerWidget/T_Manager.cpp" line="602"/>
-        <location filename="../Sources/COM_ManagerWidget/T_Manager.cpp" line="672"/>
-        <location filename="../Sources/COM_ManagerWidget/T_Manager.cpp" line="753"/>
+        <location filename="../Sources/COM_ManagerWidget/T_Manager.cpp" line="617"/>
+        <location filename="../Sources/COM_ManagerWidget/T_Manager.cpp" line="687"/>
+        <location filename="../Sources/COM_ManagerWidget/T_Manager.cpp" line="768"/>
         <source>启动参数已保存</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Sources/COM_ManagerWidget/T_Manager.cpp" line="604"/>
+        <location filename="../Sources/COM_ManagerWidget/T_Manager.cpp" line="619"/>
         <source>保存失败: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Sources/COM_ManagerWidget/T_Manager.cpp" line="664"/>
-        <location filename="../Sources/COM_ManagerWidget/T_Manager.cpp" line="745"/>
+        <location filename="../Sources/COM_ManagerWidget/T_Manager.cpp" line="679"/>
+        <location filename="../Sources/COM_ManagerWidget/T_Manager.cpp" line="760"/>
         <source>无法写入配置文件</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Sources/COM_ManagerWidget/T_Manager.cpp" line="989"/>
+        <location filename="../Sources/COM_ManagerWidget/T_Manager.cpp" line="1004"/>
         <source>完美世界竞技平台</source>
         <translation type="unfinished"></translation>
     </message>

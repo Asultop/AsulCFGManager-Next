@@ -20,6 +20,7 @@
 
 T_DeployPanel::T_DeployPanel(QWidget *parent,const AFormParser::Document::Ptr& doc,QString tempCFGLocation)
     : ElaWindow{nullptr}
+    , m_visibilityUpdatePending(false)
 {
     DBG("Constructor started");
     m_doc = doc;
@@ -172,7 +173,7 @@ T_DeployPanel::T_DeployPanel(QWidget *parent,const AFormParser::Document::Ptr& d
                     connect(binderLE,&ElaLineEdit::editingFinished,[=](){
                         binderKB->setBinderKeyText(binderLE->text());
                         keyBind->bind=binderLE->text();
-                        refreshAllFieldVisibility();
+                        scheduleVisibilityUpdate();
                     });
                     
                     widgetLayout->addWidget(binderLE);
@@ -342,7 +343,7 @@ T_DeployPanel::T_DeployPanel(QWidget *parent,const AFormParser::Document::Ptr& d
                         
                         connect(argLine,&ElaLineEdit::editingFinished,[=](){
                             arg->value=argLine->text();
-                            refreshAllFieldVisibility();
+                            scheduleVisibilityUpdate();
                         });
                         
                         argLayout->addWidget(argDesc, 3);
@@ -411,8 +412,8 @@ T_DeployPanel::T_DeployPanel(QWidget *parent,const AFormParser::Document::Ptr& d
                     optionComboBox->setCurrentText(revertOptionMap[OptionField->selected]);
                     
                     connect(optionComboBox,&ElaComboBox::currentTextChanged,[=](QString text){
-                        OptionField->selected=optionMap[text]; 
-                        refreshAllFieldVisibility();
+                        OptionField->selected=optionMap[text];
+                        scheduleVisibilityUpdate();
                     });
                     
                     QHBoxLayout *widgetLayout = new QHBoxLayout();
@@ -465,9 +466,24 @@ void T_DeployPanel::refreshAllFieldVisibility() {
         QString fieldId = it.key();
         ElaScrollPageArea* area = it.value();
         if (area) {
-            area->setVisible(m_doc->evaluateFieldEnabled(fieldId));
+            bool newVisibility = m_doc->evaluateFieldEnabled(fieldId);
+            if (newVisibility != m_fieldVisibilityCache.value(fieldId, !newVisibility)) {
+                area->setVisible(newVisibility);
+                m_fieldVisibilityCache[fieldId] = newVisibility;
+            }
         }
     }
+}
+
+void T_DeployPanel::scheduleVisibilityUpdate() {
+    if (m_visibilityUpdatePending) {
+        return;
+    }
+    m_visibilityUpdatePending = true;
+    QTimer::singleShot(0, this, [this]() {
+        m_visibilityUpdatePending = false;
+        refreshAllFieldVisibility();
+    });
 }
 
 T_DeployPanel::~T_DeployPanel(){
