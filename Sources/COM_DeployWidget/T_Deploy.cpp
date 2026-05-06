@@ -32,6 +32,10 @@
 #include <QThread>
 
 #include "../COM_DeployPanelWindow/T_DeployPanel.h"
+#include "../../3rd/ValveFileVDF-1.1.1/include/vdf_parser.hpp"
+#include <fstream>
+
+
 #define DBG(x) QLOG_DEBUG()<<"[Key] "<<#x<<" : "<<x;
 #define _DBG(label,x) QLOG_DEBUG()<<"["<<label<<"] "<<#x<<" : "<<x;
 #define gSettings GlobalSettings::getInstance()
@@ -434,7 +438,23 @@ T_Deploy::T_Deploy(QWidget *parent)
             }
 
             ElaPushButton *editButton = new ElaPushButton(tr("编辑"), this);
-            editButton->setFixedWidth(50);
+            editButton->setFixedWidth(100);
+            ElaPushButton *deleteButton = new ElaPushButton(tr("删除"), this);
+            deleteButton->setFixedWidth(100);
+            QColor defaultRedColor(255,87,87);
+            deleteButton->setDarkDefaultColor(defaultRedColor);
+            deleteButton->setDarkHoverColor(gFunc->getLighterColor(defaultRedColor));
+            deleteButton->setDarkPressColor(gFunc->getDarkerColor(defaultRedColor));
+            deleteButton->setLightDefaultColor(defaultRedColor);
+            deleteButton->setLightHoverColor(gFunc->getDarkerColor(defaultRedColor));
+            deleteButton->setLightPressColor(gFunc->getLighterColor(defaultRedColor));
+            QWidget *buttonWidget = new QWidget(this);
+            QHBoxLayout *buttonLayout = new QHBoxLayout(buttonWidget);
+            buttonLayout->setContentsMargins(0, 0, 0, 0);
+            buttonLayout->addStretch();
+            buttonLayout->addWidget(editButton,1);
+            buttonLayout->addWidget(deleteButton,1);
+
             ElaScrollPageArea *gArea;
             QString displayName = doc->metaValue("Name") + " (" + doc->metaValue("Target") + ")";
             if(!doc->metaValue("Picture").isEmpty() && QFile(subDirPath+"/"+doc->metaValue("Picture")).exists()){
@@ -443,7 +463,7 @@ T_Deploy::T_Deploy(QWidget *parent)
                     QString(subDirPath+"/"+doc->metaValue("Picture")),
                     new ElaText(displayName,this),
                     new ElaText(doc->metaValue("Author"),this),
-                    editButton,false
+                    buttonWidget,false
                 );
             }else{
                 gArea = gFunc->GenerateArea(
@@ -451,13 +471,13 @@ T_Deploy::T_Deploy(QWidget *parent)
                     QString(":/Pictures/Pictures/CS2.png"),
                     new ElaText(displayName,this),
                     new ElaText(doc->metaValue("Author"),this),
-                    editButton,false
+                    buttonWidget,false
                 );
             }
             localFileDrawerArea->addDrawer(gArea);
             m_scannedAreaMap[subDirPath] = gArea;
             qDebug() << "[T_Deploy] About to connect editButton clicked";
-            connect(editButton,&ElaPushButton::clicked,this,[this,gArea,localFileDrawerArea,subDirPath,doc,userInfoMap,selectAccountComboBox]() -> void{
+            connect(editButton,&ElaPushButton::clicked,this,[this,gArea,localFileDrawerArea,subDirPath,doc,userInfoMap,selectAccountComboBox,editButton]() -> void{
                 SteamUserInfo currentUserInfo=userInfoMap[selectAccountComboBox->currentText()];
                 qDebug()<< "[T_Deploy] About to set global variables";
                 qDebug()<< "[T_Deploy] __UserId: "<<currentUserInfo.userId;
@@ -550,6 +570,16 @@ T_Deploy::T_Deploy(QWidget *parent)
                 qDebug() << "[T_Deploy] editButton clicked, about to show deployPanel";
                 deployPanel->show();
                 qDebug() << "[T_Deploy] deployPanel->show() called";
+            });
+            connect(deleteButton, &ElaPushButton::clicked, this, [this, gArea, localFileDrawerArea, subDirPath, doc]() {
+                if(GlobalFunc::askDialog(this, tr("注意"), tr("删除将导致CFG不可用并且按键恢复默认设置\n是否继续?"))) {
+                    uninstallCFG(subDirPath);
+                    m_scannedAreaMap.remove(subDirPath);
+                    localFileDrawerArea->removeDrawer(gArea);
+                    gArea->deleteLater();
+                    // delete gArea;
+                    // gArea = nullptr;
+                }
             });
             localFileDrawerArea->expand();
         }
@@ -924,4 +954,90 @@ static bool copyFolder(const QString &fromDir, const QString &toDir, bool coverF
         }
     }
     return true;
+}
+
+void T_Deploy::uninstallCFG(const QString& location)
+{
+    qDebug() << location;
+    QString userConf = gSettings->getSteamConfPath() + "/loginusers.vdf";
+    QList<SteamUserInfo> allUsers = F_SteamUserQuery::parseUsersFile(userConf);
+    QString userMachieLocation = R"(%STEAM_USERPATH%%STEAM_SHORTID%/730/local/cfg/cs2_machine_convars.vcfg)";
+    QString userFileLocation = R"(%STEAM_USERPATH%%STEAM_SHORTID%/730/local/cfg/cs2_user_keys_0_slot0.vcfg)";
+    userFileLocation.replace("%STEAM_USERPATH%", gSettings->getSteamUserPath());
+    userMachieLocation.replace("%STEAM_USERPATH%", gSettings->getSteamUserPath());
+    QString userName;
+    for(const auto& node : allUsers) {
+        if(node.mostRecent) {
+            userFileLocation.replace("%STEAM_SHORTID%", node.userShortId);
+            userMachieLocation.replace("%STEAM_SHORTID%", node.userShortId);
+            userName = node.personaName;
+        }
+    }
+
+    if(GlobalFunc::askDialog(this, tr("注意"), tr("这会重置 ") + userName + tr("(**最近登陆**) 的所有按键绑定设置! "))) {
+        QFile cs2_user_keys_0_slot0(userFileLocation);
+        QDir(location).removeRecursively();
+        if(!cs2_user_keys_0_slot0.open(QIODevice::WriteOnly | QIODevice::Text)) {
+            qDebug() << "无法打开文件：" << cs2_user_keys_0_slot0.errorString();
+            return;
+        }
+        QTextStream out(&cs2_user_keys_0_slot0);
+        out << R"("config"
+{
+
+})";
+        cs2_user_keys_0_slot0.close();
+
+        try {
+            std::ifstream file(userMachieLocation.toStdString());
+            if(!file.is_open()) {
+                DBG(tr("无法打开文件: ") + userMachieLocation);
+                return;
+            }
+
+            tyti::vdf::Options options;
+            tyti::vdf::object root;
+            bool parse_ok;
+            try {
+                root = tyti::vdf::read(file, &parse_ok, options);
+            } catch(const std::exception& e) {
+                DBG(tr("解析失败: ") + e.what());
+                return;
+            }
+
+            if(!parse_ok) {
+                DBG(tr("[内部错误] VDF 格式错误!"));
+                return;
+            }
+
+            auto convars_it = root.childs.find("convars");
+            if(convars_it == root.childs.end() || !convars_it->second) {
+                DBG(tr("[内部错误] convar 节点丢失"));
+                return;
+            }
+
+            auto& convars_node = *convars_it->second;
+            convars_node.attribs["cl_scoreboard_mouse_enable_binding"] = "+attack2";
+
+            auto writeVdfToFile = [](const std::string& filePath, const tyti::vdf::object& root) {
+                std::ofstream file(filePath);
+                if(!file.is_open()) {
+                    DBG(tr("无法打开文件进行写入: ") + QString::fromStdString(filePath) + "\n");
+                    return false;
+                }
+                tyti::vdf::Options options;
+                tyti::vdf::write(file, root);
+                return true;
+            };
+
+            if(writeVdfToFile(userMachieLocation.toStdString(), root)) {
+                DBG(tr("操作成功"));
+            }
+        } catch(const std::exception& e) {
+            DBG(tr("VDF 操作错误: ") + QString(e.what()));
+            return;
+        }
+
+        GlobalFunc::showSuccess(tr("删除"), tr("操作成功"));
+    }
 }

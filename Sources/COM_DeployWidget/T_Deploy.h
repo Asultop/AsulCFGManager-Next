@@ -17,8 +17,9 @@ public:
 
 private:
     QMap<QString, ElaScrollPageArea*> m_scannedAreaMap;
+    void uninstallCFG(const QString& location);
 
-signals:
+private slots:
 
 };
 
