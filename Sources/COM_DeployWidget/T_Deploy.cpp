@@ -186,193 +186,19 @@ T_Deploy::T_Deploy(QWidget *parent)
                 GlobalFunc::showSuccess(tr("签名"), tr("受信任开发者：") + result.info.signer);
             }
 
-            // 解压
+            // 异步解压
             QString extracDir = gSettings->getGLoc()->path() + "/Downloads/" + QFileInfo(destPath).baseName() + "-extract";
-            gFunc->UnzipFile(destPath, extracDir);
-            QFile::remove(destPath);
-
-            // 验证 config.asul
-            QString AsulFormFilePath = extracDir + "/config.asul";
-            QFile AsulFormFile(AsulFormFilePath);
-            if(!AsulFormFile.exists()){
-                GlobalFunc::showErr(tr("获取"), tr("包中未找到 config.asul"));
-                QDir(extracDir).removeRecursively();
-                downloader->deleteLater();
-                return;
-            }
-            if(!AsulFormFile.open(QIODevice::ReadOnly)){
-                GlobalFunc::showErr(tr("获取"), tr("文件打开失败"));
-                QDir(extracDir).removeRecursively();
-                downloader->deleteLater();
-                return;
-            }
-            QString configContent = AsulFormFile.readAll();
-            AsulFormFile.close();
-
-            // 解析
-            AFormParser::ParseError err;
-            auto doc = AFormParser::Document::from(configContent, &err);
-            if(!doc){
-                GlobalFunc::showErr(tr("获取"), tr("解析失败: ") + err.message);
-                QDir(extracDir).removeRecursively();
-                downloader->deleteLater();
-                return;
-            }
-            QStringList argList = {"Version","Name","Target","Author","Description"};
-            for(auto arg : argList){
-                if(doc->metaValue(arg).isEmpty()){
-                    GlobalFunc::showErr(tr("获取"), tr("缺少参数: ") + arg);
+            gFunc->UnzipFileAsync(destPath, extracDir, [this, destPath, extracDir, result, drawerArea, userInfoMap, selectAccountComboBox, downloader](bool success){
+                QFile::remove(destPath);
+                if(!success){
+                    GlobalFunc::showErr(tr("获取"), tr("解压失败"));
                     QDir(extracDir).removeRecursively();
                     downloader->deleteLater();
                     return;
                 }
-            }
-
-            // 添加到在线商店 DrawerArea
-            ElaPushButton *installButton = new ElaPushButton(tr("安装"), this);
-            installButton->setFixedWidth(50);
-
-            // 作者 + 来源 URL（水平排列）
-            QWidget *subtitleWidget = new QWidget(this);
-            QHBoxLayout *subtitleLayout = new QHBoxLayout(subtitleWidget);
-            subtitleLayout->setContentsMargins(0,0,0,0);
-            subtitleLayout->setSpacing(6);
-            ElaText *authorText = new ElaText(doc->metaValue("Author"), this);
-            authorText->setTextPixelSize(12);
-            QString shortenedUrl = url;
-            if(shortenedUrl.length() > 40){
-                shortenedUrl = shortenedUrl.left(20) + "..." + shortenedUrl.right(17);
-            }
-            ElaText *urlText = new ElaText(shortenedUrl, this);
-            urlText->setTextPixelSize(10);
-            urlText->setStyleSheet("color: gray;");
-            subtitleLayout->addWidget(authorText);
-            // subtitleLayout->addWidget(urlText);
-            subtitleLayout->addStretch();
-
-            ElaScrollPageArea *gArea;
-            if(!doc->metaValue("Picture").isEmpty() && QFile(extracDir + "/" + doc->metaValue("Picture")).exists()){
-                gArea = gFunc->GenerateArea(this, QString(extracDir + "/" + doc->metaValue("Picture")),
-                    new ElaText(doc->metaValue("Name"), this), subtitleWidget, installButton, false);
-            }else{
-                gArea = gFunc->GenerateArea(this, QString(":/Pictures/Pictures/CS2.png"),
-                    new ElaText(doc->metaValue("Name"), this), subtitleWidget, installButton, false);
-            }
-            if(result.trusted){
-                installButton->setText(installButton->text() + " " + tr("(受信任)"));
-                installButton->setLightDefaultColor(QColor(143, 204, 167));
-                installButton->setDarkDefaultColor(QColor(39, 135, 95));
-            }
-
-            drawerArea->addDrawer(gArea);
-            drawerArea->expand();
-
-            connect(installButton, &ElaPushButton::clicked, this, [this, result, gArea, drawerArea, extracDir, doc, userInfoMap, selectAccountComboBox](){
-                SteamUserInfo currentUserInfo = userInfoMap[selectAccountComboBox->currentText()];
-                QDir CFGDir(QDir::cleanPath(gSettings->getCFGPath() + "/" + doc->metaValue("Target")));
-
-                // Target 冲突检测
-                if(CFGDir.exists()){
-                    QFile existingConfig(CFGDir.filePath("config.asul"));
-                    if(existingConfig.exists() && existingConfig.open(QIODevice::ReadOnly)){
-                        AFormParser::ParseError existErr;
-                        auto existDoc = AFormParser::Document::from(QString::fromUtf8(existingConfig.readAll()), &existErr);
-                        existingConfig.close();
-                        if(existDoc){
-                            QString existAuthor = existDoc->metaValue("Author");
-                            QString existVersion = existDoc->metaValue("Version");
-                            QString newAuthor = doc->metaValue("Author");
-                            QString newVersion = doc->metaValue("Version");
-                            if(existAuthor == newAuthor){
-                                if(!GlobalFunc::askDialog(this, tr("更新确认"),
-                                    tr("目标目录已存在同作者配置：\n\n") +
-                                    tr("作者: ") + existAuthor + "\n" +
-                                    tr("当前版本: ") + existVersion + "\n" +
-                                    tr("新版本: ") + newVersion + "\n\n" +
-                                    tr("是否更新？"))){
-                                    return;
-                                }
-                            }else{
-                                if(!GlobalFunc::askDialog(this, tr("目标冲突"),
-                                    tr("目标目录已存在不同作者的配置：\n\n") +
-                                    tr("已有作者: ") + existAuthor + " (" + existVersion + ")\n" +
-                                    tr("导入作者: ") + newAuthor + " (" + newVersion + ")\n\n" +
-                                    tr("覆盖可能导致配置丢失，是否继续？"))){
-                                    return;
-                                }
-                            }
-                        }
-                    }
-                }
-
-                QMap<QString,QString> registerMap={
-                    {"__UserId", currentUserInfo.userId},
-                    {"__UserShortId", currentUserInfo.userShortId},
-                    {"__AccountName", currentUserInfo.accountName},
-                    {"__PersonaName", currentUserInfo.personaName},
-                    {"__WhereAmI", CFGDir.absolutePath()}
-                };
-                doc->setGlobalVariables(registerMap);
-
-                T_DeployPanel *deployPanel = new T_DeployPanel(nullptr, doc, extracDir);
-                connect(deployPanel, &T_DeployPanel::deployFinished, this, [this, gArea, doc, extracDir, deployPanel, drawerArea](){
-                    QDir CFGDir(QDir::cleanPath(gSettings->getCFGPath() + "/" + doc->metaValue("Target")));
-                    if(CFGDir.exists()){
-                        CFGDir.removeRecursively();
-                    }
-                    QDir().mkpath(CFGDir.absolutePath());
-                    copyFolder(extracDir, CFGDir.absolutePath(), true);
-                    QDir().rmdir(extracDir);
-
-                    QFile AsulConfig(QDir(CFGDir.absolutePath()).filePath("config.asul"));
-                    if(AsulConfig.exists() && AsulConfig.open(QIODevice::ReadWrite | QIODevice::Truncate)){
-                        AsulConfig.write(doc->dump().toUtf8());
-                        AsulConfig.close();
-                    }
-
-                    for(auto &CFGExport : doc->toCFGs()){
-                        QFile cfgFile(CFGDir.filePath(CFGExport.fileName));
-                        if(!cfgFile.open(QIODevice::ReadWrite | QIODevice::Truncate)){
-                            continue;
-                        }
-                        QTextStream out(&cfgFile);
-                        out << tr("// ====== 生成的文件 =======") + "\n";
-                        out << tr("//=这个 %1 文件由 Asul-CFGManager(AM) 根据配置自动生成 ").arg(CFGExport.fileName) + "\n";
-                        out << tr("\n//==这个 配置文件 从哪儿来的?") + "\n";
-                        out << tr("//CFG 制作者: ") << CFGExport.sourceFormId << "\n";
-                        out << tr("//CFG 名称: ") << CFGExport.description << "\n";
-                        out << tr("//CFG 版本: ") << doc->metaValue("Version") << "\n";
-                        out << tr("//==CFG 详细 结束") + "\n\n";
-                        out << CFGExport.content << "\r\n";
-                        out << "\r\n" + tr("//==参数结束") + "\n";
-                        out << tr("//AM 是由 Alivn开发的部署 CS2 CFG 的程序,旨在为CFG制作者提供更方便的分发服务 以及 使用者提供方便的配置服务") + "\n";
-                        out << tr("//开发者:Github(https://github.com/AsulTop),网站(http://www.asul.top)") + "\n";
-                        out << tr("//配置时间: ") << QDateTime::currentDateTime().toString("yyyy-MM-dd HH:mm:ss") + "\n\n";
-                    }
-
-                    if(gSets->getOpenFolderAfterDeploy()){
-                        QDesktopServices::openUrl(QUrl("file:///" + CFGDir.absolutePath()));
-                    }
-                    if(gSets->getExecuteProgramAfterDeploy() && !doc->metaValue("Exec").isEmpty()){
-                        QString execRelativePath = doc->metaValue("Exec");
-                        QString cleanExecPath = QDir::cleanPath(CFGDir.absoluteFilePath(execRelativePath));
-                        if(!cleanExecPath.contains(gSettings->getCFGPath())){
-                            gFunc->showErr(tr("运行"), tr("可执行文件路径不在允许的目录下"));
-                        }else if(!QFile::exists(cleanExecPath)){
-                            gFunc->showErr(tr("运行"), tr("可执行文件不存在") + " " + cleanExecPath);
-                        }else{
-                            QProcess::startDetached("cmd", QStringList() << "/c" << "start" << "" << cleanExecPath, CFGDir.absolutePath());
-                        }
-                    }
-
-                    drawerArea->removeDrawer(gArea);
-                    deployPanel->deleteLater();
-                    delete gArea;
-                });
-                deployPanel->show();
+                handleExtractedPackage(extracDir, tr("获取"), result, drawerArea, userInfoMap, selectAccountComboBox);
+                downloader->deleteLater();
             });
-
-            downloader->deleteLater();
         });
 
         connect(downloader, &AsulMultiDownloader::downloadFailed, this,
@@ -663,268 +489,22 @@ T_Deploy::T_Deploy(QWidget *parent)
             }
         }
 
-        gFunc->UnzipFile(destLocation,extracDir);
-        QFile::remove(destLocation);
-        loadingProgressDialog->setValue(25);
-        QString AsulFormFilePath = extracDir + "/config.asul";
-        QFile AsulFormFile(AsulFormFilePath);
-        if(!AsulFormFile.exists()){
-            GlobalFunc::showErr(tr("导入"),tr("文件不存在")+" "+AsulFormFilePath);
-            qCritical()<<"导入失败: 文件不存在";
-            loadingProgressDialog->close();
-            delete loadingProgressDialog;
-            return;
-        }
-        QString configFormFileContent;
-
-        if(!AsulFormFile.open(QIODevice::ReadOnly)){
-            GlobalFunc::showErr(tr("导入"),tr("文件打开失败")+" "+AsulFormFilePath);
-            qDebug()<<"导入失败：文件打开失败";
-            loadingProgressDialog->close();
-            delete loadingProgressDialog;
-            return;
-        }
-        configFormFileContent=AsulFormFile.readAll();
-
-        AFormParser::ParseError err;
-        auto doc = AFormParser::Document::from(configFormFileContent,&err);
-        if(!doc){
-            GlobalFunc::showErr(tr("导入"),tr("解析失败")+err.message);
-            qWarning()<<"解析失败："<<err.line<<"<"<<err.column<<">: "<<err.message;
-            loadingProgressDialog->setValue(100);
-            loadingProgressDialog->close();
-            delete loadingProgressDialog;
-            return;
-        }
-        qDebug() << "[T_Deploy] check arguments ";
-        QStringList argList={"Version","Name","Target","Author","Description"};
-        for(auto arg:argList){
-            if(doc->metaValue(arg).isEmpty()){
-                GlobalFunc::showErr(tr("导入"),tr("缺少参数")+" "+arg);
-                qCritical()<< "[T_Deploy] Missing argument: "<<arg;
+        // 异步解压
+        gFunc->UnzipFileAsync(destLocation, extracDir, [this, destLocation, extracDir, result, localFileDrawerArea, userInfoMap, selectAccountComboBox, loadingProgressDialog](bool success){
+            QFile::remove(destLocation);
+            loadingProgressDialog->setValue(25);
+            if(!success){
+                GlobalFunc::showErr(tr("导入"), tr("解压失败"));
+                QDir(extracDir).removeRecursively();
                 loadingProgressDialog->close();
                 delete loadingProgressDialog;
                 return;
             }
-        }
-        qDebug() << "[T_Deploy] check argument validation";
-        QString targetDir = QDir(gSets->getCFGPath()).filePath(doc->metaValue("Target"));
-        QString cleanTarget = QDir::cleanPath(targetDir);
-        if(!cleanTarget.contains(gSets->getCFGPath())){
-            GlobalFunc::showErr(tr("导入"),tr("目标路径不在CFG目录下"));
-            qCritical()<< "[T_Deploy] Target path not in CFG path: "<<doc->metaValue("Target");
+            handleExtractedPackage(extracDir, tr("导入"), result, localFileDrawerArea, userInfoMap, selectAccountComboBox);
             loadingProgressDialog->close();
             delete loadingProgressDialog;
-            return;
-        }
-        qDebug() << "[T_Deploy] doc parsed successfully, forms count:" << doc->forms.size();
-        qDebug() << "[T_Deploy] About to create T_DeployPanel with doc:" << doc.get();
-        
-        // deployPanel->show();
-        ElaPushButton *installButton = new ElaPushButton(tr("安装"), this);
-        installButton->setFixedWidth(50);
-        ElaScrollPageArea *gArea;
-        if(!doc->metaValue("Picture").isEmpty()&&QFile(extracDir+"/"+doc->metaValue("Picture")).exists()){
-            gArea = gFunc->GenerateArea(
-                this,
-                QString(extracDir+"/"+doc->metaValue("Picture")),
-                new ElaText(doc->metaValue("Name"),this),
-                new ElaText(doc->metaValue("Author"),this),
-                installButton,false
-            );
-        }else{
-            gArea = gFunc->GenerateArea(
-                this,
-                QString(":/Pictures/Pictures/CS2.png"),
-                new ElaText(doc->metaValue("Name"),this),
-                new ElaText(doc->metaValue("Author"),this),
-                installButton,false
-            );
-        }
-        if(result.trusted){
-            // installButton->setIcon(QIcon((":/Pictures/Pictures/verified.png")));
-            // installButton->setStyleSheet(R"(
-            //     ElaPushButton {
-            //         text-align: left;   
-            //         padding-left: 10px;  
-            //     }
-            // )");
-            installButton->setText(installButton->text()+" "+tr(" (本地受信任)"));
-            installButton->setLightDefaultColor(QColor(143, 204, 167));
-            installButton->setDarkDefaultColor(QColor(39, 135, 95));
-        }else installButton->setText(installButton->text() + " "+tr(" (本地)"));
-        
-        localFileDrawerArea->addDrawer(gArea);
-        qDebug() << "[T_Deploy] About to connect installButton clicked";
-        connect(installButton,&ElaPushButton::clicked,this,[this,result,gArea,localFileDrawerArea,extracDir,doc,userInfoMap,selectAccountComboBox]() -> void{
-            SteamUserInfo currentUserInfo=userInfoMap[selectAccountComboBox->currentText()];
-            qDebug()<< "[T_Deploy] About to set global variables";
-            qDebug()<< "[T_Deploy] __UserId: "<<currentUserInfo.userId;
-            qDebug()<< "[T_Deploy] __UserShortId: "<<currentUserInfo.userShortId;
-            qDebug()<< "[T_Deploy] __AccountName: "<<currentUserInfo.accountName;
-            qDebug()<< "[T_Deploy] __PersonaName: "<<currentUserInfo.personaName;
-            QDir CFGDir(QDir::cleanPath(gSettings->getCFGPath()+"/"+doc->metaValue("Target")));
-
-            // Target 冲突检测
-            if(CFGDir.exists()){
-                QFile existingConfig(CFGDir.filePath("config.asul"));
-                if(existingConfig.exists() && existingConfig.open(QIODevice::ReadOnly)){
-                    AFormParser::ParseError existErr;
-                    auto existDoc = AFormParser::Document::from(QString::fromUtf8(existingConfig.readAll()), &existErr);
-                    existingConfig.close();
-                    if(existDoc){
-                        QString existAuthor = existDoc->metaValue("Author");
-                        QString existVersion = existDoc->metaValue("Version");
-                        QString newAuthor = doc->metaValue("Author");
-                        QString newVersion = doc->metaValue("Version");
-                        if(existAuthor == newAuthor){
-                            // 同作者，对比版本
-                            if(!GlobalFunc::askDialog(this, tr("更新确认"),
-                                tr("目标目录已存在同作者配置：\n\n") +
-                                tr("作者: ") + existAuthor + "\n" +
-                                tr("当前版本: ") + existVersion + "\n" +
-                                tr("新版本: ") + newVersion + "\n\n" +
-                                tr("是否更新？"))){
-                                return;
-                            }
-                        }else{
-                            // 不同作者，冲突
-                            if(!GlobalFunc::askDialog(this, tr("目标冲突"),
-                                tr("目标目录已存在不同作者的配置：\n\n") +
-                                tr("已有作者: ") + existAuthor + " (" + existVersion + ")\n" +
-                                tr("导入作者: ") + newAuthor + " (" + newVersion + ")\n\n" +
-                                tr("覆盖可能导致配置丢失，是否继续？"))){
-                                return;
-                            }
-                        }
-                    }
-                }
-            }
-
-            QMap<QString,QString> registerMap={
-                {"__UserId",currentUserInfo.userId},
-                {"__UserShortId",currentUserInfo.userShortId},
-                {"__AccountName",currentUserInfo.accountName},
-                {"__PersonaName",currentUserInfo.personaName},
-                {"__WhereAmI", CFGDir.absolutePath()}
-                // waiting to add more personal profile like keybinding
-                // {"__Forward",currentUserInfo.forwardKey}, (...)
-            };
-            doc->setGlobalVariables(registerMap);
-            
-            qDebug() << "[T_Deploy] About to create T_DeployPanel with doc";
-            T_DeployPanel * deployPanel = new T_DeployPanel(nullptr,doc,extracDir);
-            qDebug() << "[T_Deploy] T_DeployPanel created";
-            connect(deployPanel,&T_DeployPanel::deployFinished,this,[this,gArea,doc,extracDir,deployPanel,localFileDrawerArea,result](){
-                // 准备实现toCFGs保存后复制配置到CFG文件目录
-                QDir CFGDir(QDir::cleanPath(gSettings->getCFGPath()+"/"+doc->metaValue("Target")));
-                if(CFGDir.exists()){
-                    CFGDir.removeRecursively();
-                }
-                QDir().mkdir(CFGDir.absolutePath());
-                copyFolder(extracDir,CFGDir.absolutePath(),true);
-                // 复制完成，删除临时目录
-                QDir().rmdir(extracDir);
-                // 导出config.asul
-                QFile AsulConfig(QDir(CFGDir.absolutePath()).filePath("config.asul"));
-                if(!AsulConfig.exists()){
-                    gFunc->showErr(tr("导出"),tr("文件不存在")+" "+AsulConfig.fileName());
-                    qDebug() << "[T_Deploy] Failed to find config.asul file which should be found without thinking twice: "<<AsulConfig.fileName();
-                    localFileDrawerArea->removeDrawer(gArea);
-                    delete gArea;
-                    return;
-                }
-                if(!AsulConfig.open(QIODevice::ReadWrite | QIODevice::Truncate)){
-                    gFunc->showErr(tr("导出"),tr("文件打开失败:")+" "+AsulConfig.fileName());
-                    qDebug() << "[T_Deploy] Failed to open config.asul : "<<AsulConfig.fileName();
-                    localFileDrawerArea->removeDrawer(gArea);
-                    delete gArea;
-                    return;
-                }
-                if(!AsulConfig.write(doc->dump().toUtf8())){
-                    gFunc->showErr(tr("导出"),tr("文件写入失败:")+" "+AsulConfig.fileName());
-                    qDebug() << "[T_Deploy] Failed to write config.asul : "<<AsulConfig.fileName();
-                    localFileDrawerArea->removeDrawer(gArea);
-                    delete gArea;
-                    return;
-                }
-                AsulConfig.close();
-                for(auto &CFGExport: doc->toCFGs()){
-                    DBG(" ============ deployProfile ============ ");
-                    DBG(" - deployProfile:" << CFGExport.output);
-                    DBG(" - deployProfile:" << CFGExport.content);
-                    DBG(" - deployProfile:" << CFGExport.relativePath);
-                    DBG(" - deployProfile:" << CFGExport.absolutePath);
-                    DBG(" - deployProfile:" << CFGExport.fileName);
-                    DBG(" - deployProfile:" << CFGExport.sourceFormId);
-                    DBG(" - deployProfile:" << CFGExport.description);
-                    DBG(" - deployProfile done ===============");
-                    QFile cfgFile(CFGDir.filePath(CFGExport.fileName));
-                    if(!cfgFile.open(QIODevice::ReadWrite | QIODevice::Truncate)){
-                        gFunc->showErr(tr("导出"),tr("文件打开失败:")+" "+cfgFile.fileName());
-                        qDebug() << "[T_Deploy] Failed to open config file : "<<cfgFile.fileName();
-                        return;
-                    }
-                    QTextStream out(&cfgFile);
-                    out << tr("// ====== 生成的文件 =======")+"\n";
-                    out << tr("//=这个 %1 文件由 Asul-CFGManager(AM) 根据配置自动生成 ").arg(CFGExport.fileName)+"\n";
-                    out << tr("\n//==这个 配置文件 从哪儿来的?")+"\n";
-                    out << tr("//CFG 制作者: ")<<CFGExport.sourceFormId<<"\n";
-                    out << tr("//CFG 名称: ")<<CFGExport.description<<"\n";
-                    out << tr("//CFG 版本: ")<<doc->metaValue("Version")<<"\n";
-                    out << tr("//==CFG 详细 结束")+"\n\n";
-
-                    out << CFGExport.content << "\r\n";
-
-                    out << "\r\n"+tr("//==参数结束")+"\n";
-                    out << tr("//AM 是由 Alivn开发的部署 CS2 CFG 的程序,旨在为CFG制作者提供更方便的分发服务 以及 使用者提供方便的配置服务")+"\n";
-                    out << tr("//开发者:Github(https://github.com/AsulTop),网站(http://www.asul.top)")+"\n";
-                    out << tr("//配置时间: ")<<QDateTime::currentDateTime().toString("yyyy-MM-dd HH:mm:ss")+"\n\n";
-                }
-
-                if(gSets->getOpenFolderAfterDeploy()){
-                    QDesktopServices::openUrl(QUrl("file:///" + CFGDir.absolutePath()));
-                }
-
-                if(gSets->getExecuteProgramAfterDeploy() && !doc->metaValue("Exec").isEmpty()){
-                    QString execRelativePath = doc->metaValue("Exec");
-                    QString cleanExecPath = QDir::cleanPath(CFGDir.absoluteFilePath(execRelativePath));
-                    if(!cleanExecPath.contains(gSettings->getCFGPath())){
-                        gFunc->showErr(tr("运行"),tr("可执行文件路径不在允许的目录下"));
-                        qCritical()<< "[T_Deploy] Exec path not in CFG path: "<<cleanExecPath;
-                    }else if(!QFile::exists(cleanExecPath)){
-                        gFunc->showErr(tr("运行"),tr("可执行文件不存在")+" "+cleanExecPath);
-                        qDebug() << "[T_Deploy] Exec file not found: "<<cleanExecPath;
-                    }else{
-                        if(result.trusted){
-                            QProcess::startDetached("cmd", QStringList() << "/c" << "start" << "" << cleanExecPath, CFGDir.absolutePath());
-                        }else{
-                            bool askRec = GlobalFunc::askDialog(this,tr("运行"),tr("此配置未受信任，是否要运行其可执行文件？\n\n")+cleanExecPath+tr("\n\n警告：运行未受信任的程序可能存在安全风险"));
-                            if(askRec){
-                                QProcess::startDetached("cmd", QStringList() << "/c" << "start" << "" << cleanExecPath, CFGDir.absolutePath());
-                            }
-                        }
-                    }
-                }
-
-                localFileDrawerArea->removeDrawer(gArea);
-                deployPanel->deleteLater();
-                delete gArea;
-                
-            });
-            qDebug() << "[T_Deploy] installButton clicked, about to show deployPanel";
-            deployPanel->show();
-            qDebug() << "[T_Deploy] deployPanel->show() called";
-        });
-        qDebug() << "[T_Deploy] connect done, about to close loadingProgressDialog";
-        
-        {
-            loadingProgressDialog->close();
             localFileDrawerArea->expand();
-            delete loadingProgressDialog;
-        }
-        
-        qDebug() << "[T_Deploy] All setup finished";
+        });
 
     });
 }
@@ -1056,4 +636,198 @@ void T_Deploy::uninstallCFG(const QString& location)
 
         GlobalFunc::showSuccess(tr("删除"), tr("操作成功"));
     }
+}
+
+bool T_Deploy::handleExtractedPackage(const QString &extracDir, const QString &title,
+                                      const VerifyFile::SimpleVerifyResult &signResult,
+                                      ElaDrawerArea *drawerArea,
+                                      const QMap<QString, SteamUserInfo> &userInfoMap,
+                                      ElaComboBox *selectAccountComboBox)
+{
+    QString AsulFormFilePath = extracDir + "/config.asul";
+    QFile AsulFormFile(AsulFormFilePath);
+    if(!AsulFormFile.exists()){
+        GlobalFunc::showErr(title, tr("包中未找到 config.asul"));
+        QDir(extracDir).removeRecursively();
+        return false;
+    }
+    if(!AsulFormFile.open(QIODevice::ReadOnly)){
+        GlobalFunc::showErr(title, tr("文件打开失败"));
+        QDir(extracDir).removeRecursively();
+        return false;
+    }
+    QString configContent = AsulFormFile.readAll();
+    AsulFormFile.close();
+
+    AFormParser::ParseError err;
+    auto doc = AFormParser::Document::from(configContent, &err);
+    if(!doc){
+        GlobalFunc::showErr(title, tr("解析失败: ") + err.message);
+        QDir(extracDir).removeRecursively();
+        return false;
+    }
+    QStringList argList = {"Version","Name","Target","Author","Description"};
+    for(auto arg : argList){
+        if(doc->metaValue(arg).isEmpty()){
+            GlobalFunc::showErr(title, tr("缺少参数: ") + arg);
+            QDir(extracDir).removeRecursively();
+            return false;
+        }
+    }
+
+    // 校验 Target 路径安全性
+    QString targetDir = QDir(gSets->getCFGPath()).filePath(doc->metaValue("Target"));
+    QString cleanTarget = QDir::cleanPath(targetDir);
+    if(!cleanTarget.contains(gSets->getCFGPath())){
+        GlobalFunc::showErr(title, tr("目标路径不在CFG目录下"));
+        QDir(extracDir).removeRecursively();
+        return false;
+    }
+
+    // 创建安装 UI
+    ElaPushButton *installButton = new ElaPushButton(tr("安装"), this);
+    installButton->setFixedWidth(50);
+
+    QWidget *subtitleWidget = new QWidget(this);
+    QHBoxLayout *subtitleLayout = new QHBoxLayout(subtitleWidget);
+    subtitleLayout->setContentsMargins(0,0,0,0);
+    subtitleLayout->setSpacing(6);
+    ElaText *authorText = new ElaText(doc->metaValue("Author"), this);
+    authorText->setTextPixelSize(12);
+    subtitleLayout->addWidget(authorText);
+    subtitleLayout->addStretch();
+
+    ElaScrollPageArea *gArea;
+    if(!doc->metaValue("Picture").isEmpty() && QFile(extracDir + "/" + doc->metaValue("Picture")).exists()){
+        gArea = gFunc->GenerateArea(this, QString(extracDir + "/" + doc->metaValue("Picture")),
+            new ElaText(doc->metaValue("Name"), this), subtitleWidget, installButton, false);
+    }else{
+        gArea = gFunc->GenerateArea(this, QString(":/Pictures/Pictures/CS2.png"),
+            new ElaText(doc->metaValue("Name"), this), subtitleWidget, installButton, false);
+    }
+    if(signResult.trusted){
+        installButton->setText(installButton->text() + " " + tr("(受信任)"));
+        installButton->setLightDefaultColor(QColor(143, 204, 167));
+        installButton->setDarkDefaultColor(QColor(39, 135, 95));
+    }
+
+    drawerArea->addDrawer(gArea);
+    drawerArea->expand();
+
+    // 连接安装按钮
+    connect(installButton, &ElaPushButton::clicked, this, [this, signResult, gArea, drawerArea, extracDir, doc, userInfoMap, selectAccountComboBox](){
+        SteamUserInfo currentUserInfo = userInfoMap[selectAccountComboBox->currentText()];
+        QDir CFGDir(QDir::cleanPath(gSettings->getCFGPath() + "/" + doc->metaValue("Target")));
+
+        // Target 冲突检测
+        if(CFGDir.exists()){
+            QFile existingConfig(CFGDir.filePath("config.asul"));
+            if(existingConfig.exists() && existingConfig.open(QIODevice::ReadOnly)){
+                AFormParser::ParseError existErr;
+                auto existDoc = AFormParser::Document::from(QString::fromUtf8(existingConfig.readAll()), &existErr);
+                existingConfig.close();
+                if(existDoc){
+                    QString existAuthor = existDoc->metaValue("Author");
+                    QString existVersion = existDoc->metaValue("Version");
+                    QString newAuthor = doc->metaValue("Author");
+                    QString newVersion = doc->metaValue("Version");
+                    if(existAuthor == newAuthor){
+                        if(!GlobalFunc::askDialog(this, tr("更新确认"),
+                            tr("目标目录已存在同作者配置：\n\n") +
+                            tr("作者: ") + existAuthor + "\n" +
+                            tr("当前版本: ") + existVersion + "\n" +
+                            tr("新版本: ") + newVersion + "\n\n" +
+                            tr("是否更新？"))){
+                            return;
+                        }
+                    }else{
+                        if(!GlobalFunc::askDialog(this, tr("目标冲突"),
+                            tr("目标目录已存在不同作者的配置：\n\n") +
+                            tr("已有作者: ") + existAuthor + " (" + existVersion + ")\n" +
+                            tr("导入作者: ") + newAuthor + " (" + newVersion + ")\n\n" +
+                            tr("覆盖可能导致配置丢失，是否继续？"))){
+                            return;
+                        }
+                    }
+                }
+            }
+        }
+
+        QMap<QString,QString> registerMap={
+            {"__UserId", currentUserInfo.userId},
+            {"__UserShortId", currentUserInfo.userShortId},
+            {"__AccountName", currentUserInfo.accountName},
+            {"__PersonaName", currentUserInfo.personaName},
+            {"__WhereAmI", CFGDir.absolutePath()}
+        };
+        doc->setGlobalVariables(registerMap);
+
+        T_DeployPanel *deployPanel = new T_DeployPanel(nullptr, doc, extracDir);
+        connect(deployPanel, &T_DeployPanel::deployFinished, this, [this, gArea, doc, extracDir, deployPanel, drawerArea, signResult](){
+            QDir CFGDir(QDir::cleanPath(gSettings->getCFGPath() + "/" + doc->metaValue("Target")));
+            if(CFGDir.exists()){
+                CFGDir.removeRecursively();
+            }
+            QDir().mkpath(CFGDir.absolutePath());
+            copyFolder(extracDir, CFGDir.absolutePath(), true);
+            QDir().rmdir(extracDir);
+
+            QFile AsulConfig(QDir(CFGDir.absolutePath()).filePath("config.asul"));
+            if(AsulConfig.exists() && AsulConfig.open(QIODevice::ReadWrite | QIODevice::Truncate)){
+                AsulConfig.write(doc->dump().toUtf8());
+                AsulConfig.close();
+            }
+
+            for(auto &CFGExport : doc->toCFGs()){
+                QFile cfgFile(CFGDir.filePath(CFGExport.fileName));
+                if(!cfgFile.open(QIODevice::ReadWrite | QIODevice::Truncate)){
+                    continue;
+                }
+                QTextStream out(&cfgFile);
+                out << tr("// ====== 生成的文件 =======") + "\n";
+                out << tr("//=这个 %1 文件由 Asul-CFGManager(AM) 根据配置自动生成 ").arg(CFGExport.fileName) + "\n";
+                out << tr("\n//==这个 配置文件 从哪儿来的?") + "\n";
+                out << tr("//CFG 制作者: ") << CFGExport.sourceFormId << "\n";
+                out << tr("//CFG 名称: ") << CFGExport.description << "\n";
+                out << tr("//CFG 版本: ") << doc->metaValue("Version") << "\n";
+                out << tr("//==CFG 详细 结束") + "\n\n";
+                out << CFGExport.content << "\r\n";
+                out << "\r\n" + tr("//==参数结束") + "\n";
+                out << tr("//AM 是由 Alivn开发的部署 CS2 CFG 的程序,旨在为CFG制作者提供更方便的分发服务 以及 使用者提供方便的配置服务") + "\n";
+                out << tr("//开发者:Github(https://github.com/AsulTop),网站(http://www.asul.top)") + "\n";
+                out << tr("//配置时间: ") << QDateTime::currentDateTime().toString("yyyy-MM-dd HH:mm:ss") + "\n\n";
+            }
+
+            if(gSets->getOpenFolderAfterDeploy()){
+                QDesktopServices::openUrl(QUrl("file:///" + CFGDir.absolutePath()));
+            }
+            if(gSets->getExecuteProgramAfterDeploy() && !doc->metaValue("Exec").isEmpty()){
+                QString execRelativePath = doc->metaValue("Exec");
+                QString cleanExecPath = QDir::cleanPath(CFGDir.absoluteFilePath(execRelativePath));
+                if(!cleanExecPath.contains(gSettings->getCFGPath())){
+                    gFunc->showErr(tr("运行"), tr("可执行文件路径不在允许的目录下"));
+                }else if(!QFile::exists(cleanExecPath)){
+                    gFunc->showErr(tr("运行"), tr("可执行文件不存在") + " " + cleanExecPath);
+                }else{
+                    if(signResult.trusted){
+                        QProcess::startDetached("cmd", QStringList() << "/c" << "start" << "" << cleanExecPath, CFGDir.absolutePath());
+                    }else{
+                        bool askRec = GlobalFunc::askDialog(this, tr("运行"),
+                            tr("此配置未受信任，是否要运行其可执行文件？\n\n") + cleanExecPath +
+                            tr("\n\n警告：运行未受信任的程序可能存在安全风险"));
+                        if(askRec){
+                            QProcess::startDetached("cmd", QStringList() << "/c" << "start" << "" << cleanExecPath, CFGDir.absolutePath());
+                        }
+                    }
+                }
+            }
+
+            drawerArea->removeDrawer(gArea);
+            deployPanel->deleteLater();
+            delete gArea;
+        });
+        deployPanel->show();
+    });
+
+    return true;
 }

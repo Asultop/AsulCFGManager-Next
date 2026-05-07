@@ -3,6 +3,7 @@
 
 #include "qcolor.h"
 #include <QObject>
+#include <functional>
 #include <ElaMessageBar.h>
 #include <ElaScrollPageArea.h>
 #include <ElaText.h>
@@ -52,6 +53,8 @@ public:
     static std::pair<bool, QString> createDirectoryRecursively(const QString &path);
     static void addThemeSyncList(QWidget *controler);
     static bool UnzipFile(const QString &archivePath, const QString &extractDir);
+    static void UnzipFileAsync(const QString &archivePath, const QString &extractDir,
+                               std::function<void(bool)> onFinished);
 
 signals:
     void updateThemeUISignal();

@@ -13,6 +13,7 @@
 #include <qnamespace.h>
 #include <qprocess.h>
 #include <qsize.h>
+#include <QThread>
 #include <qstylehints.h>
 #include <QStandardPaths>
 #include "../SystemKit/AsulApplication.h"
@@ -84,6 +85,25 @@ bool GlobalFunc::UnzipFile(const QString &archivePath, const QString &extractDir
     }
 
     return true;
+}
+
+void GlobalFunc::UnzipFileAsync(const QString &archivePath, const QString &extractDir,
+                                std::function<void(bool)> onFinished){
+    QThread *thread = new QThread;
+    QObject *worker = new QObject;
+    worker->moveToThread(thread);
+
+    QObject::connect(thread, &QThread::started, worker, [archivePath, extractDir, onFinished, thread](){
+        bool result = GlobalFunc::UnzipFile(archivePath, extractDir);
+        QMetaObject::invokeMethod(qApp, [onFinished, result](){
+            onFinished(result);
+        }, Qt::QueuedConnection);
+        thread->quit();
+    });
+    QObject::connect(thread, &QThread::finished, worker, &QObject::deleteLater);
+    QObject::connect(thread, &QThread::finished, thread, &QThread::deleteLater);
+
+    thread->start();
 }
 void GlobalFunc::updateThemeUI(QColor customColor){
     emit gFunc->updateThemeUISignalByCustom(customColor);
