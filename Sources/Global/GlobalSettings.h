@@ -39,6 +39,7 @@ class GlobalSettings : public QObject
     Q_PROPERTY_CREATE(bool,OpenFolderAfterDeploy);
     Q_PROPERTY_CREATE(bool,ExecuteProgramAfterDeploy);
     Q_PROPERTY_CREATE(QStringList,SupportedLang);
+    Q_PROPERTY_CREATE(QString, CustomSourceURL);
 
     Q_PROPERTY_CREATE(QSettings*,RegisterSettings);
 public:

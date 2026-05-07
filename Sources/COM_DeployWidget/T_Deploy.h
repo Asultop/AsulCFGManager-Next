@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include <QMap>
+#include <QJsonObject>
 #include <qtmetamacros.h>
 #include "../SystemKit/BaseScrollPage.h"
 #include "../CTL_AsulComboBox/AsulComboBox.h"
@@ -26,6 +27,9 @@ private:
                                 ElaDrawerArea *drawerArea,
                                 const QMap<QString, SteamUserInfo> &userInfoMap,
                                 ElaComboBox *selectAccountComboBox);
+    void handleManifestEntry(const QJsonObject &entry, ElaDrawerArea *drawerArea,
+                             const QMap<QString, SteamUserInfo> &userInfoMap,
+                             ElaComboBox *selectAccountComboBox);
 
 private slots:
 

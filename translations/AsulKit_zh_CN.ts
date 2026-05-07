@@ -232,7 +232,7 @@
     <name>T_Deploy</name>
     <message>
         <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="52"/>
-        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="697"/>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="814"/>
         <source>安装</source>
         <translation type="unfinished"></translation>
     </message>
@@ -272,425 +272,496 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="202"/>
-        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="506"/>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="107"/>
+        <source>拉取</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="124"/>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="131"/>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="136"/>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="176"/>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="187"/>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="194"/>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="205"/>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="215"/>
+        <source>自定义源</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="125"/>
+        <source>从自定义源拉取配置包列表</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="131"/>
+        <source>请输入源地址</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="176"/>
+        <source>无法读取 manifest 文件</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="187"/>
+        <source>manifest 格式错误: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="194"/>
+        <source>manifest 中没有条目</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="205"/>
+        <source>已拉取 %1 个条目</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="215"/>
+        <source>拉取失败: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="319"/>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="623"/>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="1103"/>
         <source>解压失败</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="208"/>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="325"/>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="1113"/>
         <source>包校验完成，已就绪</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="234"/>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="351"/>
         <source>本地文件</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="237"/>
-        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="247"/>
-        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="269"/>
-        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="277"/>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="354"/>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="364"/>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="386"/>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="394"/>
         <source>扫描</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="239"/>
-        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="506"/>
-        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="512"/>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="356"/>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="623"/>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="629"/>
         <source>导入</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="247"/>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="364"/>
         <source>扫描本地文件</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="408"/>
-        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="411"/>
-        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="817"/>
-        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="819"/>
-        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="824"/>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="525"/>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="528"/>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="934"/>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="936"/>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="941"/>
         <source>运行</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="408"/>
-        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="817"/>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="525"/>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="934"/>
         <source>可执行文件路径不在允许的目录下</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="411"/>
-        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="819"/>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="528"/>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="936"/>
         <source>可执行文件不存在</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="744"/>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="861"/>
         <source>更新确认</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="105"/>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="1036"/>
+        <source>无效的下载地址</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="222"/>
         <source>输入包下载地址...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="107"/>
-        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="127"/>
-        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="132"/>
-        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="202"/>
-        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="207"/>
-        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="208"/>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="224"/>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="244"/>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="249"/>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="319"/>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="324"/>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="325"/>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="979"/>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="1036"/>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="1103"/>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="1110"/>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="1113"/>
         <source>获取</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="122"/>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="239"/>
         <source>自定义包Url</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="122"/>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="239"/>
         <source>从网络地址获取配置包</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="127"/>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="244"/>
         <source>请输入下载地址</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="132"/>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="136"/>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="249"/>
         <source>无效的地址</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="219"/>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="336"/>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="1124"/>
         <source>下载</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="219"/>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="336"/>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="1124"/>
         <source>下载失败: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="178"/>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="295"/>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="1080"/>
         <source>签名：未受信任</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="179"/>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="296"/>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="1081"/>
         <source>此包签名验证未通过，可能存在安全风险。
 
 是否继续？</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="189"/>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="306"/>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="1091"/>
         <source>受信任开发者：</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="659"/>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="776"/>
         <source>包中未找到 config.asul</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="609"/>
-        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="674"/>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="726"/>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="791"/>
         <source>解析失败: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="681"/>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="798"/>
         <source>缺少参数: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="718"/>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="835"/>
         <source>(受信任)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="745"/>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="862"/>
         <source>目标目录已存在同作者配置：
 
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="746"/>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="863"/>
         <source>作者: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="747"/>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="864"/>
         <source>当前版本: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="748"/>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="865"/>
         <source>新版本: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="749"/>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="866"/>
         <source>是否更新？</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="753"/>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="870"/>
         <source>目标冲突</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="754"/>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="871"/>
         <source>目标目录已存在不同作者的配置：
 
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="755"/>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="872"/>
         <source>已有作者: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="756"/>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="873"/>
         <source>导入作者: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="757"/>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="874"/>
         <source>覆盖可能导致配置丢失，是否继续？</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="293"/>
-        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="646"/>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="410"/>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="763"/>
         <source>删除</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="426"/>
-        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="582"/>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="543"/>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="699"/>
         <source>注意</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="426"/>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="543"/>
         <source>删除将导致CFG不可用并且按键恢复默认设置
 是否继续?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="825"/>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="942"/>
         <source>此配置未受信任，是否要运行其可执行文件？
 
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="826"/>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="943"/>
         <source>
 
 警告：运行未受信任的程序可能存在安全风险</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="582"/>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="699"/>
         <source>这会重置 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="582"/>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="699"/>
         <source>(**最近登陆**) 的所有按键绑定设置! </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="599"/>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="716"/>
         <source>无法打开文件: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="614"/>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="731"/>
         <source>[内部错误] VDF 格式错误!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="620"/>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="737"/>
         <source>[内部错误] convar 节点丢失</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="630"/>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="747"/>
         <source>无法打开文件进行写入: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="639"/>
-        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="646"/>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="756"/>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="763"/>
         <source>操作成功</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="642"/>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="759"/>
         <source>VDF 操作错误: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="461"/>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="578"/>
         <source>打开文件</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="461"/>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="578"/>
         <source> Files (*.*)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="189"/>
-        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="490"/>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="306"/>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="607"/>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="1091"/>
         <source>签名</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="490"/>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="607"/>
         <source>受信任开发者</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="492"/>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="609"/>
         <source>文件 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="492"/>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="609"/>
         <source> 可能存在风险，是否继续？</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="492"/>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="609"/>
         <source>签名：未受信任开发者签名</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="467"/>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="584"/>
         <source>解析包</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="664"/>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="781"/>
         <source>文件打开失败</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="269"/>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="386"/>
         <source>解析失败</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="277"/>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="394"/>
         <source>缺少参数</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="691"/>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="808"/>
         <source>目标路径不在CFG目录下</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="356"/>
-        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="380"/>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="473"/>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="497"/>
         <source>文件打开失败:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="291"/>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="408"/>
         <source>编辑</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="356"/>
-        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="361"/>
-        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="380"/>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="473"/>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="478"/>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="497"/>
         <source>保存</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="361"/>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="478"/>
         <source>文件写入失败:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="385"/>
-        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="796"/>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="502"/>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="913"/>
         <source>// ====== 生成的文件 =======</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="386"/>
-        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="797"/>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="503"/>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="914"/>
         <source>//=这个 %1 文件由 Asul-CFGManager(AM) 根据配置自动生成 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="387"/>
-        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="798"/>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="504"/>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="915"/>
         <source>
 //==这个 配置文件 从哪儿来的?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="388"/>
-        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="799"/>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="505"/>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="916"/>
         <source>//CFG 制作者: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="389"/>
-        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="800"/>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="506"/>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="917"/>
         <source>//CFG 名称: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="390"/>
-        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="801"/>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="507"/>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="918"/>
         <source>//CFG 版本: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="391"/>
-        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="802"/>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="508"/>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="919"/>
         <source>//==CFG 详细 结束</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="395"/>
-        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="804"/>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="512"/>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="921"/>
         <source>//==参数结束</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="396"/>
-        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="805"/>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="513"/>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="922"/>
         <source>//AM 是由 Alivn开发的部署 CS2 CFG 的程序,旨在为CFG制作者提供更方便的分发服务 以及 使用者提供方便的配置服务</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="397"/>
-        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="806"/>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="514"/>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="923"/>
         <source>//开发者:Github(https://github.com/AsulTop),网站(http://www.asul.top)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="398"/>
-        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="807"/>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="515"/>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="924"/>
         <source>//配置时间: </source>
         <translation type="unfinished"></translation>
     </message>
@@ -973,109 +1044,119 @@
 <context>
     <name>T_SettingScreen</name>
     <message>
-        <location filename="../Sources/COM_SettingWidget/T_SettingScreen.cpp" line="20"/>
+        <location filename="../Sources/COM_SettingWidget/T_SettingScreen.cpp" line="21"/>
         <source>设置</source>
         <translation>设置</translation>
     </message>
     <message>
-        <location filename="../Sources/COM_SettingWidget/T_SettingScreen.cpp" line="33"/>
+        <location filename="../Sources/COM_SettingWidget/T_SettingScreen.cpp" line="34"/>
         <source>外观</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Sources/COM_SettingWidget/T_SettingScreen.cpp" line="46"/>
+        <location filename="../Sources/COM_SettingWidget/T_SettingScreen.cpp" line="47"/>
         <source>开启颜色同步</source>
         <translation>开启颜色同步</translation>
     </message>
     <message>
-        <location filename="../Sources/COM_SettingWidget/T_SettingScreen.cpp" line="46"/>
+        <location filename="../Sources/COM_SettingWidget/T_SettingScreen.cpp" line="47"/>
         <source>同步 Windows 的主题色</source>
         <translation>同步 Windows 的主题色</translation>
     </message>
     <message>
-        <location filename="../Sources/COM_SettingWidget/T_SettingScreen.cpp" line="59"/>
+        <location filename="../Sources/COM_SettingWidget/T_SettingScreen.cpp" line="60"/>
         <source>开启明暗同步</source>
         <translation>开启明暗同步</translation>
     </message>
     <message>
-        <location filename="../Sources/COM_SettingWidget/T_SettingScreen.cpp" line="59"/>
+        <location filename="../Sources/COM_SettingWidget/T_SettingScreen.cpp" line="60"/>
         <source>同步 Windows 的明暗模式</source>
         <translation>同步 Windows 的明暗模式</translation>
     </message>
     <message>
-        <location filename="../Sources/COM_SettingWidget/T_SettingScreen.cpp" line="75"/>
+        <location filename="../Sources/COM_SettingWidget/T_SettingScreen.cpp" line="76"/>
         <source>显示模式</source>
         <translation>显示模式</translation>
     </message>
     <message>
-        <location filename="../Sources/COM_SettingWidget/T_SettingScreen.cpp" line="75"/>
+        <location filename="../Sources/COM_SettingWidget/T_SettingScreen.cpp" line="76"/>
         <source>切换窗口显示模式</source>
         <translation>切换窗口显示模式</translation>
     </message>
     <message>
-        <location filename="../Sources/COM_SettingWidget/T_SettingScreen.cpp" line="85"/>
+        <location filename="../Sources/COM_SettingWidget/T_SettingScreen.cpp" line="86"/>
         <source>切换主题</source>
         <translation>切换主题</translation>
     </message>
     <message>
-        <location filename="../Sources/COM_SettingWidget/T_SettingScreen.cpp" line="85"/>
+        <location filename="../Sources/COM_SettingWidget/T_SettingScreen.cpp" line="86"/>
         <source>切换 Dark/Light</source>
         <translation>切换 Dark/Light</translation>
     </message>
     <message>
-        <location filename="../Sources/COM_SettingWidget/T_SettingScreen.cpp" line="90"/>
-        <location filename="../Sources/COM_SettingWidget/T_SettingScreen.cpp" line="98"/>
+        <location filename="../Sources/COM_SettingWidget/T_SettingScreen.cpp" line="91"/>
+        <location filename="../Sources/COM_SettingWidget/T_SettingScreen.cpp" line="99"/>
         <source>选择颜色</source>
         <translation>选择颜色</translation>
     </message>
     <message>
-        <location filename="../Sources/COM_SettingWidget/T_SettingScreen.cpp" line="98"/>
+        <location filename="../Sources/COM_SettingWidget/T_SettingScreen.cpp" line="99"/>
         <source>选择自定义颜色</source>
         <translation>选择自定义颜色</translation>
     </message>
     <message>
-        <location filename="../Sources/COM_SettingWidget/T_SettingScreen.cpp" line="115"/>
+        <location filename="../Sources/COM_SettingWidget/T_SettingScreen.cpp" line="116"/>
         <source>切换语言</source>
         <translation>切换语言</translation>
     </message>
     <message>
-        <location filename="../Sources/COM_SettingWidget/T_SettingScreen.cpp" line="126"/>
+        <location filename="../Sources/COM_SettingWidget/T_SettingScreen.cpp" line="127"/>
         <source>部署</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Sources/COM_SettingWidget/T_SettingScreen.cpp" line="138"/>
+        <location filename="../Sources/COM_SettingWidget/T_SettingScreen.cpp" line="139"/>
         <source>部署后打开文件夹</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Sources/COM_SettingWidget/T_SettingScreen.cpp" line="138"/>
+        <location filename="../Sources/COM_SettingWidget/T_SettingScreen.cpp" line="139"/>
         <source>部署完成后打开 CFG 目录</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Sources/COM_SettingWidget/T_SettingScreen.cpp" line="145"/>
+        <location filename="../Sources/COM_SettingWidget/T_SettingScreen.cpp" line="146"/>
         <source>部署后执行程序</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Sources/COM_SettingWidget/T_SettingScreen.cpp" line="145"/>
+        <location filename="../Sources/COM_SettingWidget/T_SettingScreen.cpp" line="146"/>
         <source>部署完成后运行配置中的可执行文件</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Sources/COM_SettingWidget/T_SettingScreen.cpp" line="110"/>
-        <location filename="../Sources/COM_SettingWidget/T_SettingScreen.cpp" line="113"/>
+        <location filename="../Sources/COM_SettingWidget/T_SettingScreen.cpp" line="154"/>
+        <source>自定义源地址</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Sources/COM_SettingWidget/T_SettingScreen.cpp" line="154"/>
+        <source>在线商店自定义配置包来源 URL</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Sources/COM_SettingWidget/T_SettingScreen.cpp" line="111"/>
+        <location filename="../Sources/COM_SettingWidget/T_SettingScreen.cpp" line="114"/>
         <source>语言</source>
         <translation>语言</translation>
     </message>
     <message>
-        <location filename="../Sources/COM_SettingWidget/T_SettingScreen.cpp" line="110"/>
+        <location filename="../Sources/COM_SettingWidget/T_SettingScreen.cpp" line="111"/>
         <source>是否重启以更换语言</source>
         <translation>是否重启以更换语言</translation>
     </message>
     <message>
-        <location filename="../Sources/COM_SettingWidget/T_SettingScreen.cpp" line="113"/>
+        <location filename="../Sources/COM_SettingWidget/T_SettingScreen.cpp" line="114"/>
         <source>重启以更换语言</source>
         <translation>重启以更换语言</translation>
     </message>

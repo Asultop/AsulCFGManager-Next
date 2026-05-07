@@ -13,6 +13,7 @@
 #include "ElaPushButton.h"
 #include "ElaDrawerArea.h"
 #include "ElaScrollPageArea.h"
+#include "ElaLineEdit.h"
 
 T_SettingScreen::T_SettingScreen(QWidget *parent)
     : BaseScrollPage{parent}
@@ -143,6 +144,14 @@ T_SettingScreen::T_SettingScreen(QWidget *parent)
         gSets->setExecuteProgramAfterDeploy(checked);
     });
     deployDrawer->addDrawer(GlobalFunc::GenerateArea(this,new ElaText(tr("部署后执行程序"),this),new ElaText(tr("部署完成后运行配置中的可执行文件"),this),executeProgramAfterDeploy,false));
+
+    ElaLineEdit *customSourceURLEdit = new ElaLineEdit(this);
+    customSourceURLEdit->setText(gSets->getCustomSourceURL());
+    customSourceURLEdit->setFixedWidth(400);
+    connect(customSourceURLEdit, &ElaLineEdit::editingFinished, [=](){
+        gSets->setCustomSourceURL(customSourceURLEdit->text().trimmed());
+    });
+    deployDrawer->addDrawer(GlobalFunc::GenerateArea(this,new ElaText(tr("自定义源地址"),this),new ElaText(tr("在线商店自定义配置包来源 URL"),this),customSourceURLEdit,false));
 
     deployDrawer->expand();
     centerVLayout->addWidget(deployDrawer);

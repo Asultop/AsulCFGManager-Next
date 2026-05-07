@@ -35,6 +35,7 @@ void GlobalSettings::init()
     this->setOpenFolderAfterDeploy(true);
     this->setExecuteProgramAfterDeploy(true);
     this->setSupportedLang(QStringList{"zh_CN","en_US"});
+    this->setCustomSourceURL("https://github.com/Asultop/ManagerNextPackageSource/raw/refs/heads/main/manifest.json");
 
 
     foreach(QString lang,this->getSupportedLang()){

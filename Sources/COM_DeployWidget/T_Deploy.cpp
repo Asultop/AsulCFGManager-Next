@@ -100,6 +100,123 @@ T_Deploy::T_Deploy(QWidget *parent)
 
     drawerArea->setDrawerHeader(drawerHeader);
 
+    // 自定义源
+    ElaLineEdit *sourceUrlEdit = new ElaLineEdit(this);
+    sourceUrlEdit->setText(gSets->getCustomSourceURL());
+    sourceUrlEdit->setFixedWidth(400);
+    ElaPushButton *pullButton = new ElaPushButton(tr("拉取"), this);
+    pullButton->setFixedWidth(80);
+    ElaProgressRing *sourceProgressRing = new ElaProgressRing(this);
+    sourceProgressRing->setFixedSize(36, 36);
+    sourceProgressRing->setIsBusying(false);
+    sourceProgressRing->setIsDisplayValue(false);
+    sourceProgressRing->setMinimum(0);
+    sourceProgressRing->setMaximum(100);
+    sourceProgressRing->setValue(0);
+    sourceProgressRing->setBusyingWidth(4);
+    sourceProgressRing->hide();
+    QHBoxLayout *sourceInputLayout = new QHBoxLayout();
+    sourceInputLayout->addWidget(sourceUrlEdit);
+    sourceInputLayout->addWidget(pullButton);
+    sourceInputLayout->addWidget(sourceProgressRing);
+    drawerArea->addDrawer(GlobalFunc::GenerateArea(this,
+        ElaIconType::CloudArrowDown,
+        new ElaText(tr("自定义源"), this),
+        new ElaText(tr("从自定义源拉取配置包列表"), this),
+        sourceInputLayout));
+
+    connect(pullButton, &ElaPushButton::clicked, this, [this, sourceUrlEdit, pullButton, sourceProgressRing, drawerArea, userInfoMap, selectAccountComboBox](){
+        QString srcUrl = sourceUrlEdit->text().trimmed();
+        if(srcUrl.isEmpty()){
+            GlobalFunc::showWarn(tr("自定义源"), tr("请输入源地址"));
+            return;
+        }
+        QUrl qsrcUrl(srcUrl);
+        if(!qsrcUrl.isValid()){
+            GlobalFunc::showErr(tr("自定义源"), tr("无效的地址"));
+            return;
+        }
+
+        pullButton->hide();
+        sourceProgressRing->setIsBusying(true);
+        sourceProgressRing->setIsDisplayValue(false);
+        sourceProgressRing->show();
+
+        QString manifestPath = gSets->getGLoc()->path() + "/manifest.json";
+
+        AsulMultiDownloader *manifestDownloader = new AsulMultiDownloader(this);
+        manifestDownloader->setMaxConcurrentDownloads(1);
+        manifestDownloader->setAutoRetry(true);
+        manifestDownloader->setMaxRetryCount(3);
+        manifestDownloader->addDownload(qsrcUrl, manifestPath);
+
+        connect(manifestDownloader, &AsulMultiDownloader::downloadProgress, this,
+            [sourceProgressRing](const QString &taskId, qint64 received, qint64 total){
+                Q_UNUSED(taskId);
+                if(total > 0){
+                    sourceProgressRing->setIsBusying(false);
+                    sourceProgressRing->setRange(0, static_cast<int>(total));
+                    sourceProgressRing->setValue(static_cast<int>(received));
+                }
+            });
+
+        connect(manifestDownloader, &AsulMultiDownloader::downloadFinished, this,
+            [this, manifestDownloader, manifestPath, pullButton, sourceProgressRing, drawerArea, userInfoMap, selectAccountComboBox]
+            (const QString &taskId, const QString &savePath)
+        {
+            Q_UNUSED(taskId);
+            Q_UNUSED(savePath);
+
+            sourceProgressRing->hide();
+            sourceProgressRing->setIsBusying(false);
+            pullButton->show();
+
+            QFile manifestFile(manifestPath);
+            if(!manifestFile.open(QIODevice::ReadOnly)){
+                GlobalFunc::showErr(tr("自定义源"), tr("无法读取 manifest 文件"));
+                manifestDownloader->deleteLater();
+                return;
+            }
+            QByteArray manifestData = manifestFile.readAll();
+            manifestFile.close();
+            QFile::remove(manifestPath);
+
+            QJsonParseError parseErr;
+            QJsonDocument jsonDoc = QJsonDocument::fromJson(manifestData, &parseErr);
+            if(parseErr.error != QJsonParseError::NoError || !jsonDoc.isArray()){
+                GlobalFunc::showErr(tr("自定义源"), tr("manifest 格式错误: ") + parseErr.errorString());
+                manifestDownloader->deleteLater();
+                return;
+            }
+
+            QJsonArray entries = jsonDoc.array();
+            if(entries.isEmpty()){
+                GlobalFunc::showInfo(tr("自定义源"), tr("manifest 中没有条目"));
+                manifestDownloader->deleteLater();
+                return;
+            }
+
+            for(const auto &entry : entries){
+                if(!entry.isObject()) continue;
+                QJsonObject obj = entry.toObject();
+                handleManifestEntry(obj, drawerArea, userInfoMap, selectAccountComboBox);
+            }
+            drawerArea->expand();
+            GlobalFunc::showSuccess(tr("自定义源"), tr("已拉取 %1 个条目").arg(entries.size()));
+            manifestDownloader->deleteLater();
+        });
+
+        connect(manifestDownloader, &AsulMultiDownloader::downloadFailed, this,
+            [manifestDownloader, pullButton, sourceProgressRing](const QString &taskId, const QString &errorString){
+                Q_UNUSED(taskId);
+                sourceProgressRing->hide();
+                sourceProgressRing->setIsBusying(false);
+                pullButton->show();
+                GlobalFunc::showErr(tr("自定义源"), tr("拉取失败: ") + errorString);
+                manifestDownloader->deleteLater();
+            });
+    });
+
     // 自定义包 URL 输入
     ElaLineEdit *customUrlEdit = new ElaLineEdit(this);
     customUrlEdit->setPlaceholderText(tr("输入包下载地址..."));
@@ -839,4 +956,173 @@ bool T_Deploy::handleExtractedPackage(const QString &extracDir, const QString &t
     });
 
     return true;
+}
+
+void T_Deploy::handleManifestEntry(const QJsonObject &entry, ElaDrawerArea *drawerArea,
+                                   const QMap<QString, SteamUserInfo> &userInfoMap,
+                                   ElaComboBox *selectAccountComboBox)
+{
+    QString name = entry.value("name").toString();
+    QString version = entry.value("version").toString();
+    QString author = entry.value("author").toString();
+    QString description = entry.value("description").toString();
+    QString downloadUrl = entry.value("download_url").toString();
+    QString pictureUrl = entry.value("picture_url").toString();
+
+    if(name.isEmpty() || downloadUrl.isEmpty()){
+        qDebug() << "[T_Deploy] Skipping manifest entry with missing name or download_url";
+        return;
+    }
+
+    QString displayName = name + " (" + version + ")";
+
+    ElaPushButton *getButton = new ElaPushButton(tr("获取"), this);
+    getButton->setFixedWidth(80);
+    ElaProgressRing *entryRing = new ElaProgressRing(this);
+    entryRing->setFixedSize(36, 36);
+    entryRing->setIsBusying(false);
+    entryRing->setIsDisplayValue(false);
+    entryRing->setMinimum(0);
+    entryRing->setMaximum(100);
+    entryRing->setValue(0);
+    entryRing->setBusyingWidth(4);
+    entryRing->hide();
+
+    QWidget *buttonWidget = new QWidget(this);
+    QHBoxLayout *buttonLayout = new QHBoxLayout(buttonWidget);
+    buttonLayout->setContentsMargins(0, 0, 0, 0);
+    buttonLayout->addStretch();
+    buttonLayout->addWidget(getButton);
+    buttonLayout->addWidget(entryRing);
+
+    ElaScrollPageArea *gArea;
+    if(!pictureUrl.isEmpty()){
+        gArea = gFunc->GenerateArea(this, QString(":/Pictures/Pictures/CS2.png"),
+            new ElaText(displayName, this),
+            new ElaText(author + " - " + description, this),
+            buttonWidget, false);
+
+        // 异步下载图片
+        QString picPath = gSets->getGLoc()->path() + "/pic_" + name + ".png";
+        AsulMultiDownloader *picDownloader = new AsulMultiDownloader(this);
+        picDownloader->setMaxConcurrentDownloads(1);
+        picDownloader->addDownload(QUrl(pictureUrl), picPath);
+        connect(picDownloader, &AsulMultiDownloader::downloadFinished, this,
+            [picDownloader, picPath](const QString &taskId, const QString &savePath){
+                Q_UNUSED(taskId);
+                Q_UNUSED(savePath);
+                picDownloader->deleteLater();
+            });
+        connect(picDownloader, &AsulMultiDownloader::downloadFailed, this,
+            [picDownloader](const QString &taskId, const QString &errorString){
+                Q_UNUSED(taskId);
+                Q_UNUSED(errorString);
+                picDownloader->deleteLater();
+            });
+    }else{
+        gArea = gFunc->GenerateArea(this, QString(":/Pictures/Pictures/CS2.png"),
+            new ElaText(displayName, this),
+            new ElaText(author + " - " + description, this),
+            buttonWidget, false);
+    }
+
+    drawerArea->addDrawer(gArea);
+
+    connect(getButton, &ElaPushButton::clicked, this,
+        [this, getButton, entryRing, gArea, drawerArea, downloadUrl, userInfoMap, selectAccountComboBox]()
+    {
+        QUrl qurl(downloadUrl);
+        if(!qurl.isValid()){
+            GlobalFunc::showErr(tr("获取"), tr("无效的下载地址"));
+            return;
+        }
+
+        getButton->hide();
+        entryRing->setIsBusying(true);
+        entryRing->setIsDisplayValue(false);
+        entryRing->show();
+
+        QString downloadDir = gSets->getGLoc()->path() + "/Downloads";
+        QDir().mkpath(downloadDir);
+        QString fileName = qurl.fileName().isEmpty() ? "package.zip" : qurl.fileName();
+        QString destPath = downloadDir + "/" + fileName;
+
+        AsulMultiDownloader *downloader = new AsulMultiDownloader(this);
+        downloader->setMaxConcurrentDownloads(1);
+        downloader->setAutoRetry(true);
+        downloader->setMaxRetryCount(3);
+        downloader->addDownload(qurl, destPath);
+
+        connect(downloader, &AsulMultiDownloader::downloadProgress, this,
+            [entryRing](const QString &taskId, qint64 received, qint64 total){
+                Q_UNUSED(taskId);
+                if(total > 0){
+                    entryRing->setIsBusying(false);
+                    entryRing->setRange(0, static_cast<int>(total));
+                    entryRing->setValue(static_cast<int>(received));
+                }
+            });
+
+        connect(downloader, &AsulMultiDownloader::downloadFinished, this,
+            [this, downloader, destPath, gArea, drawerArea, getButton, entryRing, userInfoMap, selectAccountComboBox]
+            (const QString &taskId, const QString &savePath)
+        {
+            Q_UNUSED(taskId);
+            Q_UNUSED(savePath);
+
+            entryRing->setIsBusying(true);
+            entryRing->setIsDisplayValue(false);
+
+            QString rootCaPath(":/certs/RootCA-Cert/root-ca.crt.pem");
+            VerifyFile::SimpleVerifyResult result = VerifyFile::VerifyFileSdk::verifyFileSimple(destPath, rootCaPath);
+
+            if(!result.trusted){
+                bool userAccept = GlobalFunc::askDialog(this, tr("签名：未受信任"),
+                    tr("此包签名验证未通过，可能存在安全风险。\n\n是否继续？"));
+                if(!userAccept){
+                    QFile::remove(destPath);
+                    entryRing->hide();
+                    entryRing->setIsBusying(false);
+                    getButton->show();
+                    downloader->deleteLater();
+                    return;
+                }
+            }else{
+                GlobalFunc::showSuccess(tr("签名"), tr("受信任开发者：") + result.info.signer);
+            }
+
+            QString extracDir = gSets->getGLoc()->path() + "/Downloads/" + QFileInfo(destPath).baseName() + "-extract";
+            gFunc->UnzipFileAsync(destPath, extracDir,
+                [this, destPath, extracDir, result, gArea, drawerArea, getButton, entryRing, downloader, userInfoMap, selectAccountComboBox](bool success)
+            {
+                QFile::remove(destPath);
+                entryRing->hide();
+                entryRing->setIsBusying(false);
+
+                if(!success){
+                    GlobalFunc::showErr(tr("获取"), tr("解压失败"));
+                    QDir(extracDir).removeRecursively();
+                    getButton->show();
+                    downloader->deleteLater();
+                    return;
+                }
+
+                handleExtractedPackage(extracDir, tr("获取"), result, drawerArea, userInfoMap, selectAccountComboBox);
+                drawerArea->removeDrawer(gArea);
+                delete gArea;
+                GlobalFunc::showSuccess(tr("获取"), tr("包校验完成，已就绪"));
+                downloader->deleteLater();
+            });
+        });
+
+        connect(downloader, &AsulMultiDownloader::downloadFailed, this,
+            [downloader, getButton, entryRing](const QString &taskId, const QString &errorString){
+                Q_UNUSED(taskId);
+                entryRing->hide();
+                entryRing->setIsBusying(false);
+                getButton->show();
+                GlobalFunc::showErr(tr("下载"), tr("下载失败: ") + errorString);
+                downloader->deleteLater();
+            });
+    });
 }
