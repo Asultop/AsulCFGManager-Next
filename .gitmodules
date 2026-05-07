@@ -1,3 +1,6 @@
 [submodule "3rd/AFormSDK"]
 	path = 3rd/AFormSDK
 	url = https://github.com/AsulTop/AFormParser.git
+[submodule "3rd/ADownloader-SDK"]
+	path = 3rd/ADownloader-SDK
+	url = https://github.com/AsulTop/AsulDownloader

@@ -60,7 +60,8 @@ set(SOURCES
     3rd/QsLog/QsLogDestFile.cpp
     3rd/QsLog/QsLogDestFunctor.cpp
 
-    
+    3rd/ADownloader-SDK/AsulMultiDownloader.cpp
+
     Sources/CTL_AsulComboBox/AsulComboBox.cpp
 
     Sources/MainEntry/main.cpp
@@ -88,6 +89,7 @@ set(HEADERS
     Sources/ToolKit/ASteamSDK/ASteamUserQuery/F_SteamUserQuery.h
     Sources/CTL_AsulComboBox/AsulComboBox.h
     Sources/ToolKit/LoadingProgress/LoadingProgressDialog.h
+    3rd/ADownloader-SDK/AsulMultiDownloader.h
 
     Sources/MainEntry/asul.h
 )
@@ -131,6 +133,7 @@ target_include_directories(${PROJECT_NAME} PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/3rd/ValveFileVDF-1.1.1/include
     ${CMAKE_CURRENT_SOURCE_DIR}/3rd/QsLog
     ${CMAKE_CURRENT_SOURCE_DIR}/3rd/AFormSDK/include
+    ${CMAKE_CURRENT_SOURCE_DIR}/3rd/ADownloader-SDK
 )
 
 # 链接库

@@ -27,6 +27,8 @@
 #include <QNetworkRequest>
 #include "VerifyFileSdk/VerifyFileSdk.h"
 #include "AFormParser/AFormParser.hpp"
+#include "ElaProgressRing.h"
+#include "AsulMultiDownloader.h"
 #include "../ToolKit/ASteamSDK/ASteamUserQuery/F_SteamUserQuery.h"
 #include "../ToolKit/LoadingProgress/LoadingProgressDialog.h"
 #include <QThread>
@@ -104,12 +106,22 @@ T_Deploy::T_Deploy(QWidget *parent)
     customUrlEdit->setFixedWidth(400);
     ElaPushButton *fetchButton = new ElaPushButton(tr("获取"), this);
     fetchButton->setFixedWidth(80);
+    ElaProgressRing *progressRing = new ElaProgressRing(this);
+    progressRing->setFixedSize(36, 36);
+    progressRing->setIsBusying(false);
+    progressRing->setIsDisplayValue(false);
+    progressRing->setMinimum(0);
+    progressRing->setMaximum(100);
+    progressRing->setValue(0);
+    progressRing->setBusyingWidth(4);
+    progressRing->hide();
     QHBoxLayout *urlInputLayout = new QHBoxLayout();
     urlInputLayout->addWidget(customUrlEdit);
     urlInputLayout->addWidget(fetchButton);
+    urlInputLayout->addWidget(progressRing);
     drawerArea->addDrawer(GlobalFunc::GenerateArea(this, ElaIconType::Globe, new ElaText(tr("自定义包Url"), this), new ElaText(tr("从网络地址获取配置包"), this), urlInputLayout));
 
-    connect(fetchButton, &ElaPushButton::clicked, this, [this, customUrlEdit, drawerArea, userInfoMap, selectAccountComboBox](){
+    connect(fetchButton, &ElaPushButton::clicked, this, [this, customUrlEdit, drawerArea, userInfoMap, selectAccountComboBox, fetchButton, progressRing](){
         QString url = customUrlEdit->text().trimmed();
         if(url.isEmpty()){
             GlobalFunc::showWarn(tr("获取"), tr("请输入下载地址"));
@@ -121,52 +133,44 @@ T_Deploy::T_Deploy(QWidget *parent)
             return;
         }
 
-        GlobalFunc::showInfo(tr("获取"), tr("正在下载..."));
-        QApplication::processEvents();
-
         QString downloadDir = gSets->getGLoc()->path() + "/Downloads";
         QDir().mkpath(downloadDir);
         QString fileName = qurl.fileName().isEmpty() ? "package.zip" : qurl.fileName();
         QString destPath = downloadDir + "/" + fileName;
 
-        LoadingProgressDialog *loadingProgressDialog = new LoadingProgressDialog(this);
-        loadingProgressDialog->setTitle(tr("下载包"));
-        loadingProgressDialog->setProgressMode(LoadingProgressDialog::ProgressMode::Infinity);
-        loadingProgressDialog->show();
+        fetchButton->hide();
+        progressRing->setIsBusying(true);
+        progressRing->setIsDisplayValue(false);
+        progressRing->show();
 
-        QNetworkAccessManager *nam = new QNetworkAccessManager(this);
-        QNetworkRequest request(qurl);
-        QNetworkReply *reply = nam->get(request);
+        AsulMultiDownloader *downloader = new AsulMultiDownloader(this);
+        downloader->setMaxConcurrentDownloads(1);
+        downloader->setAutoRetry(true);
+        downloader->setMaxRetryCount(3);
+        downloader->addDownload(qurl, destPath);
 
-        connect(reply, &QNetworkReply::downloadProgress, this, [loadingProgressDialog](qint64 received, qint64 total){
-            if(total > 0){
-                loadingProgressDialog->setProgressMode(LoadingProgressDialog::ProgressMode::Step);
-                loadingProgressDialog->setRange(0, total);
-                loadingProgressDialog->setValue(received);
-            }
-        });
+        connect(downloader, &AsulMultiDownloader::downloadProgress, this,
+            [progressRing](const QString &taskId, qint64 received, qint64 total){
+                Q_UNUSED(taskId);
+                if(total > 0){
+                    progressRing->setIsBusying(false);
+                    progressRing->setRange(0, static_cast<int>(total));
+                    progressRing->setValue(static_cast<int>(received));
+                }
+            });
 
-        connect(reply, &QNetworkReply::finished, this, [this, reply, nam, destPath, url, drawerArea, userInfoMap, selectAccountComboBox, loadingProgressDialog](){
-            reply->deleteLater();
-            nam->deleteLater();
+        connect(downloader, &AsulMultiDownloader::downloadFinished, this,
+            [this, downloader, destPath, url, drawerArea, userInfoMap, selectAccountComboBox, fetchButton, progressRing]
+            (const QString &taskId, const QString &savePath)
+        {
+            Q_UNUSED(taskId);
+            Q_UNUSED(savePath);
 
-            if(reply->error() != QNetworkReply::NoError){
-                GlobalFunc::showErr(tr("下载"), tr("下载失败: ") + reply->errorString());
-                loadingProgressDialog->close();
-                return;
-            }
+            progressRing->hide();
+            progressRing->setIsBusying(false);
+            fetchButton->show();
 
-            QFile file(destPath);
-            if(!file.open(QIODevice::WriteOnly)){
-                GlobalFunc::showErr(tr("下载"), tr("文件保存失败"));
-                loadingProgressDialog->close();
-                delete loadingProgressDialog;
-                return;
-            }
-            file.write(reply->readAll());
-            file.close();
-
-            // 验证 zip 包签名（保存后立即验证）
+            // 验证 zip 包签名
             QString rootCaPath(":/certs/RootCA-Cert/root-ca.crt.pem");
             VerifyFile::SimpleVerifyResult result = VerifyFile::VerifyFileSdk::verifyFileSimple(destPath, rootCaPath);
 
@@ -175,16 +179,12 @@ T_Deploy::T_Deploy(QWidget *parent)
                     tr("此包签名验证未通过，可能存在安全风险。\n\n是否继续？"));
                 if(!userAccept){
                     QFile::remove(destPath);
-                    loadingProgressDialog->close();
-                    delete loadingProgressDialog;
+                    downloader->deleteLater();
                     return;
                 }
             }else{
                 GlobalFunc::showSuccess(tr("签名"), tr("受信任开发者：") + result.info.signer);
             }
-
-            loadingProgressDialog->close();
-            delete loadingProgressDialog;
 
             // 解压
             QString extracDir = gSettings->getGLoc()->path() + "/Downloads/" + QFileInfo(destPath).baseName() + "-extract";
@@ -197,11 +197,13 @@ T_Deploy::T_Deploy(QWidget *parent)
             if(!AsulFormFile.exists()){
                 GlobalFunc::showErr(tr("获取"), tr("包中未找到 config.asul"));
                 QDir(extracDir).removeRecursively();
+                downloader->deleteLater();
                 return;
             }
             if(!AsulFormFile.open(QIODevice::ReadOnly)){
                 GlobalFunc::showErr(tr("获取"), tr("文件打开失败"));
                 QDir(extracDir).removeRecursively();
+                downloader->deleteLater();
                 return;
             }
             QString configContent = AsulFormFile.readAll();
@@ -213,6 +215,7 @@ T_Deploy::T_Deploy(QWidget *parent)
             if(!doc){
                 GlobalFunc::showErr(tr("获取"), tr("解析失败: ") + err.message);
                 QDir(extracDir).removeRecursively();
+                downloader->deleteLater();
                 return;
             }
             QStringList argList = {"Version","Name","Target","Author","Description"};
@@ -220,6 +223,7 @@ T_Deploy::T_Deploy(QWidget *parent)
                 if(doc->metaValue(arg).isEmpty()){
                     GlobalFunc::showErr(tr("获取"), tr("缺少参数: ") + arg);
                     QDir(extracDir).removeRecursively();
+                    downloader->deleteLater();
                     return;
                 }
             }
@@ -367,7 +371,19 @@ T_Deploy::T_Deploy(QWidget *parent)
                 });
                 deployPanel->show();
             });
+
+            downloader->deleteLater();
         });
+
+        connect(downloader, &AsulMultiDownloader::downloadFailed, this,
+            [downloader, fetchButton, progressRing](const QString &taskId, const QString &errorString){
+                Q_UNUSED(taskId);
+                progressRing->hide();
+                progressRing->setIsBusying(false);
+                fetchButton->show();
+                GlobalFunc::showErr(tr("下载"), tr("下载失败: ") + errorString);
+                downloader->deleteLater();
+            });
     });
 
     centerVLayout->addWidget(drawerArea);
