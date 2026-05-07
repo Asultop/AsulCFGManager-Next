@@ -166,9 +166,9 @@ T_Deploy::T_Deploy(QWidget *parent)
             Q_UNUSED(taskId);
             Q_UNUSED(savePath);
 
-            progressRing->hide();
-            progressRing->setIsBusying(false);
-            fetchButton->show();
+            // 下载完成，切换 ring 到 Busy 模式（解压阶段无法获取精确进度）
+            progressRing->setIsBusying(true);
+            progressRing->setIsDisplayValue(false);
 
             // 验证 zip 包签名
             QString rootCaPath(":/certs/RootCA-Cert/root-ca.crt.pem");
@@ -179,6 +179,9 @@ T_Deploy::T_Deploy(QWidget *parent)
                     tr("此包签名验证未通过，可能存在安全风险。\n\n是否继续？"));
                 if(!userAccept){
                     QFile::remove(destPath);
+                    progressRing->hide();
+                    progressRing->setIsBusying(false);
+                    fetchButton->show();
                     downloader->deleteLater();
                     return;
                 }
@@ -188,8 +191,13 @@ T_Deploy::T_Deploy(QWidget *parent)
 
             // 异步解压
             QString extracDir = gSettings->getGLoc()->path() + "/Downloads/" + QFileInfo(destPath).baseName() + "-extract";
-            gFunc->UnzipFileAsync(destPath, extracDir, [this, destPath, extracDir, result, drawerArea, userInfoMap, selectAccountComboBox, downloader](bool success){
+            gFunc->UnzipFileAsync(destPath, extracDir, [this, destPath, extracDir, result, drawerArea, userInfoMap, selectAccountComboBox, fetchButton, progressRing, downloader](bool success){
                 QFile::remove(destPath);
+                // 解压完成，恢复 UI
+                progressRing->hide();
+                progressRing->setIsBusying(false);
+                fetchButton->show();
+
                 if(!success){
                     GlobalFunc::showErr(tr("获取"), tr("解压失败"));
                     QDir(extracDir).removeRecursively();
@@ -197,6 +205,7 @@ T_Deploy::T_Deploy(QWidget *parent)
                     return;
                 }
                 handleExtractedPackage(extracDir, tr("获取"), result, drawerArea, userInfoMap, selectAccountComboBox);
+                GlobalFunc::showSuccess(tr("获取"), tr("包校验完成，已就绪"));
                 downloader->deleteLater();
             });
         });
