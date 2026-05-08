@@ -109,7 +109,7 @@ qt6_create_translation(QM_FILES ${CMAKE_SOURCE_DIR} ${TS_FILES})
 
 # qt6_add_translations(${PROJECT_NAME} ${TS_FILES})
 # 可执行文件
-add_executable(${PROJECT_NAME} #WIN32
+add_executable(${PROJECT_NAME} WIN32
     ${SOURCES}
     ${HEADERS}
     ${RESOURCE_FILES}
