@@ -4,3 +4,6 @@
 [submodule "3rd/ADownloader-SDK"]
 	path = 3rd/ADownloader-SDK
 	url = https://github.com/AsulTop/AsulDownloader
+[submodule "3rd/AsulASync-SDK"]
+	path = 3rd/AsulASync-SDK
+	url = https://github.com/Asultop/AsulASync.git
