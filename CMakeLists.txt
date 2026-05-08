@@ -134,15 +134,18 @@ target_include_directories(${PROJECT_NAME} PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/3rd/QsLog
     ${CMAKE_CURRENT_SOURCE_DIR}/3rd/AFormSDK/include
     ${CMAKE_CURRENT_SOURCE_DIR}/3rd/ADownloader-SDK
+    ${CMAKE_CURRENT_SOURCE_DIR}/3rd/AsulASync-SDK/include
 )
 
 # 链接库
 target_link_libraries(${PROJECT_NAME} PRIVATE
     ${QT_LIBRARIES}
     aformparser
+    AsulASync
 )
 add_subdirectory(3rd/AFormSDK)
 add_subdirectory(3rd/ADownloader-SDK)
+add_subdirectory(3rd/AsulASync-SDK)
 # Windows特定设置
 if(WIN32)
     # 链接ElaWidgetTools库

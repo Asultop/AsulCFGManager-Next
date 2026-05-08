@@ -118,6 +118,13 @@ T_Deploy::T_Deploy(QWidget *parent)
         sourceInputLayout));
 
     connect(pullButton, &ElaPushButton::clicked, this, [this, sourceUrlEdit, pullButton, sourceProgressRing, drawerArea, userInfoMap, selectAccountComboBox](){
+        // 清除之前的 manifest 条目
+        for(auto *area : m_manifestAreas){
+            drawerArea->removeDrawer(area);
+            delete area;
+        }
+        m_manifestAreas.clear();
+
         QString srcUrl = sourceUrlEdit->text().trimmed();
         if(srcUrl.isEmpty()){
             GlobalFunc::showWarn(tr("自定义源"), tr("请输入源地址"));
@@ -867,6 +874,7 @@ void T_Deploy::handleManifestEntry(const QJsonObject &entry, ElaDrawerArea *draw
     });
 
     drawerArea->addDrawer(gArea);
+    m_manifestAreas.append(gArea);
 
     connect(getButton, &ElaPushButton::clicked, this,
         [this, getButton, entryRing, gArea, drawerArea, downloadUrl, userInfoMap, selectAccountComboBox]()
@@ -981,6 +989,7 @@ void T_Deploy::downloadAndProcessPackage(const QUrl &url, const QString &title,
             handleExtractedPackage(extracDir, title, result, drawerArea, userInfoMap, selectAccountComboBox);
             if(existingArea){
                 drawerArea->removeDrawer(existingArea);
+                m_manifestAreas.removeOne(existingArea);
                 delete existingArea;
             }
             GlobalFunc::showSuccess(title, tr("包校验完成，已就绪"));

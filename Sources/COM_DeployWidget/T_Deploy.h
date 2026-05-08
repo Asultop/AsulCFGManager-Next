@@ -26,6 +26,7 @@ public:
 
 private:
     QMap<QString, ElaScrollPageArea*> m_scannedAreaMap;
+    QList<ElaScrollPageArea*> m_manifestAreas;
     void uninstallCFG(const QString& location);
     bool handleExtractedPackage(const QString &extracDir, const QString &title,
                                 const VerifyFile::SimpleVerifyResult &signResult,
