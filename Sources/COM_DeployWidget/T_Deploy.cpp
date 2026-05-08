@@ -988,10 +988,17 @@ void T_Deploy::handleManifestEntry(const QJsonObject &entry, ElaDrawerArea *draw
     entryRing->setBusyingWidth(4);
     entryRing->hide();
 
+    ElaText *sizeText = new ElaText("--", this);
+    sizeText->setStyleSheet("color: gray;");
+    sizeText->setTextPixelSize(12);
+    sizeText->setFixedWidth(80);
+    sizeText->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
+
     QWidget *buttonWidget = new QWidget(this);
     QHBoxLayout *buttonLayout = new QHBoxLayout(buttonWidget);
     buttonLayout->setContentsMargins(0, 0, 0, 0);
     buttonLayout->addStretch();
+    buttonLayout->addWidget(sizeText);
     buttonLayout->addWidget(getButton);
     buttonLayout->addWidget(entryRing);
 
@@ -1025,6 +1032,26 @@ void T_Deploy::handleManifestEntry(const QJsonObject &entry, ElaDrawerArea *draw
             new ElaText(author + " - " + description, this),
             buttonWidget, false);
     }
+
+    // 异步获取文件大小
+    QNetworkAccessManager *sizeNam = new QNetworkAccessManager(this);
+    QNetworkRequest sizeReq;
+    sizeReq.setUrl(QUrl(downloadUrl));
+    QNetworkReply *sizeReply = sizeNam->head(sizeReq);
+    connect(sizeReply, &QNetworkReply::finished, this, [sizeReply, sizeText, sizeNam](){
+        if(sizeReply->error() == QNetworkReply::NoError){
+            qint64 bytes = sizeReply->header(QNetworkRequest::ContentLengthHeader).toLongLong();
+            if(bytes > 0){
+                if(bytes >= 1024 * 1024){
+                    sizeText->setText(QString("%1 MB").arg(bytes / (1024.0 * 1024.0), 0, 'f', 1));
+                }else{
+                    sizeText->setText(QString("%1 KB").arg(bytes / 1024.0, 0, 'f', 1));
+                }
+            }
+        }
+        sizeReply->deleteLater();
+        sizeNam->deleteLater();
+    });
 
     drawerArea->addDrawer(gArea);
 

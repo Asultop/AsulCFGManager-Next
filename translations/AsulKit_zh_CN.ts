@@ -326,13 +326,13 @@
     <message>
         <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="319"/>
         <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="623"/>
-        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="1103"/>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="1130"/>
         <source>解压失败</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="325"/>
-        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="1113"/>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="1140"/>
         <source>包校验完成，已就绪</source>
         <translation type="unfinished"></translation>
     </message>
@@ -388,7 +388,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="1036"/>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="1063"/>
         <source>无效的下载地址</source>
         <translation type="unfinished"></translation>
     </message>
@@ -405,10 +405,10 @@
         <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="324"/>
         <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="325"/>
         <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="979"/>
-        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="1036"/>
-        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="1103"/>
-        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="1110"/>
-        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="1113"/>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="1063"/>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="1130"/>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="1137"/>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="1140"/>
         <source>获取</source>
         <translation type="unfinished"></translation>
     </message>
@@ -435,25 +435,25 @@
     </message>
     <message>
         <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="336"/>
-        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="1124"/>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="1151"/>
         <source>下载</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="336"/>
-        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="1124"/>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="1151"/>
         <source>下载失败: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="295"/>
-        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="1080"/>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="1107"/>
         <source>签名：未受信任</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="296"/>
-        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="1081"/>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="1108"/>
         <source>此包签名验证未通过，可能存在安全风险。
 
 是否继续？</source>
@@ -461,7 +461,7 @@
     </message>
     <message>
         <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="306"/>
-        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="1091"/>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="1118"/>
         <source>受信任开发者：</source>
         <translation type="unfinished"></translation>
     </message>
@@ -626,7 +626,7 @@
     <message>
         <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="306"/>
         <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="607"/>
-        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="1091"/>
+        <location filename="../Sources/COM_DeployWidget/T_Deploy.cpp" line="1118"/>
         <source>签名</source>
         <translation type="unfinished"></translation>
     </message>
