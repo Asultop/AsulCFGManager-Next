@@ -776,8 +776,8 @@ void T_Manager::restartPlatform()
 {
     switch(m_currentPlatform) {
     case Platform::Steam: {
-        // 终止 Steam
-        QProcess::startDetached("taskkill", QStringList() << "/F" << "/IM" << "steam.exe");
+        // 终止 Steam（提权）
+        killPlatformWithElevation("steam.exe");
         QThread::msleep(1000);
         // 启动 Steam
         QString steamExe = gSettings->getSteamPath();
