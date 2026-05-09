@@ -221,16 +221,19 @@ T_DeployPanel::T_DeployPanel(QWidget *parent,const AFormParser::Document::Ptr& d
                     textLayout->addWidget(subDescText);
                     textLayout->addStretch();
                     
-                    ElaLineEdit *mustFieldLE = new ElaLineEdit(contentWidget);
-                    mustFieldLE->setFixedSize(250, 40);
-                    mustFieldLE->setText(MustField->bind);
-                    mustFieldLE->setReadOnly(true);
-                    mustFieldLE->setStyleSheet("background-color: #f0f0f0;");
+                    ElaText *mustFieldT = new ElaText(contentWidget);
+                    // mustFieldT->setFixedSize(250, 40);
+                    QFont font=mustFieldT->font();
+                    font.setPixelSize(10);
+                    mustFieldT->setFont(font);
+                    mustFieldT->setText(tr("已绑定:")+MustField->bind);
+                    // mustFieldT->setReadOnly(true);
+                    // mustFieldT->setStyleSheet("background-color: #f0f0f0;");
                     
                     QHBoxLayout *widgetLayout = new QHBoxLayout();
                     widgetLayout->setContentsMargins(0, 15, 20, 15);
                     widgetLayout->addStretch();
-                    widgetLayout->addWidget(mustFieldLE);
+                    widgetLayout->addWidget(mustFieldT);
                     
                     areaLayout->addLayout(textLayout, 1);
                     areaLayout->addLayout(widgetLayout);

@@ -45,7 +45,7 @@ T_Home::T_Home(QWidget *parent)
     urlCard1->setTitlePixelSize(17);
     urlCard1->setTitleSpacing(25);
     urlCard1->setSubTitleSpacing(13);
-    urlCard1->setUrl(gSets->getProgramRepository());
+    urlCard1->setUrl("https://www.github.com/AsulTop/AsulSwiftDevelopKit");
 
     urlCard1->setCardPixmap(QPixmap(":/Sources/icon/github.png"));
     urlCard1->setTitle("Github");

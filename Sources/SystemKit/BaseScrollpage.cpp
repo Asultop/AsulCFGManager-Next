@@ -56,6 +56,11 @@ void BaseScrollPage::createCustomWidget(QString desText)
 void BaseScrollPage::addTopWidget(QWidget *widget){
     QWidget *nowWidget=getCustomWidget();
     QLayout *topLayout=nowWidget->layout();
+    static bool switched=false;
+    if(!switched){
+        switched=true;
+        topLayout->setContentsMargins(0,0,10,0);
+    }
     topLayout->addWidget(widget);
     nowWidget->setLayout(topLayout);
     setCustomWidget(nowWidget);

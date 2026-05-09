@@ -76,8 +76,8 @@ T_Manager::T_Manager(QWidget *parent)
 void T_Manager::setupTopWidget()
 {
     QWidget* topWidget = new QWidget(this);
-    QHBoxLayout* topLayout = new QHBoxLayout(topWidget);
-    topLayout->setContentsMargins(0, 0, 0, 0);
+    // QHBoxLayout* topLayout = new QHBoxLayout(topWidget);
+    // topLayout->setContentsMargins(0, 0, 0, 0);
 
     // 左侧：平台 Label
     ElaText* platformLabel = new ElaText(tr("平台"), this);
@@ -115,11 +115,15 @@ void T_Manager::setupTopWidget()
         break;
     }
 
-    topLayout->addWidget(platformLabel);
-    topLayout->addStretch();
-    topLayout->addWidget(m_platformComboBox);
+    // topLayout->addWidget(platformLabel);
+    // topLayout->addStretch();
+    // topLayout->addWidget(m_platformComboBox);
 
-    this->addTopWidget(topWidget);
+    auto gArea = gFunc->GenerateArea(
+        this,
+        platformLabel,
+        m_platformComboBox,false);
+    this->addTopWidget(gArea);
 
     // 连接平台切换信号
     connect(m_platformComboBox, &QComboBox::currentTextChanged, this, [this](const QString& text){

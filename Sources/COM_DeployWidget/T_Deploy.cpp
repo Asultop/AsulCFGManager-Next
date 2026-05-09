@@ -106,6 +106,8 @@ T_Deploy::T_Deploy(QWidget *parent)
     sourceUrlEdit->setFixedWidth(400);
     ElaPushButton *pullButton = new ElaPushButton(tr("拉取"), this);
     pullButton->setFixedWidth(80);
+    gFunc->addThemeSyncList(pullButton);
+    //pullButton->setDefault(true);
     ElaProgressRing *sourceProgressRing = createProgressRing();
     QHBoxLayout *sourceInputLayout = new QHBoxLayout();
     sourceInputLayout->addWidget(sourceUrlEdit);
@@ -221,6 +223,8 @@ T_Deploy::T_Deploy(QWidget *parent)
     customUrlEdit->setPlaceholderText(tr("输入包下载地址..."));
     customUrlEdit->setFixedWidth(400);
     ElaPushButton *fetchButton = new ElaPushButton(tr("获取"), this);
+    gFunc->addThemeSyncList(fetchButton);
+    //fetchButton->setDefault(true);
     fetchButton->setFixedWidth(80);
     ElaProgressRing *progressRing = createProgressRing();
     QHBoxLayout *urlInputLayout = new QHBoxLayout();
@@ -254,6 +258,8 @@ T_Deploy::T_Deploy(QWidget *parent)
     ElaPushButton *scanButton = new ElaPushButton(tr("扫描"), this);
     scanButton->setFixedWidth(100);
     ElaPushButton *importButton = new ElaPushButton(tr("导入"), this);
+    gFunc->addThemeSyncList(importButton);
+    //importButton->setDefault(true);
     importButton->setFixedWidth(100);
 
     QWidget * headerWidget=new QWidget(this);
@@ -1006,6 +1012,7 @@ void T_Deploy::downloadAndProcessPackage(const QUrl &url, const QString &title,
             GlobalFunc::showErr(tr("下载"), tr("下载失败: ") + errorString);
             downloader->deleteLater();
         });
+    gFunc->updateThemeUI();
 }
 
 void T_Deploy::writeDeployedConfigs(AFormParser::Document::Ptr doc, const QString &sourceDir,
